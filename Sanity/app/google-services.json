@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "980624065966",
+    "firebase_url": "https://sanity2-b2dc7.firebaseio.com",
+    "project_id": "sanity2-b2dc7",
+    "storage_bucket": "sanity2-b2dc7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:980624065966:android:3201b196c9d4d5cf",
+        "android_client_info": {
+          "package_name": "com.example.tomdong.sanity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "980624065966-e7v69u95eraoglfj5hpq9o5j3l9kstia.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz-IVJtNHCxrISZX8JVzjyYqBjYx226VE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
