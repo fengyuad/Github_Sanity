@@ -5,6 +5,15 @@ package Model;
  */
 
 public class Category {
+    // getter and setter
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
     // member variable
     private String mName;
     private double mAmount; // the upper bound of user setting amount

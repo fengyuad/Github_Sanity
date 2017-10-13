@@ -1,5 +1,6 @@
 package Model;
-import java.util.Vector;
+import java.util.Map;
+
 
 import Model.*;
 
@@ -9,11 +10,12 @@ import Model.*;
 
 public class CategoryModel {
     // member variable
-    private Vector<Category> mCategories;
+    private Map<String, Category> mNameToCategory;
 
     // public methods
     public void AddCategory(Category category)
     {
-        
+        mCategories.add(category);
     }
+
 }
