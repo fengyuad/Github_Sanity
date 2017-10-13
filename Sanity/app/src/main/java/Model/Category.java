@@ -5,8 +5,32 @@ package Model;
  */
 
 public class Category {
-    public String mName;
-    double mAmount;
-    double mCurrentAmount;
-    
+    // member variable
+    private String mName;
+    private double mAmount; // the upper bound of user setting amount
+    private double mCurrentAmount; // current spending amount
+
+    // constructor
+    public Category(String name){
+        mName = name;
+        mAmount = 0;
+        mCurrentAmount = 0;
+    }
+    public Category(String name, double amount){
+        mName = name;
+        mAmount = amount;
+        mCurrentAmount = 0;
+    }
+
+    // public methods
+    void SetmAmount(double amount){
+        mAmount = amount;
+    }
+    void DeductAmount(double amount){
+        mCurrentAmount += amount;
+    }
+
+
+
+
 }
