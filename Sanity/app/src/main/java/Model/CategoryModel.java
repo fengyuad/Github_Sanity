@@ -1,7 +1,5 @@
 package Model;
-import java.util.Map;
-
-
+import java.util.*;
 import Model.*;
 
 /**
@@ -10,12 +8,30 @@ import Model.*;
 
 public class CategoryModel {
     // member variable
-    private Map<String, Category> mNameToCategory;
+    private Map<Long, Category> mIDToCategory;
+    private Set<String> nameCategoryUsed;
 
-    // public methods
+    // constructor
+    public CategoryModel(){
+        mIDToCategory = new HashMap<>();
+        nameCategoryUsed = new HashSet<>();
+    }
+
+    // Public methods
     public void AddCategory(Category category)
     {
-        mCategories.add(category);
+        mIDToCategory.put(category.GetID(), category);
     }
+
+    public void DeleteCategory(Category category)
+    {
+        mIDToCategory.remove(category.GetID());
+    }
+
+    public boolean checkNameUsed(String name){
+        return nameCategoryUsed.contains(name);
+    }
+
+
 
 }
