@@ -13,6 +13,14 @@ public class Budget {
     private double mAmount = 0.0f;
     private Set<Long> mCatIds;
 
+    /**
+     * Constructor - Initialize a Budget
+     *
+     * @param dueDate due date
+     * @param period  budget period
+     * @param amount  budget amount
+     * @param catIds  category Ids
+     */
     public Budget(long dueDate, int period, double amount, Set<Long> catIds) {
         mDueDate = dueDate;
         mPeriod = period;
@@ -50,7 +58,8 @@ public class Budget {
     /**
      * Update Categories
      *
-     * @param catIds
+     * @param catIds a Set of <b>long</b> category IDs
+     * @see Set
      */
     void UpdateCatIds(Set<Long> catIds) {
         mCatIds = catIds;
@@ -65,17 +74,41 @@ public class Budget {
         return mBudgetId;
     }
 
+    /**
+     * Get due date
+     *
+     * @return <b>long</b> mDueDate
+     */
     long GetDueDate() {
         return mDueDate;
     }
+
+    /**
+     * Get budget period
+     *
+     * @return <b>int</b> mPeriod
+     */
 
     int GetPeriod() {
         return mPeriod;
     }
 
+    /**
+     * Get budget amount
+     *
+     * @return <b>double</b> mAmount
+     */
+
     double GetAmount() {
         return mAmount;
     }
+
+    /**
+     * Get category IDs
+     *
+     * @return <b>Set&lt;Long&gt;</b> GetCatIds
+     * @see Set
+     */
 
     Set<Long> GetCatIds() {
         return mCatIds;
