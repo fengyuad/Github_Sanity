@@ -5,7 +5,10 @@ package Model;
  */
 
 public class Transaction {
-    public int Amount;
-    public String info;
-
+    private double mAmount;
+    private String mCategory;
+    public Transaction(double amount, String category){
+        mAmount = amount;
+        mCategory = category;
+    }
 }
