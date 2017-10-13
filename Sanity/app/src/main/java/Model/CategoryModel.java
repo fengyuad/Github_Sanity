@@ -23,15 +23,18 @@ public class CategoryModel {
         mIDToCategory.put(category.GetID(), category);
     }
 
-    public void DeleteCategory(Category category)
+    public void DeleteCategory(Long id)
     {
-        mIDToCategory.remove(category.GetID());
+        mIDToCategory.remove(id);
     }
 
-    public boolean checkNameUsed(String name){
+    public boolean CheckNameUsed(String name){
         return nameCategoryUsed.contains(name);
     }
 
+    public void UpdateCategory(Long id, double amount){
+        mIDToCategory.get(id).AddCurrentAmount(amount);
+    }
 
 
 }

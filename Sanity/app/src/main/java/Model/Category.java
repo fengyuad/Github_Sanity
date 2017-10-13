@@ -48,15 +48,12 @@ public class Category {
     }
 
     // public methods
-    void SetmAmount(double amount) {
+    public void SetAmount(double amount) {
         mAmount = amount;
     }
-    void DeductAmount(double amount) {
+    public void AddCurrentAmount(double amount) {
         mCurrentAmount += amount;
     }
-
-
-
 
 
 }
