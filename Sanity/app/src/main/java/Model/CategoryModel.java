@@ -21,7 +21,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
      *  member variable
      */
     private static CategoryModel mInstance = null;
-    private Map<String, Category> mIDToCategory;
+    private Map<Long, Category> mIDToCategory;
     private List<String> nameCategoryUsed;
     private DatabaseReference mDatabase;
 
@@ -45,27 +45,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
         // initialize the data struture
         mIDToCategory = new HashMap<>();
         nameCategoryUsed = new ArrayList<String>();
-
-        // read data from database and store in mIDToCategory
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot){
-                for(DataSnapshot ds: dataSnapshot.getChildren()){
-                    Category cat = ds.getValue(Category.class);
-                    mIDToCategory.put(cat.getmID(), cat);
-
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        WriteNewCategory(new Category("Test", "aXaqwe13AX"));
     }
 
     /**
@@ -101,14 +81,41 @@ public class CategoryModel extends Model implements java.io.Serializable {
         mIDToCategory.get(id).AddCurrentAmount(amount);
     }
 
+    /**
+     *
+     * @param cat
+     * @return true if successfully write into the database
+     * @return false if find duplicate category name
+     */
     public boolean WriteNewCategory(Category cat){
-        String key = mDatabase.push().getKey();
+        // check duplicate name
+        if(nameCategoryUsed.contains(cat.getmName())) return false;
+
+        Long key = System.currentTimeMillis()/1000;
         cat.setmID(key);
         mIDToCategory.put(key, cat);
-        mDatabase.child(key).setValue(cat);
-
-
+        mDatabase.child(key.toString()).setValue(cat);
         return true;
     }
 
+    /**
+     * read all category
+     */
+    public void ReadCategory(){
+        // read data from database and store in mIDToCategory
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot){
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    Category cat = ds.getValue(Category.class);
+                    mIDToCategory.put(cat.getmID(), cat);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
 }

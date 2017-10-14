@@ -17,19 +17,19 @@ public class Category implements java.io.Serializable{
         this.mName = mName;
     }
 
-    public String getmID() {
+    public Long getmID() {
         return mID;
     }
 
-    public void setmID(String mID) {
+    public void setmID(Long mID) {
         this.mID = mID;
     }
 
-    public String getmBudgetID() {
+    public Long getmBudgetID() {
         return mBudgetID;
     }
 
-    public void setmBudgetID(String mBudgetID) {
+    public void setmBudgetID(Long mBudgetID) {
         this.mBudgetID = mBudgetID;
     }
 
@@ -53,8 +53,8 @@ public class Category implements java.io.Serializable{
      * Member Variable
      */
     private String mName;
-    private String mID;
-    private String mBudgetID;
+    private Long mID;
+    private Long mBudgetID;
     private double mAmount; // the upper bound of user setting amount
     private double mCurrentAmount; // current spending amount
 
@@ -62,25 +62,21 @@ public class Category implements java.io.Serializable{
      * Constructor
      */
     public Category(){
-        mName = "";
-        mID = "";
-        mBudgetID = "";
-        mAmount = 0;
-        mCurrentAmount = 0;
+
     }
-    public Category(String name, String budgetID){
+    public Category(String name, Long budgetID){
         mName = name;
-        mAmount = 0;
-        mCurrentAmount = 0;
+        mAmount = 0.00;
+        mCurrentAmount = 0.00;
         mBudgetID = budgetID;
     }
-    public Category(String name, double amount, String budgetID){
+    public Category(String name, double amount, Long budgetID){
         mName = name;
         mAmount = amount;
         mCurrentAmount = 0;
         mBudgetID = budgetID;
     }
-    public Category(String name, double amount, double currentAmount, String budgetID){
+    public Category(String name, double amount, double currentAmount, Long budgetID){
         mName = name;
         mAmount = amount;
         mCurrentAmount = currentAmount;
