@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "980624065966-46t8v8mshcvjh6lj2olsss53n0aj9cvc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tomdong.sanity",
+            "certificate_hash": "08bdba098eee0ca483aefdee47767300d0c01caf"
+          }
+        },
+        {
           "client_id": "980624065966-hgk8f19ev883fjn8u8irffd4ubh1vun8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
