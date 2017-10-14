@@ -7,12 +7,12 @@ import java.util.Map;
  * Created by zhongchu on 10/12/17.
  */
 
-public class TransactionModel extends Model {
+public class TransactionModel extends Model implements java.io.Serializable{
     private static TransactionModel instance = null;
-    ;
-    private Map<Long, Transaction> Transactions = new HashMap<>();
+    private Map<Long, Transaction> Transactions;
 
     private TransactionModel() {
+        Transactions = new HashMap<>();
     }
 
     public static TransactionModel GetInstance() {
