@@ -32,7 +32,7 @@ public class CategoryModel extends Model {
 
 
         // read from the database
-        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+        mCategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
