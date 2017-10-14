@@ -7,7 +7,7 @@ import java.util.Set;
  * Created by Yifan on 10/12 012.
  */
 
-public class BudgetModel {
+public class BudgetModel extends Model{
 
     private static BudgetModel mInstance = null;
     private Map<Long, Budget> mBudgetMap;

@@ -19,7 +19,7 @@ public class StorageModel extends Activity {
         outFile = new File(getCacheDir(), "Sanity.dat");
     }
 
-    public <E extends BudgetModel> boolean SaceObject(E model) {
+    public <E extends Model> boolean SaceObject(E model) {
         try {
             oos = new ObjectOutputStream(new FileOutputStream(outFile));
             oos.writeObject(model);
