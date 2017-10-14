@@ -28,9 +28,6 @@ public class Category {
     private String mName;
     private Long mID;
     private double mAmount; // the upper bound of user setting amount
-
-
-
     private double mCurrentAmount; // current spending amount
 
     // constructor
