@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
     private ImageView SanityImage;
     private EditText Account;
-    private  EditText PassWord;
+    private EditText PassWord;
     private Button Login;
     private Button Register;
     private TextView ForgetPassword;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         //AddListener
         Login.setOnClickListener(this);
         Register.setOnClickListener(this);
-
+        ForgetPassword.setOnClickListener(this);
         // Test database
         CategoryModel test = CategoryModel.GetInstance();
 
@@ -113,7 +113,32 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             Log.d("MyApp","Login");
             LoginUser();
         }
+        if(view == ForgetPassword){
+            Log.d("MyApp", "Forget");
+            ResetPassword();
+        }
+    }
 
+    public void ResetPassword(){
+        String emailAdd = Account.getText().toString();
+        if(emailAdd.isEmpty()){
+            Toast.makeText(MainActivity.this,"Email Empty!",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(MainActivity.this, emailAdd,Toast.LENGTH_SHORT).show();
+        firebaseAuth.sendPasswordResetEmail(emailAdd)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(MainActivity.this,"Email sent!!!",Toast.LENGTH_SHORT).show();
+                            Log.d("MyApp", "Email sent.");
+                        }
+                        else{
+                            Toast.makeText(MainActivity.this,"Email sent Failed!!!",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     public void RegisterUser()
@@ -154,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             Toast.makeText(MainActivity.this,"Email Empty!",Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(email))
+        if(TextUtils.isEmpty(pw))
         {
             Toast.makeText(MainActivity.this,"Password Empty!",Toast.LENGTH_SHORT).show();
             return;
