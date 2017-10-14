@@ -59,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
         // Test database
         CategoryModel test = new CategoryModel();
+
+
     }
 
     @Override

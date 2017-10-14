@@ -6,13 +6,19 @@ package Model;
  */
 
 public class Category {
-    // getter and setter
+    /**
+     * Getter and setter
+     */
     public String GetName() {
         return mName;
+    }
+    public void SetmID(Long mID) {
+        this.mID = mID;
     }
     public void SetName(String mName) {
         this.mName = mName;
     }
+
     public Long GetID() {
         return mID;
     }
@@ -24,13 +30,20 @@ public class Category {
     }
 
 
-    // member variable
+    /**
+     * Member Variable
+     */
     private String mName;
+
+
+
     private Long mID;
     private double mAmount; // the upper bound of user setting amount
     private double mCurrentAmount; // current spending amount
 
-    // constructor
+    /**
+     * Constructor
+     */
     public Category(String name){
         mID = System.currentTimeMillis()/1000;
         mName = name;
@@ -43,8 +56,16 @@ public class Category {
         mAmount = amount;
         mCurrentAmount = 0;
     }
+    public Category(String name, double amount, long id, double currentAmount){
+        mID = id;
+        mName = name;
+        mAmount = amount;
+        mCurrentAmount = currentAmount;
+    }
 
-    // public methods
+    /**
+     * Public method
+     */
     public void SetAmount(double amount) {
         mAmount = amount;
     }
