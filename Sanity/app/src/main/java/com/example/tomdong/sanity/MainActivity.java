@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             Log.d("MyApp","Login");
             LoginUser();
         }
+
     }
 
     public void RegisterUser()

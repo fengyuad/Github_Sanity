@@ -8,13 +8,27 @@ import java.util.Set;
  */
 
 public class BudgetModel {
+
+    private static BudgetModel mInstance = null;
     private Map<Long, Budget> mBudgetMap;
 
     /**
      * Constructor - Initialize a BudgetModel
      */
-    public BudgetModel() {
+    private BudgetModel() {
 
+    }
+
+    /**
+     * Get the instance of this model
+     *
+     * @return <b>BudgetModel</b> a BudgetModel instance
+     */
+    public static BudgetModel GetInstance() {
+        if (mInstance == null) {
+            mInstance = new BudgetModel();
+        }
+        return mInstance;
     }
 
     /**
