@@ -54,6 +54,8 @@ public class CategoryModel extends Model implements java.io.Serializable {
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     Category cat = ds.getValue(Category.class);
                     mIDToCategory.put(cat.getmID(), cat);
+
+
                 }
             }
 
@@ -63,6 +65,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
             }
         });
 
+        WriteNewCategory(new Category("Test", "aXaqwe13AX"));
     }
 
     /**
@@ -102,7 +105,8 @@ public class CategoryModel extends Model implements java.io.Serializable {
         String key = mDatabase.push().getKey();
         cat.setmID(key);
         mIDToCategory.put(key, cat);
-        mDatabase.setValue(mIDToCategory);
+        mDatabase.child(key).setValue(cat);
+
 
         return true;
     }
