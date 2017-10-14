@@ -21,20 +21,21 @@ public class CategoryModel extends Model {
     // member variable
     private Map<Long, Category> mIDToCategory;
     private Set<String> nameCategoryUsed;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mCategoryRef;
 
 
     // constructor
     public CategoryModel() {
         mIDToCategory = new HashMap<>();
         nameCategoryUsed = new HashSet<>();
-        mDatabase = FirebaseDatabase.getInstance().getReference("categories");
+        mCategoryRef = FirebaseDatabase.getInstance().getReference("categories");
 
 
         // read from the database
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
