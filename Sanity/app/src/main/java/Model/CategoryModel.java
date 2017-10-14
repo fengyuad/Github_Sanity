@@ -16,14 +16,14 @@ import java.util.*;
  * Created by EricWang on 10/12/17.
  */
 
-public class CategoryModel extends Model {
+public class CategoryModel extends Model implements java.io.Serializable {
     /**
      *  member variable
      */
     private static CategoryModel mInstance = null;
-    private Map<Long, Category> mIDToCategory;
+    private Map<String, Category> mIDToCategory;
     private List<String> nameCategoryUsed;
-    private DatabaseReference mCategoryRef;
+    private DatabaseReference mDatabase;
 
     /**
      * Get the instance of this model
@@ -40,24 +40,20 @@ public class CategoryModel extends Model {
     /**
      * Constructor, read from database
      */
-    public CategoryModel() {
+    private CategoryModel() {
+        super();
         // initialize the data struture
         mIDToCategory = new HashMap<>();
         nameCategoryUsed = new ArrayList<String>();
 
-        // read data from database
-        mCategoryRef = FirebaseDatabase.getInstance().getReference(mUserID);
-        mCategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        // read data from database and store in mIDToCategory
+        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    Map<String, Object> catInfo = (HashMap<String, Object>) ds.getValue();
-                    Log.d("id+name+amount", ds.getKey() + " " + (String) catInfo.get("name") + " " + catInfo.get("amount"));
-                    String name = (String) catInfo.get("name");
-                    String amount = (String)catInfo.get("amount");
-                    Double currentAmount = ((Long) catInfo.get("current-amount")).doubleValue();
-                    Long key = Long.parseLong(ds.getKey());
-
+            public void onDataChange(DataSnapshot dataSnapshot){
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    Category cat = ds.getValue(Category.class);
+                    mIDToCategory.put(cat.getmID(), cat);
                 }
             }
 
@@ -67,14 +63,13 @@ public class CategoryModel extends Model {
             }
         });
 
-
     }
 
     /**
      * Public method //////////
      */
     public void AddCategory(Category category) {
-        mIDToCategory.put(category.GetID(), category);
+        mIDToCategory.put(category.getmID(), category);
     }
 
     /**
@@ -103,5 +98,13 @@ public class CategoryModel extends Model {
         mIDToCategory.get(id).AddCurrentAmount(amount);
     }
 
+    public boolean WriteNewCategory(Category cat){
+        String key = mDatabase.push().getKey();
+        cat.setmID(key);
+        mIDToCategory.put(key, cat);
+        mDatabase.setValue(mIDToCategory);
+
+        return true;
+    }
 
 }
