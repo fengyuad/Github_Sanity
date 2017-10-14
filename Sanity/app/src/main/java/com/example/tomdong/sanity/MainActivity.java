@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         Register.setOnClickListener(this);
 
         // Test database
-        CategoryModel test = new CategoryModel();
+        //CategoryModel test = new CategoryModel();
 
 
     }

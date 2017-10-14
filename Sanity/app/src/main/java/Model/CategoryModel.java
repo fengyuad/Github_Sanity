@@ -28,7 +28,7 @@ public class CategoryModel extends Model {
     /**
      * Get the instance of this model
      *
-     * @return <b>CategoryModel</b> a BudgetModel instance
+     * @return <b>CategoryModel</b> a CategoryModel instance
      */
     public static CategoryModel GetInstance() {
         if (mInstance == null) {
@@ -46,7 +46,7 @@ public class CategoryModel extends Model {
         nameCategoryUsed = new ArrayList<String>();
 
         // read data from database
-        mCategoryRef = FirebaseDatabase.getInstance().getReference("categories");
+        mCategoryRef = FirebaseDatabase.getInstance().getReference(mUserID);
         mCategoryRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -57,7 +57,7 @@ public class CategoryModel extends Model {
                     String amount = (String)catInfo.get("amount");
                     Double currentAmount = ((Long) catInfo.get("current-amount")).doubleValue();
                     Long key = Long.parseLong(ds.getKey());
-                    mIDToCategory.put(key, new Category(name, Double.parseDouble(amount), key, currentAmount));
+
                 }
             }
 
