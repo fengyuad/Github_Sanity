@@ -5,7 +5,44 @@ package Model;
  * Created by EricWang on 10/12/17.
  */
 
-public class Category implements java.io.Serializable{
+public class Category implements java.io.Serializable {
+    /**
+     * Member Variable
+     */
+    private String mName;
+    private Long mID;
+    private Long mBudgetID;
+    private double mAmount; // the upper bound of user setting amount
+    private double mCurrentAmount; // current spending amount
+
+    /**
+     * Constructor
+     */
+    public Category() {
+
+    }
+
+    public Category(String name, Long budgetID) {
+        mName = name;
+        mAmount = 0.00;
+        mCurrentAmount = 0.00;
+        mBudgetID = budgetID;
+    }
+
+    public Category(String name, double amount, Long budgetID) {
+        mName = name;
+        mAmount = amount;
+        mCurrentAmount = 0;
+        mBudgetID = budgetID;
+    }
+
+    public Category(String name, double amount, double currentAmount, Long budgetID) {
+        mName = name;
+        mAmount = amount;
+        mCurrentAmount = currentAmount;
+        mBudgetID = budgetID;
+    }
+
     /**
      * Getter and Setter
      */
@@ -50,45 +87,10 @@ public class Category implements java.io.Serializable{
     }
 
     /**
-     * Member Variable
-     */
-    private String mName;
-    private Long mID;
-    private Long mBudgetID;
-    private double mAmount; // the upper bound of user setting amount
-    private double mCurrentAmount; // current spending amount
-
-    /**
-     * Constructor
-     */
-    public Category(){
-
-    }
-    public Category(String name, Long budgetID){
-        mName = name;
-        mAmount = 0.00;
-        mCurrentAmount = 0.00;
-        mBudgetID = budgetID;
-    }
-    public Category(String name, double amount, Long budgetID){
-        mName = name;
-        mAmount = amount;
-        mCurrentAmount = 0;
-        mBudgetID = budgetID;
-    }
-    public Category(String name, double amount, double currentAmount, Long budgetID){
-        mName = name;
-        mAmount = amount;
-        mCurrentAmount = currentAmount;
-        mBudgetID = budgetID;
-    }
-
-    /**
      * Public method
      */
 
     /**
-     *
      * @param amount
      * @return currentAmount
      */
@@ -96,7 +98,6 @@ public class Category implements java.io.Serializable{
         mCurrentAmount += amount;
         return mCurrentAmount;
     }
-
 
 
 }
