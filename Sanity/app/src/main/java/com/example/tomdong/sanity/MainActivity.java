@@ -124,16 +124,24 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             Log.d("MyApp", "Forget");
             ResetPassword();
         }
-        List<Long> catIdSet = new ArrayList<>();
+        // 下面的Code不要删！测试用
+        /*List<Long> catIdSet = new ArrayList<>();
         catIdSet.add(123456789L);
         Budget b = new Budget(123456, 10, 500, catIdSet);
         Model.BudgetModel bm = Model.BudgetModel.GetInstance();
         bm.AddBudget(b);
         Model.StorageModel sm = new Model.StorageModel(getApplicationContext());
+        boolean exists = sm.FileExist();
+        sm.DeleteFile();
+        exists = sm.FileExist();
         sm.SaveObject(bm);
+        exists = sm.FileExist();
         bm.DeleteBudget(b.getmBudgetId());
+        exists = sm.FileExist();
         bm = sm.ReadObject("BudgetModel");
+        exists = sm.FileExist();
         bm.InitDataBase();
+        exists = sm.FileExist();*/
     }
 
     public void ResetPassword() {

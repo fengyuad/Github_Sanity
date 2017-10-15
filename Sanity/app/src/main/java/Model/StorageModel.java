@@ -3,6 +3,7 @@ package Model;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -21,6 +22,24 @@ public class StorageModel {
 
     public StorageModel(Context context) {
         mContext = context;
+    }
+
+    public void DeleteFile(){
+        File file = mContext.getFileStreamPath("SanityBudgetModel.dat");
+        file.delete();
+    }
+
+    public boolean FileExist() {
+        File file = mContext.getFileStreamPath("SanityBudgetModel.dat");
+        /*if (!file.exists())
+            return false;
+        file = mContext.getFileStreamPath("SanityCategoryModel.dat");
+        if (!file.exists())
+            return false;
+        file = mContext.getFileStreamPath("SanityTransactionModel.dat");*/
+        if (!file.exists())
+            return false;
+        return true;
     }
 
     public void SaveAll() {

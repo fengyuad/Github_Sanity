@@ -37,7 +37,7 @@ public class BudgetModel extends Model implements Serializable {
     }
 
     public void InitDataBase() {
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/budget");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("budget");
     }
 
     /**
