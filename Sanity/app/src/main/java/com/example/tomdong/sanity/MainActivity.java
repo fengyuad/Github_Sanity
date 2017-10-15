@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Budget;
-import Model.Category;
 import Model.CategoryModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
         test.ReadCategoryFromDatabase();
         test.PrintCategoryInfo();
-
 
 
     }
@@ -133,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         // 下面的Code不要删！测试用
         /*List<Long> catIdSet = new ArrayList<>();
         catIdSet.add(123456789L);
-        Budget b = new Budget(123456, 10, 500, catIdSet);
+        Budget b = new Budget("Life", 123456, 10, 500, catIdSet);
         Model.BudgetModel bm = Model.BudgetModel.GetInstance();
         bm.AddBudget(b);
         Model.StorageModel sm = new Model.StorageModel(getApplicationContext());

@@ -9,11 +9,11 @@ import java.util.List;
 
 public class Budget implements Serializable {
     private long mBudgetId = 0;
+    private String mName = "";
     private long mDueDate = 0;
     private int mPeriod = 0;
     private double mAmount = 0.0f;
     private List<Long> mCatIds;
-
     /**
      * Constructor - Initialize a Budget
      *
@@ -22,12 +22,21 @@ public class Budget implements Serializable {
      * @param amount  budget amount
      * @param catIds  category Ids
      */
-    public Budget(long dueDate, int period, double amount, List<Long> catIds) {
+    public Budget(String name, long dueDate, int period, double amount, List<Long> catIds) {
+        mName = name;
         mBudgetId = System.currentTimeMillis() / 1000;
         mDueDate = dueDate;
         mPeriod = period;
         mAmount = amount;
         mCatIds = catIds;
+    }
+
+    public String getmName() {
+        return mName;
+    }
+
+    public void setmName(String mName) {
+        this.mName = mName;
     }
 
     /**
