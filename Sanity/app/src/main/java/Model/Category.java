@@ -112,6 +112,11 @@ public class Category implements java.io.Serializable{
         return mCurrentAmount;
     }
 
+    public void RemoveTransaction(Long transID){
+        mTransactionIDs.remove(transID);
+        mCurrentAmount -= TransactionModel.GetInstance().getmTransactions().get(transID).getmAmount();
+    }
+
     /**
      * Add a transaction id to the arrayList
      * @param id
