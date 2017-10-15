@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
         CategoryModel test = CategoryModel.GetInstance();
+        test.ReadCategoryFromDatabase();
+        test.WriteCategoryAndUpdateDatabase(new Category("test", 123123L));
 
 
     }

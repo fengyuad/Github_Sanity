@@ -1,6 +1,9 @@
 package Model;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by EricWang on 10/12/17.
  */
@@ -58,6 +61,16 @@ public class Category implements java.io.Serializable{
     private double mAmount; // the upper bound of user setting amount
     private double mCurrentAmount; // current spending amount
 
+    public List<Long> getmTranID() {
+        return mTranID;
+    }
+
+    public void setmTranID(List<Long> mTranID) {
+        this.mTranID = mTranID;
+    }
+
+    private List<Long> mTranID = new ArrayList<>();
+
     /**
      * Constructor
      */
@@ -69,6 +82,9 @@ public class Category implements java.io.Serializable{
         mAmount = 0.00;
         mCurrentAmount = 0.00;
         mBudgetID = budgetID;
+        mTranID.add(123123L);
+        mTranID.add(123142L);
+
     }
     public Category(String name, double amount, Long budgetID){
         mName = name;
