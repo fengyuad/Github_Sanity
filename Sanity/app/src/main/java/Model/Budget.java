@@ -1,17 +1,19 @@
 package Model;
 
+import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
  * Created by Yifan on 10/12 012.
  */
 
-public class Budget {
+public class Budget implements Serializable {
     private long mBudgetId = 0;
     private long mDueDate = 0;
     private int mPeriod = 0;
     private double mAmount = 0.0f;
-    private Set<Long> mCatIds;
+    private List<Long> mCatIds;
 
     /**
      * Constructor - Initialize a Budget
@@ -21,7 +23,8 @@ public class Budget {
      * @param amount  budget amount
      * @param catIds  category Ids
      */
-    public Budget(long dueDate, int period, double amount, Set<Long> catIds) {
+    public Budget(long dueDate, int period, double amount, List<Long> catIds) {
+        mBudgetId = System.currentTimeMillis() / 1000;
         mDueDate = dueDate;
         mPeriod = period;
         mAmount = amount;
@@ -61,7 +64,7 @@ public class Budget {
      * @param catIds a Set of <b>long</b> category IDs
      * @see Set
      */
-    void UpdateCatIds(Set<Long> catIds) {
+    void UpdateCatIds(List<Long> catIds) {
         mCatIds = catIds;
     }
 
@@ -70,7 +73,7 @@ public class Budget {
      *
      * @return mBudgetId Budget Id
      */
-    long GetId() {
+    public long GetId() {
         return mBudgetId;
     }
 
@@ -110,7 +113,7 @@ public class Budget {
      * @see Set
      */
 
-    Set<Long> GetCatIds() {
+    List<Long> GetCatIds() {
         return mCatIds;
     }
 }

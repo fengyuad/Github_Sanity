@@ -1,32 +1,53 @@
 package Model;
 
-import android.app.Activity;
+import android.content.Context;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 /**
  * Created by Yifan on 10/13 013.
  */
 
-public class StorageModel extends Activity {
-    private File outFile;
-    private ObjectOutputStream oos;
+public class StorageModel {
+    FileOutputStream fos;
+    FileInputStream fis;
+    ObjectOutputStream oos;
+    ObjectInputStream ois;
+    Context mContext;
 
-    StorageModel() {
-        outFile = new File(getCacheDir(), "Sanity.dat");
+    public StorageModel(Context context) {
+        mContext = context;
     }
 
-    public <E extends Model> boolean SaceObject(E model) {
+    public <E extends Model> boolean SaveObject(E model) {
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(outFile));
+            fos = mContext.openFileOutput("Sanity.dat", Context.MODE_PRIVATE);
+            oos = new ObjectOutputStream(fos);
             oos.writeObject(model);
             oos.close();
+            fos.close();
             return true;
-        } catch (IOException ioe) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
+        }
+    }
+
+    public <E extends Model> E ReadObject() {
+        try {
+            E currModel;
+            fis = mContext.openFileInput("Sanity.dat");
+            ois = new ObjectInputStream(fis);
+            currModel = (E) ois.readObject();
+            ois.close();
+            fis.close();
+            return currModel;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

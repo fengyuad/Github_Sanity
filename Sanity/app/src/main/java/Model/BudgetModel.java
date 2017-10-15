@@ -1,13 +1,15 @@
 package Model;
 
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Yifan on 10/12 012.
  */
 
-public class BudgetModel extends Model{
+public class BudgetModel extends Model implements Serializable {
 
     private static BudgetModel mInstance = null;
     private Map<Long, Budget> mBudgetMap;
@@ -16,7 +18,7 @@ public class BudgetModel extends Model{
      * Constructor - Initialize a BudgetModel
      */
     private BudgetModel() {
-
+        mBudgetMap = new HashMap<>();
     }
 
     /**
@@ -39,7 +41,7 @@ public class BudgetModel extends Model{
      * <b>false</b> if budget is already in mBudgetMap
      * @see Map#put(Object, Object)
      */
-    boolean AddBudget(Budget budget) {
+    public boolean AddBudget(Budget budget) {
         if (mBudgetMap.containsKey(budget.GetId())) {
             return false;
         } else {
@@ -59,7 +61,7 @@ public class BudgetModel extends Model{
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
-    boolean UpdateBudget(long budgetId, long dueDate, int period, double amount, Set<Long> catIds) {
+    public boolean UpdateBudget(long budgetId, long dueDate, int period, double amount, List<Long> catIds) {
         if (mBudgetMap.containsKey(budgetId)) {
             Budget curr = mBudgetMap.get(budgetId);
             curr.UpdateDueDate(dueDate);
@@ -80,7 +82,7 @@ public class BudgetModel extends Model{
      * <b>false</b> if budget is not in mBudgetMap
      * @see Map#remove(Object)
      */
-    boolean DeleteBudget(long budgetId) {
+    public boolean DeleteBudget(long budgetId) {
         if (mBudgetMap.containsKey(budgetId)) {
             mBudgetMap.remove(budgetId);
             return true;
