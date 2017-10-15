@@ -1,15 +1,53 @@
 package Model;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by EricWang on 10/12/17.
  */
 
-public class Category implements java.io.Serializable {
+public class Category implements java.io.Serializable{
+    /**
+     * Getter and Setter
+     */
+    public String getmName() {
+        return mName;
+    }
 
+    public void setmName(String mName) {
+        this.mName = mName;
+    }
+
+    public Long getmID() {
+        return mID;
+    }
+
+    public void setmID(Long mID) {
+        this.mID = mID;
+    }
+
+    public Long getmBudgetID() {
+        return mBudgetID;
+    }
+
+    public void setmBudgetID(Long mBudgetID) {
+        this.mBudgetID = mBudgetID;
+    }
+
+    public double getmAmount() {
+        return mAmount;
+    }
+
+    public void setmAmount(double mAmount) {
+        this.mAmount = mAmount;
+    }
+
+    public double getmCurrentAmount() {
+        return mCurrentAmount;
+    }
+
+    public void setmCurrentAmount(double mCurrentAmount) {
+        this.mCurrentAmount = mCurrentAmount;
+    }
 
     /**
      * Member Variable
@@ -19,16 +57,6 @@ public class Category implements java.io.Serializable {
     private Long mBudgetID;
     private double mAmount; // the upper bound of user setting amount
     private double mCurrentAmount; // current spending amount
-
-    public List<Long> getmTranID() {
-        return mTranID;
-    }
-
-    public void setmTranID(List<Long> mTranID) {
-        this.mTranID = mTranID;
-    }
-
-    private List<Long> mTranID = new ArrayList<>();
 
     /**
      * Constructor
@@ -41,9 +69,6 @@ public class Category implements java.io.Serializable {
         mAmount = 0.00;
         mCurrentAmount = 0.00;
         mBudgetID = budgetID;
-        mTranID.add(123123L);
-        mTranID.add(123142L);
-
     }
     public Category(String name, double amount, Long budgetID){
         mName = name;
@@ -61,8 +86,9 @@ public class Category implements java.io.Serializable {
     /**
      * Public method
      */
-    
+
     /**
+     *
      * @param amount
      * @return currentAmount
      */
@@ -70,6 +96,7 @@ public class Category implements java.io.Serializable {
         mCurrentAmount += amount;
         return mCurrentAmount;
     }
+
 
 
 }
