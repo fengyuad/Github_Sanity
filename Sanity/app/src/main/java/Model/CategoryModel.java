@@ -125,6 +125,10 @@ public class CategoryModel extends Model implements Serializable {
         cat.AddTransaction(tranID);
     }
 
+    private void RemoveTransactionInCategory(Long catID, Long tranID){
+        mIDToCategory.get(catID).RemoveTransaction(tranID);
+    }
+
     /**
      *----------------- Database Related -----------------
      */
@@ -217,11 +221,11 @@ public class CategoryModel extends Model implements Serializable {
 
     }
 
-    public void PrintCategoryInfo(){
-        for(Long l: mIDToCategory.keySet()){
-            Log.d("print", mIDToCategory.get(l).getmName() + "/" + mIDToCategory.get(l).getmID());
-        }
-        Log.d("print", "end");
+
+    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID){
+        RemoveTransactionInCategory(catID, tranID);
+        List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
+        mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
     }
 
 }
