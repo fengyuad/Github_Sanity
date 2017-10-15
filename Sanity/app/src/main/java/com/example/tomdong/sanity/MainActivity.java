@@ -161,7 +161,10 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 if(task.isSuccessful())
                 {
                     Toast.makeText(MainActivity.this,"Login Succeeded",Toast.LENGTH_SHORT).show();
-                    //startActivity(new Intent(getApplicationContext(),OverViewActivity.class));
+
+                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    startActivity(intent);
+                    finish();
                 }
                 else
                 {

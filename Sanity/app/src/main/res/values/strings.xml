@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Sanity</string>
+    <string name="title_activity_menu">MenuActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="bgt_array">
+        <item>Choose a budget</item>
+        <item>School</item>
+        <item>Weekend</item>
+        <item>Summer</item>
+    </string-array>
+
+    <string-array name="cat_array">
+        <item>Choose a category</item>
+        <item>Food</item>
+        <item>Drinks</item>
+        <item>Gas</item>
+        <item>Games</item>
+    </string-array>
+
+    <string name="bgt_prompt">Choose a budget</string>
+    <string name="cat_prompt">Choose a category</string>
+
 </resources>
