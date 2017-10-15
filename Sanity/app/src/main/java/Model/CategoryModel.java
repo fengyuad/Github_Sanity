@@ -1,5 +1,7 @@
 package Model;
 
+import android.util.Log;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,6 +27,7 @@ public class CategoryModel extends Model implements Serializable {
     public Map<Long, Category> mIDToCategory;
     private List<String> mNameCategoryUsed;
     private DatabaseReference mDatabase;
+
 
     /**
      * Constructor, read from database
@@ -112,6 +115,17 @@ public class CategoryModel extends Model implements Serializable {
     }
 
     /**
+     *
+     * @param catID
+     * @param tranID
+     * @return
+     */
+    private void AddTransactionToCategory(Long catID, Long tranID){
+        Category cat = mIDToCategory.get(catID);
+        cat.AddTransaction(tranID);
+    }
+
+    /**
      *----------------- Database Related -----------------
      */
 
@@ -145,6 +159,7 @@ public class CategoryModel extends Model implements Serializable {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Category cat = ds.getValue(Category.class);
                     mIDToCategory.put(cat.getmID(), cat);
+                    Log.d("print", "put value");
                 }
             }
 
@@ -188,6 +203,25 @@ public class CategoryModel extends Model implements Serializable {
         double currentAmount = AddCategoryAmount(id, amount);
         mDatabase.child(id.toString()).child("mCurrentAmount").setValue(currentAmount);
         return currentAmount;
+    }
+
+    /**
+     *
+     * @param catID
+     * @param tranID
+     */
+    public void AddTransactionIDToCategoryAndUpdateDatabase(Long catID, Long tranID){
+        AddTransactionToCategory(catID, tranID);
+        List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
+        mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
+
+    }
+
+    public void PrintCategoryInfo(){
+        for(Long l: mIDToCategory.keySet()){
+            Log.d("print", mIDToCategory.get(l).getmName() + "/" + mIDToCategory.get(l).getmID());
+        }
+        Log.d("print", "end");
     }
 
 }
