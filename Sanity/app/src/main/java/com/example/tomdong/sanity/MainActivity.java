@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Model.Budget;
+import Model.Category;
 import Model.CategoryModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     private Button Register;
     private TextView ForgetPassword;
     private FirebaseAuth firebaseAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +70,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
         CategoryModel test = CategoryModel.GetInstance();
+
         test.ReadCategoryFromDatabase();
-        test.WriteCategoryAndUpdateDatabase(new Model.Category("test", 123123L));
+        test.PrintCategoryInfo();
+
+
+
     }
 
     @Override
@@ -181,6 +187,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     }
 
     public void LoginUser() {
+
+
         String email = Account.getText().toString();
         String pw = PassWord.getText().toString();
 
