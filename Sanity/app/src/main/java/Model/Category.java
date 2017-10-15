@@ -112,9 +112,9 @@ public class Category implements java.io.Serializable{
         return mCurrentAmount;
     }
 
-    public void RemoveTransaction(Long transID){
+    public void RemoveTransaction(Long transID, double amount){
         mTransactionIDs.remove(transID);
-        mCurrentAmount -= TransactionModel.GetInstance().getmTransactions().get(transID).getmAmount();
+        mCurrentAmount -= amount;
     }
 
     /**

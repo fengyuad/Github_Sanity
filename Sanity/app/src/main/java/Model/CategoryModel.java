@@ -125,8 +125,14 @@ public class CategoryModel extends Model implements Serializable {
         cat.AddTransaction(tranID);
     }
 
-    private void RemoveTransactionInCategory(Long catID, Long tranID){
-        mIDToCategory.get(catID).RemoveTransaction(tranID);
+    /**
+     *
+     * @param catID
+     * @param tranID
+     * @param amount
+     */
+    private void RemoveTransactionInCategory(Long catID, Long tranID, double amount){
+        mIDToCategory.get(catID).RemoveTransaction(tranID, amount);
     }
 
     /**
@@ -221,11 +227,17 @@ public class CategoryModel extends Model implements Serializable {
 
     }
 
-
-    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID){
-        RemoveTransactionInCategory(catID, tranID);
+    /**
+     *
+     * @param catID
+     * @param tranID
+     * @param amount
+     */
+    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID, double amount){
+        RemoveTransactionInCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
+        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
     }
 
 }
