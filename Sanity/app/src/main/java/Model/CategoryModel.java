@@ -21,7 +21,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
      * member variable
      */
     private static CategoryModel mInstance = null;
-    private Map<Long, Category> mIDToCategory;
+    public Map<Long, Category> mIDToCategory;
     private List<String> mNameCategoryUsed;
     private DatabaseReference mDatabase;
 
@@ -58,6 +58,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
      * @param category
      */
     private void AddCategory(Category category) {
+        category.setmID(System.currentTimeMillis()/1000);
         mIDToCategory.put(category.getmID(), category);
         mNameCategoryUsed.add(category.getmName());
     }
@@ -106,7 +107,6 @@ public class CategoryModel extends Model implements java.io.Serializable {
         mNameCategoryUsed.remove(cat.getmName());
         cat.setmName(name);
         mNameCategoryUsed.add(name);
-
         return true;
     }
 
@@ -120,6 +120,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
      */
     public boolean WriteCategoryAndUpdateDatabase(Category cat) {
         // check duplicate name
+<<<<<<< HEAD
         if (mNameCategoryUsed.contains(cat.getmName())) return false;
 
         Long key = System.currentTimeMillis() / 1000;
@@ -127,6 +128,11 @@ public class CategoryModel extends Model implements java.io.Serializable {
         mIDToCategory.put(key, cat);
         mNameCategoryUsed.add(cat.getmName());
         mDatabase.child(key.toString()).setValue(cat);
+=======
+        if(mNameCategoryUsed.contains(cat.getmName())) return false;
+        AddCategory(cat);
+        mDatabase.child(cat.getmID().toString()).setValue(cat);
+>>>>>>> Bingtang-Wang
         return true;
     }
 
