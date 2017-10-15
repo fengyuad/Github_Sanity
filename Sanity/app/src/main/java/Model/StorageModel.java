@@ -24,26 +24,46 @@ public class StorageModel {
         mContext = context;
     }
 
-    public void DeleteFile(){
+    public boolean DeleteFiles() {
         File file = mContext.getFileStreamPath("SanityBudgetModel.dat");
-        file.delete();
+        if (!file.delete())
+            return false;
+        file = mContext.getFileStreamPath("SanityCategoryModel.dat");
+        if (!file.delete())
+            return false;
+        file = mContext.getFileStreamPath("SanityTransactionModel.dat");
+        if (!file.delete())
+            return false;
+        return true;
     }
 
-    public boolean FileExist() {
+    public boolean FilesExist() {
         File file = mContext.getFileStreamPath("SanityBudgetModel.dat");
-        /*if (!file.exists())
+        if (!file.exists())
             return false;
         file = mContext.getFileStreamPath("SanityCategoryModel.dat");
         if (!file.exists())
             return false;
-        file = mContext.getFileStreamPath("SanityTransactionModel.dat");*/
+        file = mContext.getFileStreamPath("SanityTransactionModel.dat");
         if (!file.exists())
             return false;
         return true;
     }
 
-    public void SaveAll() {
-        //SaveObject();
+    public boolean SaveAll() {
+        if (!SaveObject(BudgetModel.GetInstance()))
+            return false;
+        if (!SaveObject(CategoryModel.GetInstance()))
+            return false;
+        if (!SaveObject(TransactionModel.GetInstance()))
+            return false;
+        return true;
+    }
+
+    public void ReadAll() {
+        BudgetModel.UpdateInstance((BudgetModel) ReadObject("BudgetModel"));
+        BudgetModel.UpdateInstance((BudgetModel) ReadObject("CategoryModel"));
+        BudgetModel.UpdateInstance((BudgetModel) ReadObject("TransactionModel"));
     }
 
     public <E extends Model> boolean SaveObject(E model) {

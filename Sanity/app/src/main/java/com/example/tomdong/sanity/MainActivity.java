@@ -135,17 +135,17 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         Model.BudgetModel bm = Model.BudgetModel.GetInstance();
         bm.AddBudget(b);
         Model.StorageModel sm = new Model.StorageModel(getApplicationContext());
-        boolean exists = sm.FileExist();
-        sm.DeleteFile();
-        exists = sm.FileExist();
+        boolean exists = sm.FilesExist();
+        sm.DeleteFiles();
+        exists = sm.FilesExist();
         sm.SaveObject(bm);
-        exists = sm.FileExist();
+        exists = sm.FilesExist();
         bm.DeleteBudget(b.getmBudgetId());
-        exists = sm.FileExist();
+        exists = sm.FilesExist();
         bm = sm.ReadObject("BudgetModel");
-        exists = sm.FileExist();
+        exists = sm.FilesExist();
         bm.InitDataBase();
-        exists = sm.FileExist();*/
+        exists = sm.FilesExist();*/
     }
 
     public void ResetPassword() {
