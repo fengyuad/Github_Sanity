@@ -4,7 +4,39 @@ package Model;
  * Created by zhongchu on 10/12/17.
  */
 
-public class Transaction {
+public class Transaction implements java.io.Serializable{
+    public double getmAmount() {
+        return mAmount;
+    }
+
+    public long getmCategoryId() {
+        return mCategoryId;
+    }
+
+    public long getmTransactionId() {
+        return mTransactionId;
+    }
+
+    public String getmNotes() {
+        return mNotes;
+    }
+
+    public void setmAmount(double mAmount) {
+        this.mAmount = mAmount;
+    }
+
+    public void setmCategoryId(long mCategoryId) {
+        this.mCategoryId = mCategoryId;
+    }
+
+    public void setmTransactionId(long mTransactionId) {
+        this.mTransactionId = mTransactionId;
+    }
+
+    public void setmNotes(String mNotes) {
+        this.mNotes = mNotes;
+    }
+
     private double mAmount;
     private long mCategoryId;
     private long mTransactionId;
@@ -17,31 +49,7 @@ public class Transaction {
         mNotes = notes;
     }
 
-    public double GetAmount(){
-        return mAmount;
+    public Transaction(){
+
     }
-
-    public void SetmAmount(double amount){
-        mAmount = amount;
-    }
-
-    public long GetCategoryId(){
-        return mCategoryId;
-    }
-
-    public void SetmCategoryId(long categoryId){
-        mCategoryId = categoryId;
-    }
-
-    public long GetTransactionId(){
-        return mTransactionId;
-    }
-
-    public void SetmTransactionId(long transID){
-        mTransactionId = transID;
-    }
-
-    public String GetNotes() { return mNotes; }
-
-    public void SetmNotes(String notes) { mNotes = notes; }
 }
