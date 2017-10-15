@@ -1,5 +1,7 @@
 package Model;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ public class BudgetModel extends Model implements Serializable {
      */
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
+        InitDataBase();
     }
 
     /**
@@ -33,6 +36,10 @@ public class BudgetModel extends Model implements Serializable {
         return mInstance;
     }
 
+    public void InitDataBase() {
+        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/budget");
+    }
+
     /**
      * Add a new budget
      *
@@ -42,10 +49,11 @@ public class BudgetModel extends Model implements Serializable {
      * @see Map#put(Object, Object)
      */
     public boolean AddBudget(Budget budget) {
-        if (mBudgetMap.containsKey(budget.GetId())) {
+        if (mBudgetMap.containsKey(budget.getmBudgetId())) {
             return false;
         } else {
-            mBudgetMap.put(budget.GetId(), budget);
+            mBudgetMap.put(budget.getmBudgetId(), budget);
+            mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
             return true;
         }
     }
@@ -64,10 +72,10 @@ public class BudgetModel extends Model implements Serializable {
     public boolean UpdateBudget(long budgetId, long dueDate, int period, double amount, List<Long> catIds) {
         if (mBudgetMap.containsKey(budgetId)) {
             Budget curr = mBudgetMap.get(budgetId);
-            curr.UpdateDueDate(dueDate);
-            curr.UpdatePeriod(period);
-            curr.UpdateAmount(amount);
-            curr.UpdateCatIds(catIds);
+            curr.setmDueDate(dueDate);
+            curr.setmPeriod(period);
+            curr.setmAmount(amount);
+            curr.setmCatIds(catIds);
             return true;
         } else {
             return false;

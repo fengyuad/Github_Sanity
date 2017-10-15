@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.Map;
  * Created by EricWang on 10/12/17.
  */
 
-public class CategoryModel extends Model implements java.io.Serializable {
+public class CategoryModel extends Model implements Serializable {
     /**
      * member variable
      */

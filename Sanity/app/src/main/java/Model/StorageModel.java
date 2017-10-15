@@ -1,6 +1,7 @@
 package Model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,13 +23,18 @@ public class StorageModel {
         mContext = context;
     }
 
+    public void SaveAll() {
+        //SaveObject();
+    }
+
     public <E extends Model> boolean SaveObject(E model) {
         try {
-            fos = mContext.openFileOutput("Sanity.dat", Context.MODE_PRIVATE);
+            fos = mContext.openFileOutput("Sanity" + model.getClass().getSimpleName() + ".dat", Context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(model);
             oos.close();
             fos.close();
+            Log.d("DEBUG", "Object Saved");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -36,14 +42,15 @@ public class StorageModel {
         }
     }
 
-    public <E extends Model> E ReadObject() {
+    public <E extends Model> E ReadObject(String className) {
         try {
             E currModel;
-            fis = mContext.openFileInput("Sanity.dat");
+            fis = mContext.openFileInput("Sanity" + className + ".dat");
             ois = new ObjectInputStream(fis);
             currModel = (E) ois.readObject();
             ois.close();
             fis.close();
+            Log.d("DEBUG", "Object Read");
             return currModel;
         } catch (Exception e) {
             e.printStackTrace();

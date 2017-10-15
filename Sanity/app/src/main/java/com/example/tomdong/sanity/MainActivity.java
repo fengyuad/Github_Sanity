@@ -131,8 +131,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         bm.AddBudget(b);
         Model.StorageModel sm = new Model.StorageModel(getApplicationContext());
         sm.SaveObject(bm);
-        bm.DeleteBudget(b.GetId());
-        bm = sm.ReadObject();
+        bm.DeleteBudget(b.getmBudgetId());
+        bm = sm.ReadObject("BudgetModel");
+        bm.InitDataBase();
     }
 
     public void ResetPassword() {

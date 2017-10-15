@@ -2,7 +2,6 @@ package Model;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Yifan on 10/12 012.
@@ -32,88 +31,92 @@ public class Budget implements Serializable {
     }
 
     /**
-     * Update due date
+     * Getter
      *
-     * @param dueDate a <b>long</b> Unix Time that represents the due date
+     * @return mBudgetId
      */
-    void UpdateDueDate(long dueDate) {
-        mDueDate = dueDate;
-    }
-
-    /**
-     * Update budget period
-     *
-     * @param period an <b>int</b> that represents budget period in days
-     */
-    void UpdatePeriod(int period) {
-        mPeriod = period;
-    }
-
-    /**
-     * Update budget amount
-     *
-     * @param amount a <b>double</b> that represents the budget amount
-     */
-    void UpdateAmount(double amount) {
-        mAmount = amount;
-    }
-
-    /**
-     * Update Categories
-     *
-     * @param catIds a Set of <b>long</b> category IDs
-     * @see Set
-     */
-    void UpdateCatIds(List<Long> catIds) {
-        mCatIds = catIds;
-    }
-
-    /**
-     * Return this budget's Id
-     *
-     * @return mBudgetId Budget Id
-     */
-    public long GetId() {
+    public long getmBudgetId() {
         return mBudgetId;
     }
 
     /**
-     * Get due date
+     * Setter
      *
-     * @return <b>long</b> mDueDate
+     * @param mBudgetId
      */
-    long GetDueDate() {
+    /*public void setmBudgetId(long mBudgetId) {
+        this.mBudgetId = mBudgetId;
+    }*/
+
+    /**
+     * Getter
+     *
+     * @return mDueDate
+     */
+    public long getmDueDate() {
         return mDueDate;
     }
 
     /**
-     * Get budget period
+     * Setter
      *
-     * @return <b>int</b> mPeriod
+     * @param mDueDate
      */
+    public void setmDueDate(long mDueDate) {
+        this.mDueDate = mDueDate;
+    }
 
-    int GetPeriod() {
+    /**
+     * Getter
+     *
+     * @return mPeriod
+     */
+    public int getmPeriod() {
         return mPeriod;
     }
 
     /**
-     * Get budget amount
+     * Setter
      *
-     * @return <b>double</b> mAmount
+     * @param mPeriod
      */
+    public void setmPeriod(int mPeriod) {
+        this.mPeriod = mPeriod;
+    }
 
-    double GetAmount() {
+    /**
+     * Getter
+     *
+     * @return mAmount
+     */
+    public double getmAmount() {
         return mAmount;
     }
 
     /**
-     * Get category IDs
+     * Setter
      *
-     * @return <b>Set&lt;Long&gt;</b> GetCatIds
-     * @see Set
+     * @param mAmount
      */
+    public void setmAmount(double mAmount) {
+        this.mAmount = mAmount;
+    }
 
-    List<Long> GetCatIds() {
+    /**
+     * Getter
+     *
+     * @return mCatIds
+     */
+    public List<Long> getmCatIds() {
         return mCatIds;
+    }
+
+    /**
+     * Setter
+     *
+     * @param mCatIds
+     */
+    public void setmCatIds(List<Long> mCatIds) {
+        this.mCatIds = mCatIds;
     }
 }
