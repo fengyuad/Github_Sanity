@@ -22,7 +22,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
      */
     private static CategoryModel mInstance = null;
     private Map<Long, Category> mIDToCategory;
-    private List<String> nameCategoryUsed;
+    private List<String> mNameCategoryUsed;
     private DatabaseReference mDatabase;
 
     /**
@@ -44,42 +44,76 @@ public class CategoryModel extends Model implements java.io.Serializable {
         super();
         // initialize the data struture
         mIDToCategory = new HashMap<>();
-        nameCategoryUsed = new ArrayList<String>();
+        mNameCategoryUsed = new ArrayList<String>();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
     }
 
     /**
-     * Public method //////////
+     *----------------- Public method on local -----------------
      */
-    public void AddCategory(Category category) {
+
+    /**
+     * add category to map and nameCategoryUsed
+     * @param category
+     */
+    private void AddCategory(Category category) {
         mIDToCategory.put(category.getmID(), category);
+        mNameCategoryUsed.add(category.getmName());
     }
 
     /**
      *
      * @param id
      */
-    public void DeleteCategory(Long id) {
+    private void DeleteCategory(Long id) {
+        mNameCategoryUsed.remove(mIDToCategory.get(id));
         mIDToCategory.remove(id);
     }
 
     /**
-     *
      * @param name
      * @return true if name already used
      */
-    public boolean CheckNameUsed(String name) {
-        return nameCategoryUsed.contains(name);
+    private boolean CheckNameUsed(String name) {
+        return mNameCategoryUsed.contains(name);
     }
 
     /**
      * Update the current amount
      * @param id
      * @param amount
+     * @return id's current amount
      */
-    public void UpdateCategory(Long id, double amount) {
-        mIDToCategory.get(id).AddCurrentAmount(amount);
+    private double AddCategoryAmount(Long id, double amount) {
+        return mIDToCategory.get(id).AddCurrentAmount(amount);
     }
+
+    /**
+     *
+     * @param id
+     * @param name
+     * @return true if change successfully, false if contains duplicate name
+     *
+     */
+    private boolean ChangeCategoryName(Long id, String name){
+        Category cat = mIDToCategory.get(id);
+        // same name as previous
+        if(cat.getmName().equals(name)) return true;
+
+        // same as name already used
+        if(mNameCategoryUsed.contains(name)) return false;
+
+        // change the name on local
+        mNameCategoryUsed.remove(cat.getmName());
+        cat.setmName(name);
+        mNameCategoryUsed.add(name);
+
+        return true;
+    }
+
+    /**
+     *----------------- Database Related -----------------
+     */
 
     /**
      *
@@ -87,13 +121,14 @@ public class CategoryModel extends Model implements java.io.Serializable {
      * @return true if successfully write into the database
      * @return false if find duplicate category name
      */
-    public boolean WriteNewCategory(Category cat){
+    public boolean WriteCategoryAndUpdateDatabase(Category cat){
         // check duplicate name
-        if(nameCategoryUsed.contains(cat.getmName())) return false;
+        if(mNameCategoryUsed.contains(cat.getmName())) return false;
 
         Long key = System.currentTimeMillis()/1000;
         cat.setmID(key);
         mIDToCategory.put(key, cat);
+        mNameCategoryUsed.add(cat.getmName());
         mDatabase.child(key.toString()).setValue(cat);
         return true;
     }
@@ -101,7 +136,7 @@ public class CategoryModel extends Model implements java.io.Serializable {
     /**
      * read all category
      */
-    public void ReadCategory(){
+    public void ReadCategoryFromDatabase(){
         // read data from database and store in mIDToCategory
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -118,4 +153,40 @@ public class CategoryModel extends Model implements java.io.Serializable {
         });
 
     }
+
+    /**
+     * delete category on the database
+     * @param catID
+     */
+    public void DeleteCategoryAndUpdateDatabase(Long catID){
+        DeleteCategory(catID);
+        mDatabase.child(catID.toString()).removeValue();
+    }
+
+    /**
+     *
+     * @param id
+     * @param name
+     * @return true if successfully update the name, false if duplicate name
+     */
+    public boolean ChangeCategoryNameAndUpdateDatabase(Long id, String name){
+        // duplicate name
+        if(!ChangeCategoryName(id, name)) return false;
+
+        mDatabase.child(id.toString()).child("mName").setValue(name);
+        return true;
+    }
+
+    /**
+     *
+     * @param id
+     * @param amount
+     * @return id's current amount
+     */
+    public double AddCategoryAmountAndUpdateDatabase(Long id, double amount){
+        double currentAmount = AddCategoryAmount(id, amount);
+        mDatabase.child(id.toString()).child("mCurrentAmount").setValue(currentAmount);
+        return currentAmount;
+    }
+
 }

@@ -57,7 +57,10 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         Login.setOnClickListener(this);
         Register.setOnClickListener(this);
         ForgetPassword.setOnClickListener(this);
-        // Test database
+
+        /**
+         * ------------------ Test Database Model Functionality -------------------
+         */
         CategoryModel test = CategoryModel.GetInstance();
 
 

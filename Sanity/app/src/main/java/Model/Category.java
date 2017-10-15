@@ -86,12 +86,15 @@ public class Category implements java.io.Serializable{
     /**
      * Public method
      */
+
     /**
-     * Add to current amount
+     *
      * @param amount
+     * @return currentAmount
      */
-    public void AddCurrentAmount(double amount) {
+    public double AddCurrentAmount(double amount) {
         mCurrentAmount += amount;
+        return mCurrentAmount;
     }
 
 
