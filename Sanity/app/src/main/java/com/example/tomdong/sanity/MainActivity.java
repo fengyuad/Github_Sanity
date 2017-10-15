@@ -69,9 +69,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          */
         CategoryModel test = CategoryModel.GetInstance();
         test.ReadCategoryFromDatabase();
-        test.WriteCategoryAndUpdateDatabase(new Category("test", 123123L));
-
-
+        test.WriteCategoryAndUpdateDatabase(new Model.Category("test", 123123L));
     }
 
     @Override
