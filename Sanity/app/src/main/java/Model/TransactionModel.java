@@ -38,10 +38,13 @@ public class TransactionModel extends Model implements java.io.Serializable{
     }
 
     public Transaction addTransaction(Transaction trans) {
-        //Long transactionId = System.currentTimeMillis() / 1000;
-        CategoryModel CModel = CategoryModel.GetInstance();
-        CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+
         WriteNewTransaction(trans);
+        CategoryModel CModel = CategoryModel.GetInstance();
+
+        CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+
+
         mTransactions.put(trans.getmTransactionId(), trans);
         return trans;
     }
@@ -61,9 +64,9 @@ public class TransactionModel extends Model implements java.io.Serializable{
     }
 
     public boolean WriteNewTransaction(Transaction trans){
-        Long key = System.currentTimeMillis()/1000;
-        trans.setmTransactionId(key);
-        addTransaction(trans);
+        Long key = trans.getmTransactionId();
+        //trans.setmTransactionId(key);
+        //addTransaction(trans);
         mDatabase.child(key.toString()).setValue(trans);
         return true;
     }

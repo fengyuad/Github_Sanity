@@ -23,8 +23,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
+import Model.Budget;
+import Model.BudgetModel;
+import Model.Category;
 import Model.CategoryModel;
 import Model.StorageModel;
+import Model.Transaction;
+import Model.TransactionModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -73,9 +80,17 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-        CategoryModel test = CategoryModel.GetInstance();
+        CategoryModel catTest = CategoryModel.GetInstance();
+        BudgetModel budTest = BudgetModel.GetInstance();
+        TransactionModel tranTest = TransactionModel.GetInstance();
+        catTest.ReadCategoryFromDatabase();
+        tranTest.ReadTransaction();
 
-        test.ReadCategoryFromDatabase();
+//        Budget budget = new Budget("Budget1", 1508692133L, 30, 1000.0, new ArrayList<Long>());
+//        budTest.AddBudget(budget);
+//        catTest.WriteCategoryAndUpdateDatabase(new Category("Category1", 100.0, budget.getmBudgetId()));
+
+
     }
 
     @Override
@@ -115,6 +130,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     @Override
     public void onClick(View view) {
 
+        Transaction transactionOne = new Transaction(20.0, 1508177224168L, "This is the first transaction", 2017, 10, 16);
+        TransactionModel.GetInstance().addTransaction(transactionOne);
+
         Log.d("MyApp", "I am here");
         Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
 
@@ -148,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         exists = sm.FilesExist();
         bm.InitDataBase();
         exists = sm.FilesExist();*/
+
+
     }
 
     public void ResetPassword() {
