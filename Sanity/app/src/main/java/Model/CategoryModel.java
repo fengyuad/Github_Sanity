@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -135,6 +136,29 @@ public class CategoryModel extends Model implements Serializable {
      */
     private void RemoveTransactionInCategory(Long catID, Long tranID, double amount){
         mIDToCategory.get(catID).RemoveTransaction(tranID, amount);
+    }
+
+    /**
+     * 
+     * @return list of the string displayed in notification
+     */
+    public List<String> getNotification(){
+        double threshold = Variable.GetInstance().getmThreshold();
+        List<String> ret = new ArrayList<>();
+
+        for(Long l: mIDToCategory.keySet()){
+            Category cat = mIDToCategory.get(l);
+            if(cat.getmCurrentAmount() >= cat.getmAmount() * threshold){
+                StringBuilder sb = new StringBuilder();
+                sb.append(cat.getmName() + " has reached "); // name of the category
+                sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
+                sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
+                sb.append("Time remaining: " ); // time remaining
+                ret.add(sb.toString());
+            }
+        }
+        return ret;
+
     }
 
     /**
