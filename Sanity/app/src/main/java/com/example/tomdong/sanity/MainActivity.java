@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 if(task.isSuccessful())
                 {
                     Toast.makeText(MainActivity.this,"Register Succeeded",Toast.LENGTH_SHORT).show();
+
                 }
                 else
                 {
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     {
         String email=Account.getText().toString();
         String pw=PassWord.getText().toString();
-
+        startActivity(new Intent(getApplicationContext(),OverViewActivity.class));
         if(TextUtils.isEmpty(email))
         {
             Toast.makeText(MainActivity.this,"Email Empty!",Toast.LENGTH_SHORT).show();
@@ -160,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 if(task.isSuccessful())
                 {
                     Toast.makeText(MainActivity.this,"Login Succeeded",Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                     startActivity(intent);
                     finish();
