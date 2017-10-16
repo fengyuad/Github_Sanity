@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         String pw = PassWord.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(MainActivity.this, "Email Empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
 
             return;
         }
