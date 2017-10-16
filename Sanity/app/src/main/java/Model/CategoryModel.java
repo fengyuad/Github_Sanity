@@ -57,6 +57,10 @@ public class CategoryModel extends Model implements Serializable {
      *----------------- Public method on local -----------------
      */
 
+
+
+
+
     /**
      * add category to map and nameCategoryUsed
      *
