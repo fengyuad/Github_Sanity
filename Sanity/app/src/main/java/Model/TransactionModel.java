@@ -89,14 +89,15 @@ public class TransactionModel extends Model implements java.io.Serializable{
     public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay){
         Map<Long, Transaction> toReturn = new HashMap<>();
         for(Long key : mTransactions.keySet()) {
-            if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)) {
+            if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)){
                 toReturn.put(key, mTransactions.get(key));
-            } else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear) {
+            }
+            else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear){
                 if(mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth){
                     toReturn.put(key, mTransactions.get(key));
                 }
                 else if(mTransactions.get(key).getmYear() == fromMonth || mTransactions.get(key).getmYear() == toMonth){
-                    if(mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay) {
+                    if(mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay){
                         toReturn.put(key, mTransactions.get(key));
                     }
                 }
