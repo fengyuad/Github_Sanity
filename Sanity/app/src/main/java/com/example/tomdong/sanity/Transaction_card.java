@@ -13,13 +13,15 @@ public class Transaction_card {
     private String time;
     private String Note;
     private String amount;
-    public Transaction_card(String CategoryType,String time,String amount,String Note) {
+
+    public Transaction_card(String CategoryType, String time, String amount, String Note) {
         //this.BudgetType = BudgetType;
         this.CategoryType = CategoryType;
-        this.time=time;
-        this.Note=Note;
-        this.amount=amount;
+        this.time = time;
+        this.Note = Note;
+        this.amount = amount;
     }
+
     public String GetCategoryType() {
         return CategoryType;
     }
@@ -27,9 +29,11 @@ public class Transaction_card {
     public String GetTime() {
         return time;
     }
+
     public String GetNote() {
         return Note;
     }
+
     public String GetAmount() {
         return amount;
     }

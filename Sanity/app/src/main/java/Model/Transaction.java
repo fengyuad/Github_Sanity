@@ -1,17 +1,15 @@
 package Model;
 
-import java.security.Timestamp;
-
 /**
  * Created by zhongchu on 10/12/17.
  */
 
-public class Transaction implements java.io.Serializable{
+public class Transaction implements java.io.Serializable {
 
     private double mAmount;
     private long mCategoryId;
     private long mTransactionId;
-    private String mNotes;
+    private String mNotes = "";
     private int mYear;
     private int mMonth;
     private int mDay;
@@ -72,17 +70,17 @@ public class Transaction implements java.io.Serializable{
         return mDay;
     }
 
-    public Transaction(double amount, long categoryId, long transID, String notes, int year, int month, int day){
+    public Transaction(double amount, long categoryId, String notes, int year, int month, int day) {
         mYear = year;
         mMonth = month;
         mDay = day;
         mAmount = amount;
         mCategoryId = categoryId;
-        mTransactionId = transID;
+        mTransactionId = System.currentTimeMillis();
         mNotes = notes;
     }
 
-    public Transaction(){
+    public Transaction() {
 
     }
 }

@@ -6,34 +6,23 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
+
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tomdong.sanity.dummy.DummyContent;
+
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
-
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 /**
  * A fragment representing a list of Items.
@@ -81,8 +70,8 @@ public class BudgetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget_list, container, false);
-        mListView=view.findViewById(R.id.my_budgets_listview);
-        mImageView=view.findViewById(R.id.my_budgets_icon);
+        mListView = view.findViewById(R.id.my_budgets_listview);
+        mImageView = view.findViewById(R.id.my_budgets_icon);
 
 
         ArrayList<Budget_card> list = new ArrayList<>();
@@ -95,7 +84,7 @@ public class BudgetFragment extends Fragment {
         list.add(new Budget_card("Gaming"));
         list.add(new Budget_card("Travelling"));
         list.add(new Budget_card("pooping"));
-        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
+        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
         mListView.setAdapter(adapter);
 //        SwipeMenuCreator creator = new SwipeMenuCreator() {
 //
@@ -138,7 +127,7 @@ public class BudgetFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                startActivity(new Intent(getContext(),BudgetViewActivity.class));
+                startActivity(new Intent(getContext(), BudgetViewActivity.class));
 
             }
         });

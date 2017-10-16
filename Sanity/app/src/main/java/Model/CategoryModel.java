@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -28,7 +27,6 @@ public class CategoryModel extends Model implements Serializable {
     public Map<Long, Category> mIDToCategory;
     private List<String> mNameCategoryUsed;
     private DatabaseReference mDatabase;
-
 
 
     /**
@@ -57,9 +55,6 @@ public class CategoryModel extends Model implements Serializable {
     /**
      *----------------- Public method on local -----------------
      */
-
-
-
 
 
     /**
@@ -110,50 +105,50 @@ public class CategoryModel extends Model implements Serializable {
     }
 
     /**
-     *
      * @param id
      * @return Category
      */
-    public Category GetCategoryById(Long id){
+    public Category GetCategoryById(Long id) {
         return mIDToCategory.get(id);
     }
 
     /**
-     *
      * @param catID
      * @param tranID
      * @return
      */
-    private void AddTransactionToCategory(Long catID, Long tranID, double amount){
+    private void AddTransactionToCategory(Long catID, Long tranID, double amount) {
         mIDToCategory.get(catID).AddTransaction(tranID, amount);
     }
 
     /**
-     *
      * @param catID
      * @param tranID
      * @param amount
      */
-    private void RemoveTransactionInCategory(Long catID, Long tranID, double amount){
+    private void RemoveTransactionInCategory(Long catID, Long tranID, double amount) {
+        Log.d("test", "size of category map: " + mIDToCategory.size());
+        for (Long l : mIDToCategory.keySet()) {
+            Log.d("test", "category map: " + l);
+        }
         mIDToCategory.get(catID).RemoveTransaction(tranID, amount);
     }
 
     /**
-     * 
      * @return list of the string displayed in notification
      */
-    public List<String> getNotification(){
+    public List<String> getNotification() {
         double threshold = Variable.GetInstance().getmThreshold();
         List<String> ret = new ArrayList<>();
 
-        for(Long l: mIDToCategory.keySet()){
+        for (Long l : mIDToCategory.keySet()) {
             Category cat = mIDToCategory.get(l);
-            if(cat.getmCurrentAmount() >= cat.getmAmount() * threshold){
+            if (cat.getmCurrentAmount() >= cat.getmAmount() * threshold) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(cat.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
                 sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
-                sb.append("Time remaining: " ); // time remaining
+                sb.append("Time remaining: "); // time remaining
                 ret.add(sb.toString());
             }
         }
@@ -173,7 +168,7 @@ public class CategoryModel extends Model implements Serializable {
         // check duplicate name
         if (CheckNameUsed(cat.getmName())) return false;
 
-        Long key = System.currentTimeMillis() / 1000;
+        Long key = System.currentTimeMillis();
         cat.setmID(key);
 
         AddCategory(cat);
@@ -189,12 +184,13 @@ public class CategoryModel extends Model implements Serializable {
      */
     public void ReadCategoryFromDatabase() {
         // read data from database and store in mIDToCategory
+        Log.d("test", "read from categroy db");
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Category cat = ds.getValue(Category.class);
-                    mIDToCategory.put(cat.getmID(), cat);
+                    AddCategory(cat);
 
                 }
             }
@@ -213,7 +209,7 @@ public class CategoryModel extends Model implements Serializable {
      * @param catID
      */
     public void DeleteCategoryAndUpdateDatabase(Long catID) {
-        for(Long l: mIDToCategory.get(catID).getmTransactionIDs()){
+        for (Long l : mIDToCategory.get(catID).getmTransactionIDs()) {
             // remove transaction by id, call TransactionModel method
             TransactionModel.GetInstance().DeleteTransaction(l, false);
         }
@@ -239,26 +235,23 @@ public class CategoryModel extends Model implements Serializable {
 
 
     /**
-     *
      * @param catID
      * @param tranID
      */
-    public void AddTransactionIDToCategoryAndUpdateDatabase(Long catID, Long tranID, double amount){
+    public void AddTransactionIDToCategoryAndUpdateDatabase(Long catID, Long tranID, double amount) {
         AddTransactionToCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
-        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
-
+        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmCurrentAmount());
         BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
     }
 
     /**
-     *
      * @param catID
      * @param tranID
      * @param amount
      */
-    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID, double amount){
+    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID, double amount) {
         RemoveTransactionInCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
@@ -267,10 +260,9 @@ public class CategoryModel extends Model implements Serializable {
     }
 
     /**
-     *
      * @param catID
      */
-    public void ResetCategoryAndUpdateDatabase(Long catID){
+    public void ResetCategoryAndUpdateDatabase(Long catID) {
         Category cat = mIDToCategory.get(catID).Reset();
         mDatabase.child(cat.toString()).setValue(cat);
     }

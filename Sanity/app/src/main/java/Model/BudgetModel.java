@@ -1,6 +1,9 @@
 package Model;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,6 +28,10 @@ public class BudgetModel extends Model implements Serializable {
         InitDataBase();
     }
 
+
+    //<editor-fold desc="Singleton & Init">
+    /* =============== Singleton & Init =============== */
+
     /**
      * Get the instance of this model
      *
@@ -37,13 +44,53 @@ public class BudgetModel extends Model implements Serializable {
         return mInstance;
     }
 
+    /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param bm a <b>BudgetModel</b> instance
+     */
     public static void UpdateInstance(BudgetModel bm) {
         mInstance = bm;
     }
 
+    /**
+     * Initialize Firebase database connection
+     */
     public void InitDataBase() {
         mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("budget");
     }
+    //</editor-fold>
+
+
+    //<editor-fold desc="Notification">
+    /* =============== Notification =============== */
+
+    /**
+     * Get notification
+     *
+     * @return list of the string displayed in notification
+     */
+    public List<String> getNotification() {
+        double threshold = Variable.GetInstance().getmThreshold();
+        int frequency = Variable.GetInstance().getmFrequency();
+        List<String> ret = new ArrayList<>();
+        for (Budget budget : mBudgetMap.values()) {
+            if (budget.getmAmount() >= budget.getmTotalAmount() * threshold) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(budget.getmName() + " has reached "); // name of the category
+                sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
+                sb.append("Amount left: " + (budget.getmAmount() - budget.GetCurrAmount()) + "; "); // amount left
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + "Day(s)"); // time remaining
+                ret.add(sb.toString());
+            }
+        }
+        return ret;
+    }
+    //</editor-fold>
+
+
+    //<editor-fold desc="Budget Related">
+    /* =============== Budget Related =============== */
 
     /**
      * Add a new budget
@@ -118,6 +165,18 @@ public class BudgetModel extends Model implements Serializable {
     }
 
     /**
+     * Delete all budgets from map
+     */
+    public void DeleteAllBudgets() {
+        mBudgetMap.clear();
+    }
+    //</editor-fold>
+
+
+    //<editor-fold desc="Category Related">
+    /* =============== Category Related =============== */
+
+    /**
      * Called when Category is Added
      *
      * @param budgetId budget ID
@@ -126,17 +185,6 @@ public class BudgetModel extends Model implements Serializable {
     public void CategoryAdded(long budgetId, long catId) {
         mBudgetMap.get(budgetId).AddCatId(catId);
         CalcTotalAmount(budgetId);
-    }
-
-    /**
-     * Calculate total amount and update local&DB
-     *
-     * @param budgetId budget ID
-     */
-    public void CalcTotalAmount(long budgetId) {
-        mBudgetMap.get(budgetId).UpdateTotalAmount();
-        CloudSet(mBudgetMap.get(budgetId));
-        LocalUpdate();
     }
 
     /**
@@ -151,26 +199,20 @@ public class BudgetModel extends Model implements Serializable {
     }
 
     /**
-     * Get notification
+     * Calculate total amount and update local&DB
      *
-     * @return list of the string displayed in notification
+     * @param budgetId budget ID
      */
-    public List<String> getNotification() {
-        double threshold = Variable.GetInstance().getmThreshold();
-        int frequency = Variable.GetInstance().getmFrequency();
-        List<String> ret = new ArrayList<>();
-        for (Budget budget : mBudgetMap.values()) {
-            if (budget.getmAmount() >= budget.getmTotalAmount() * threshold) {
-                StringBuilder sb = new StringBuilder();
-                sb.append(budget.getmName() + " has reached "); // name of the category
-                sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
-                sb.append("Amount left: " + (budget.getmAmount() - budget.GetCurrAmount()) + "; "); // amount left
-                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + "Day(s)"); // time remaining
-                ret.add(sb.toString());
-            }
-        }
-        return ret;
+    public void CalcTotalAmount(long budgetId) {
+        mBudgetMap.get(budgetId).UpdateTotalAmount();
+        CloudSet(mBudgetMap.get(budgetId));
+        LocalUpdate();
     }
+    //</editor-fold>
+
+
+    //<editor-fold desc="Data Storage">
+    /* =============== Data Storage =============== */
 
     /**
      * Firebase SetValue Budget
@@ -180,6 +222,26 @@ public class BudgetModel extends Model implements Serializable {
     private void CloudSet(Budget budget) {
         // Firebase Set
         mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
+    }
+
+    /**
+     * Firebase GetValue Budget
+     */
+    public void CloudGet() {
+        // read data from database and store in mIDToCategory
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    Budget budget = ds.getValue(Budget.class);
+                    mBudgetMap.put(budget.getmBudgetId(), budget);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     /**
@@ -199,4 +261,5 @@ public class BudgetModel extends Model implements Serializable {
         // Local Update
         StorageModel.GetInstance().SaveObject(this);
     }
+    //</editor-fold>
 }

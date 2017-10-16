@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="8dp" />
 
-    <android.support.design.widget.FloatingActionButton
+   <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_budget_floatingButton"
         android:layout_width="45dp"
         android:layout_height="54dp"
