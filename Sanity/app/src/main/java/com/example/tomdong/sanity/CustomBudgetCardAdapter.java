@@ -31,6 +31,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by User on 4/4/2017.
  */
@@ -78,21 +80,14 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
                 holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
-                holder.deleteButton=(Button)convertView.findViewById(R.id.deleteButton);
-                holder.deleteButton.setOnClickListener(new Button.OnClickListener(){
-                    public void onClick(View v)
-                    {
-                        remove(getItem(tempPos));
-                    }
-                });
                 result = convertView;
                 convertView.setTag(holder);
+                holder.BudgetType.setText(mList.get(position).GetBudgetType());
             }
             else{
                 holder = (ViewHolder) convertView.getTag();
                 result = convertView;
             }
-
             lastPosition = position;
 
             holder.BudgetType.setText(BudgetCat);
@@ -105,10 +100,10 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
 
     }
 
-    public void Remove(Budget_card budgetCard)
+    public void Remove(int Position)
     {
-       mList.remove(budgetCard);
-        notifyDataSetChanged();
+        Log.e(TAG, "Delete Position: "+getItem(Position).GetBudgetType());
+        remove(getItem(Position));
     }
     public void toggleSelection(int position)
     {
