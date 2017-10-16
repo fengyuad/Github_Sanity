@@ -84,16 +84,6 @@ public class CategoryModel extends Model implements Serializable {
         return mNameCategoryUsed.contains(name);
     }
 
-    /**
-     * Update the current amount
-     *
-     * @param id
-     * @param amount
-     * @return id's current amount
-     */
-    private double AddCategoryAmount(Long id, double amount) {
-        return mIDToCategory.get(id).AddCurrentAmount(amount);
-    }
 
     /**
      * @param id
@@ -131,8 +121,7 @@ public class CategoryModel extends Model implements Serializable {
      * @return
      */
     private void AddTransactionToCategory(Long catID, Long tranID, double amount){
-        Category cat = mIDToCategory.get(catID);
-        cat.AddTransaction(tranID, amount);
+        mIDToCategory.get(catID).AddTransaction(tranID, amount);
     }
 
     /**
@@ -221,16 +210,6 @@ public class CategoryModel extends Model implements Serializable {
         return true;
     }
 
-    /**
-     * @param catId
-     * @param amount
-     * @return id's current amount
-     */
-    public double AddCategoryAmountAndUpdateDatabase(Long catId, double amount) {
-        double currentAmount = AddCategoryAmount(catId, amount);
-        mDatabase.child(catId.toString()).child("mCurrentAmount").setValue(currentAmount);
-        return currentAmount;
-    }
 
     /**
      *
@@ -240,8 +219,8 @@ public class CategoryModel extends Model implements Serializable {
     public void AddTransactionIDToCategoryAndUpdateDatabase(Long catID, Long tranID, double amount){
         AddTransactionToCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
-        AddCategoryAmountAndUpdateDatabase(catID, amount);
-        mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list); 
+        mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
+        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
     }
 
     /**

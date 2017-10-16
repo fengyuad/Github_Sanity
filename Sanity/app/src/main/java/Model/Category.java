@@ -102,15 +102,7 @@ public class Category implements java.io.Serializable{
      * Public method
      */
 
-    /**
-     *
-     * @param amount
-     * @return currentAmount
-     */
-    public double AddCurrentAmount(double amount) {
-        mCurrentAmount += amount;
-        return mCurrentAmount;
-    }
+
 
     public void RemoveTransaction(Long transID, double amount){
         mTransactionIDs.remove(transID);
@@ -122,8 +114,8 @@ public class Category implements java.io.Serializable{
      * @param id
      */
     public void AddTransaction(Long id, double amount){
-        AddCurrentAmount(amount);
         mTransactionIDs.add(id);
+        mCurrentAmount += amount;
     }
 
     public Category Reset(){
