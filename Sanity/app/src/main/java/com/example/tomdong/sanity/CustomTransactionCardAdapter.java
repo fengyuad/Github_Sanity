@@ -11,23 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-
-
-
-import android.widget.ArrayAdapter;
-import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
 
 import java.util.ArrayList;
 
@@ -35,14 +19,14 @@ import java.util.ArrayList;
  * Created by User on 4/4/2017.
  */
 
-public class CustomTransactionCardAdapter  extends ArrayAdapter<Transaction_card> {
+public class CustomTransactionCardAdapter extends ArrayAdapter<Transaction_card> {
 
     private static final String TAG = "CustomListAdapter";
 
     private Context mContext;
     private int mResource;
     private int lastPosition = -1;
-    ArrayList<Transaction_card>mList;
+    ArrayList<Transaction_card> mList;
     SparseBooleanArray mSelectedItemsIds;
 
     /**
@@ -54,11 +38,12 @@ public class CustomTransactionCardAdapter  extends ArrayAdapter<Transaction_card
         private TextView Note;
         private TextView amount;
     }
+
     public CustomTransactionCardAdapter(Context context, int resource, ArrayList<Transaction_card> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
-        mList=objects;
+        mList = objects;
 
     }
 
@@ -70,6 +55,7 @@ public class CustomTransactionCardAdapter  extends ArrayAdapter<Transaction_card
 //        String time= getItem(position).GetTime();
 //        String Note= getItem(position).GetNote();
 //        String amount= getItem(position).GetAmount();
+
 
             ViewHolder holder;
             holder= new ViewHolder();
@@ -90,39 +76,35 @@ public class CustomTransactionCardAdapter  extends ArrayAdapter<Transaction_card
 
     }
 
-    public void Remove(Budget_card budgetCard)
-    {
+    public void Remove(Budget_card budgetCard) {
         mList.remove(budgetCard);
         notifyDataSetChanged();
     }
-    public void toggleSelection(int position)
-    {
-        selectView(position,!mSelectedItemsIds.get(position));
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
     }
-    public void removeSelection()
-    {
-        mSelectedItemsIds=new SparseBooleanArray();
+
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
         notifyDataSetChanged();
     }
-    public void selectView(int position,boolean value)
-    {
-        if(value)
-        {
-            mSelectedItemsIds.put(position,value);
 
-        }
-        else
-        {
+    public void selectView(int position, boolean value) {
+        if (value) {
+            mSelectedItemsIds.put(position, value);
+
+        } else {
             mSelectedItemsIds.delete(position);
         }
         notifyDataSetChanged();
     }
-    public int getSelectedCount()
-    {
+
+    public int getSelectedCount() {
         return mSelectedItemsIds.size();
     }
-    public SparseBooleanArray getSeectedIds()
-    {
+
+    public SparseBooleanArray getSeectedIds() {
         return mSelectedItemsIds;
     }
 

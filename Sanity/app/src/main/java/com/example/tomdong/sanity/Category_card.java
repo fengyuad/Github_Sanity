@@ -6,6 +6,7 @@ package com.example.tomdong.sanity;
 public class Category_card {
     private String CatoryType;
     private String BudgetType;
+
     public Category_card(String CatoryType) {
         //this.BudgetType = BudgetType;
         this.CatoryType = CatoryType;
@@ -18,6 +19,7 @@ public class Category_card {
     public String GetCatoryType() {
         return CatoryType;
     }
+
     public void setCatoryType(String CatoryType) {
         this.CatoryType = CatoryType;
     }

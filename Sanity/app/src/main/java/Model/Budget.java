@@ -20,6 +20,13 @@ public class Budget implements Serializable {
     private double mPrevAmount = 0.0;
 
     /**
+     * Default Constructor
+     */
+    public Budget() {
+
+    }
+
+    /**
      * Constructor - Initialize a Budget
      *
      * @param dueTime due time
@@ -29,13 +36,21 @@ public class Budget implements Serializable {
      */
     public Budget(String name, long dueTime, int period, double amount, List<Long> catIds) {
         mName = name;
-        mBudgetId = System.currentTimeMillis() / 1000;
+        mBudgetId = System.currentTimeMillis();
         mDueTime = dueTime;
         mPeriod = period;
         mAmount = amount;
         mCatIds = catIds;
     }
 
+
+    //<editor-fold desc="Budget Update">
+    /* =============== Budget Update =============== */
+
+    /**
+     * Update current balance of the budget
+     * Should be triggered whenever a transaction/category change happends
+     */
     public void UpdateTotalAmount() {
         double totalAmount = 0.0;
         for (long catId : mCatIds)
@@ -44,9 +59,9 @@ public class Budget implements Serializable {
     }
 
     /**
-     * Update budget info
+     * Reset budget if it's time (should be triggered somewhere)
      */
-    public void UpdateBudget() {
+    public void ResetBudget() {
         // If new period
         UpdateTotalAmount();
         /*Calendar rightNow = Calendar.getInstance();
@@ -68,17 +83,40 @@ public class Budget implements Serializable {
             mDueTime += 86400 * mPeriod;
         }
     }
+    //</editor-fold>
 
+
+    //<editor-fold desc="Category Related">
+    /* =============== Category Related =============== */
+
+    /**
+     * add a category to this budget
+     *
+     * @param catId a category ID
+     */
     public void AddCatId(long catId) {
         mCatIds.add(catId);
     }
 
+    /**
+     * remove a category from this budget
+     *
+     * @param catId a category ID
+     */
     public void RemoveCatId(long catId) {
         mCatIds.remove(catId);
     }
+    //</editor-fold>
 
-    // Getters and Setters
 
+    //<editor-fold desc="Getters and Setters">
+    /* =============== Getters and Setters =============== */
+
+    /**
+     * return current budget balance
+     *
+     * @return <b>double</b> budget balance
+     */
     public double GetCurrAmount() {
         return mTotalAmount - mPrevAmount;
     }
@@ -109,15 +147,6 @@ public class Budget implements Serializable {
     public long getmBudgetId() {
         return mBudgetId;
     }
-
-    /**
-     * Setter
-     *
-     * @param mBudgetId
-     */
-    /*public void setmBudgetId(long mBudgetId) {
-        this.mBudgetId = mBudgetId;
-    }*/
 
     /**
      * Getter
@@ -208,4 +237,5 @@ public class Budget implements Serializable {
     public void setmTotalAmount(double mTotalAmount) {
         this.mTotalAmount = mTotalAmount;
     }
+    //</editor-fold>
 }
