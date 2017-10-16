@@ -69,18 +69,18 @@ public class OverViewActivity extends AppCompatActivity{
 
                }
            });
-        Budget_ListView=findViewById(R.id.Budget_listview);
-        ArrayList<Category_card> list = new ArrayList<>();
-        list.add(new Category_card("Parking"));
-        list.add(new Category_card("Eating"));
-        list.add(new Category_card("Studying"));
-        list.add(new Category_card("Working"));
-        list.add(new Category_card("Skiing"));
-        list.add(new Category_card("Gaming"));
-        list.add(new Category_card("Travelling"));
-        list.add(new Category_card("pooping"));
-        CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
-        Budget_ListView.setAdapter(adapter);
+//        Budget_ListView=findViewById(R.id.Budget_listview);
+//        ArrayList<Category_card> list = new ArrayList<>();
+//        list.add(new Category_card("Parking"));
+//        list.add(new Category_card("Eating"));
+//        list.add(new Category_card("Studying"));
+//        list.add(new Category_card("Working"));
+//        list.add(new Category_card("Skiing"));
+//        list.add(new Category_card("Gaming"));
+//        list.add(new Category_card("Travelling"));
+//        list.add(new Category_card("pooping"));
+//        CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
+//        Budget_ListView.setAdapter(adapter);
 
     }
 

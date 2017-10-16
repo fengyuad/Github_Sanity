@@ -1,12 +1,36 @@
 package com.example.tomdong.sanity;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Toast;
+
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
+
+import java.util.ArrayList;
 
 
 /**
@@ -28,7 +52,9 @@ public class OverviewFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    PieChart pieChart;
+    ListView Budget_ListView;
+    View myFragmentView;
     public OverviewFragment() {
         // Required empty public constructor
     }
@@ -54,6 +80,7 @@ public class OverviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -64,7 +91,87 @@ public class OverviewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_overview, container, false);
+        myFragmentView = inflater.inflate(R.layout.activity_overview, container, false);
+       // Budget_ListView = myFragmentView.findViewById(R.id.Budget_listview);
+        pieChart=(PieChart)myFragmentView.findViewById(R.id.overview_pie);
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setExtraOffsets(5,10,5,5);
+        pieChart.setDragDecelerationFrictionCoef(0.95f);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleColor(Color.TRANSPARENT);
+        pieChart.setTransparentCircleRadius(61f);
+        //pieChart.getDescription().setText("Budgets OverView");
+        ArrayList<PieEntry> yvalues= new ArrayList<>();
+        yvalues.add(new PieEntry(34f,"PartyA"));
+        yvalues.add(new PieEntry(23f,"USA"));
+        yvalues.add(new PieEntry(14f,"China"));
+        yvalues.add(new PieEntry(35f,"Japan"));
+        yvalues.add(new PieEntry(23f,"Russia"));
+
+        PieDataSet dataSet= new PieDataSet(yvalues,"Counntries");
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(5f);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        PieData data=new PieData(dataSet);
+        data.setValueTextSize(10f);
+        data.setValueTextColor(Color.YELLOW);
+        pieChart.setData(data);
+        pieChart.animateY(1000);
+
+        pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                Log.i("VAL SELECTED",
+                        "Value: " + ((PieEntry)e).getLabel() + ", index: " + h.getX()
+                                + ", DataSet index: " + h.getDataSetIndex());
+                startActivity(new Intent(getContext(),BudgetViewActivity.class));
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) myFragmentView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInputDialog();
+            }
+        });
+//        ArrayList<Category_card> list = new ArrayList<>();
+//        list.add(new Category_card("Parking"));
+//        list.add(new Category_card("Eating"));
+//        list.add(new Category_card("Studying"));
+//        list.add(new Category_card("Working"));
+//        list.add(new Category_card("Skiing"));
+//        list.add(new Category_card("Gaming"));
+//        list.add(new Category_card("Travelling"));
+//        list.add(new Category_card("pooping"));
+//        CustomCardAdapter adapter = new CustomCardAdapter(getContext(), R.layout.card_layout, list);
+//        Budget_ListView.setAdapter(adapter);
+//        Budget_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position,
+//                                    long id) {
+//                startActivity(new Intent(getContext(),BudgetViewActivity.class));
+//
+//            }
+//        });
+//
+//        Budget_ListView.setOnTouchListener(new View.OnTouchListener() {
+//            // Setting on Touch Listener for handling the touch inside ScrollView
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                // Disallow the touch request for parent scroll on touch of child view
+//                v.getParent().requestDisallowInterceptTouchEvent(true);
+//                return false;
+//            }
+//        });
+
+        return myFragmentView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -91,6 +198,8 @@ public class OverviewFragment extends Fragment {
         mListener = null;
     }
 
+
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -104,5 +213,32 @@ public class OverviewFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+    protected void showInputDialog() {
+
+        // get input_dialog.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setView(promptView);
+
+        final EditText editText = (EditText) promptView.findViewById(R.id.trans_amt);
+        // setup a dialog window
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getContext(),"Add Transaction!",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 }
