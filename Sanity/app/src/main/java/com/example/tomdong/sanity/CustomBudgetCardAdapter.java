@@ -78,13 +78,13 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
                 holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
-                holder.deleteButton=(Button)convertView.findViewById(R.id.deleteButton);
-                holder.deleteButton.setOnClickListener(new Button.OnClickListener(){
-                    public void onClick(View v)
-                    {
-                        remove(getItem(tempPos));
-                    }
-                });
+                //holder.deleteButton=(Button)convertView.findViewById(R.id.deleteButton);
+//                holder.deleteButton.setOnClickListener(new Button.OnClickListener(){
+//                    public void onClick(View v)
+//                    {
+//                        remove(getItem(tempPos));
+//                    }
+//                });
                 result = convertView;
                 convertView.setTag(holder);
             }
