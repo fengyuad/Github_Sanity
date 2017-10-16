@@ -53,7 +53,11 @@ public class Budget implements Serializable {
         }
     }
 
-    public void removeCatId(long catId) {
+    public void AddCatId(long catId) {
+        mCatIds.add(catId);
+    }
+
+    public void RemoveCatId(long catId) {
         mCatIds.remove(catId);
     }
 

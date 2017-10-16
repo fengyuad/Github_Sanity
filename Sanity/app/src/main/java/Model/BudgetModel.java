@@ -58,10 +58,8 @@ public class BudgetModel extends Model implements Serializable {
         } else {
             // Add
             mBudgetMap.put(budget.getmBudgetId(), budget);
-            // Firebase Update
-            mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
-            // Local Update
-            StorageModel.GetInstance().SaveObject(this);
+            CloudSet(budget);
+            LocalUpdate();
             return true;
         }
     }
@@ -87,10 +85,8 @@ public class BudgetModel extends Model implements Serializable {
             curr.setmPeriod(period);
             curr.setmAmount(amount);
             curr.setmCatIds(catIds);
-            // Firebase Update
-            mDatabase.child(Long.toString(curr.getmBudgetId())).setValue(curr);
-            // Local Update
-            StorageModel.GetInstance().SaveObject(this);
+            CloudSet(curr);
+            LocalUpdate();
             return true;
         } else {
             return false;
@@ -109,26 +105,47 @@ public class BudgetModel extends Model implements Serializable {
         if (mBudgetMap.containsKey(budgetId)) {
             // Delete
             mBudgetMap.remove(budgetId);
-            // Firebase Update
-            mDatabase.child(Long.toString(budgetId)).removeValue();
-            // Local Update
-            StorageModel.GetInstance().SaveObject(this);
+            for (long catId : mBudgetMap.get(budgetId).getmCatIds()) {
+                CategoryModel.GetInstance().DeleteCategoryAndUpdateDatabase(catId);
+            }
+            CloudRemove(mBudgetMap.get(budgetId));
+            LocalUpdate();
             return true;
         } else {
             return false;
         }
     }
 
+    public void AddCategory(long budgetId, long catId) {
+        mBudgetMap.get(budgetId).AddCatId(catId);
+        CalcTotalAmount(budgetId);
+        CloudSet(mBudgetMap.get(budgetId));
+        LocalUpdate();
+    }
+
     public void CalcTotalAmount(long budgetId) {
         mBudgetMap.get(budgetId).UpdateTotalAmount();
-        // Firebase Update
-        mDatabase.child(Long.toString(budgetId)).removeValue();
-        // Local Update
-        StorageModel.GetInstance().SaveObject(this);
     }
 
     public void CategoryRemoved(long budgetId, long catId) {
-        mBudgetMap.get(budgetId).removeCatId(catId);
+        mBudgetMap.get(budgetId).RemoveCatId(catId);
         CalcTotalAmount(budgetId);
+        CloudSet(mBudgetMap.get(budgetId));
+        LocalUpdate();
+    }
+
+    private void CloudSet(Budget budget) {
+        // Firebase Set
+        mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
+    }
+
+    private void CloudRemove(Budget budget) {
+        // Firebase Remove
+        mDatabase.child(Long.toString(budget.getmBudgetId())).removeValue();
+    }
+
+    private void LocalUpdate() {
+        // Local Update
+        StorageModel.GetInstance().SaveObject(this);
     }
 }
