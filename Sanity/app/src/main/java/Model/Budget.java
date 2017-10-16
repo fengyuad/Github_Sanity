@@ -49,8 +49,12 @@ public class Budget implements Serializable {
         UpdateTotalAmount();
         if (mDueDate <= System.currentTimeMillis() / 1000) {
             mPrevAmount = mTotalAmount;
-            //mDueDate+=
+            mDueDate += 86400 * mPeriod;
         }
+    }
+
+    public void removeCatId(long catId) {
+        mCatIds.remove(catId);
     }
 
     // Getters and Setters
