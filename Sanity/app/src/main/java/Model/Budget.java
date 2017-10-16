@@ -1,6 +1,8 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,7 +12,9 @@ import java.util.List;
 public class Budget implements Serializable {
     private long mBudgetId = 0;
     private String mName = "";
-    private long mDueDate = 0;
+    private int mDueDate = 1;
+    private boolean mIsWeek = true;
+    private long mDueTime = 0;
     private int mPeriod = 0;
     private double mAmount = 0.0;
     private List<Long> mCatIds;
@@ -20,15 +24,15 @@ public class Budget implements Serializable {
     /**
      * Constructor - Initialize a Budget
      *
-     * @param dueDate due date
+     * @param dueTime due time
      * @param period  budget period
      * @param amount  budget amount
      * @param catIds  category Ids
      */
-    public Budget(String name, long dueDate, int period, double amount, List<Long> catIds) {
+    public Budget(String name, long dueTime, int period, double amount, List<Long> catIds) {
         mName = name;
         mBudgetId = System.currentTimeMillis() / 1000;
-        mDueDate = dueDate;
+        mDueTime = dueTime;
         mPeriod = period;
         mAmount = amount;
         mCatIds = catIds;
@@ -47,9 +51,23 @@ public class Budget implements Serializable {
     public void UpdateBudget() {
         // If new period
         UpdateTotalAmount();
-        if (mDueDate <= System.currentTimeMillis() / 1000) {
+        /*Calendar rightNow = Calendar.getInstance();
+        if (mIsWeek)
+        {
+            if (mDueDate < rightNow.get(Calendar.DAY_OF_MONTH)) {
+                mPrevAmount = mTotalAmount;
+            }
+            else
+            {
+
+            }
+        }
+        else{
+
+        }*/
+        if (mDueTime <= System.currentTimeMillis() / 1000) {
             mPrevAmount = mTotalAmount;
-            mDueDate += 86400 * mPeriod;
+            mDueTime += 86400 * mPeriod;
         }
     }
 
@@ -102,19 +120,19 @@ public class Budget implements Serializable {
     /**
      * Getter
      *
-     * @return mDueDate
+     * @return mDueTime
      */
-    public long getmDueDate() {
-        return mDueDate;
+    public long getmDueTime() {
+        return mDueTime;
     }
 
     /**
      * Setter
      *
-     * @param mDueDate
+     * @param mDueTime
      */
-    public void setmDueDate(long mDueDate) {
-        this.mDueDate = mDueDate;
+    public void setmDueTime(long mDueTime) {
+        this.mDueTime = mDueTime;
     }
 
     /**

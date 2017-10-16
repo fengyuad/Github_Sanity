@@ -68,20 +68,20 @@ public class BudgetModel extends Model implements Serializable {
      * Update an existing budget
      *
      * @param budgetId ID of the budget you want to update
-     * @param dueDate  due date
+     * @param dueTime  due date
      * @param period   budget period
      * @param amount   budget amount
      * @param catIds   category Ids
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
-    public boolean UpdateBudget(String name, long budgetId, long dueDate, int period, double amount, List<Long> catIds) {
+    public boolean UpdateBudget(String name, long budgetId, long dueTime, int period, double amount, List<Long> catIds) {
         if (mBudgetMap.containsKey(budgetId)) {
             // Get Budget
             Budget curr = mBudgetMap.get(budgetId);
             // Update
             curr.setmName(name);
-            curr.setmDueDate(dueDate);
+            curr.setmDueTime(dueTime);
             curr.setmPeriod(period);
             curr.setmAmount(amount);
             curr.setmCatIds(catIds);
