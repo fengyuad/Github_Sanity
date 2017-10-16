@@ -110,12 +110,16 @@ public class BudgetModel extends Model implements Serializable {
             // Delete
             mBudgetMap.remove(budgetId);
             // Firebase Update
-            //mDatabase.child(Long.toString(curr.getmBudgetId())).setValue(curr);
+            mDatabase.child(Long.toString(budgetId)).removeValue();
             // Local Update
-            //StorageModel.GetInstance().SaveObject(this);
+            StorageModel.GetInstance().SaveObject(this);
             return true;
         } else {
             return false;
         }
+    }
+
+    public void CalcTotalAmount(long budgetId) {
+        mBudgetMap.get(budgetId).UpdateTotalAmount();
     }
 }

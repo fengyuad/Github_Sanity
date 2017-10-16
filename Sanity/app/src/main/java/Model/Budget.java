@@ -12,8 +12,11 @@ public class Budget implements Serializable {
     private String mName = "";
     private long mDueDate = 0;
     private int mPeriod = 0;
-    private double mAmount = 0.0f;
+    private double mAmount = 0.0;
     private List<Long> mCatIds;
+    private double mTotalAmount = 0.0;
+    private double mPrevAmount = 0.0;
+
     /**
      * Constructor - Initialize a Budget
      *
@@ -31,10 +34,41 @@ public class Budget implements Serializable {
         mCatIds = catIds;
     }
 
+    public void UpdateTotalAmount() {
+        double totalAmount = 0.0;
+        for (long catId : mCatIds)
+            totalAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
+        mTotalAmount = totalAmount;
+    }
+
+    /**
+     * Update budget info
+     */
+    public void UpdateBudget() {
+        // If new period
+        UpdateTotalAmount();
+        if (mDueDate <= System.currentTimeMillis() / 1000) {
+            mPrevAmount = mTotalAmount;
+            //mDueDate+=
+        }
+    }
+
+    // Getters and Setters
+
+    /**
+     * Getter
+     *
+     * @return mName
+     */
     public String getmName() {
         return mName;
     }
 
+    /**
+     * Setter
+     *
+     * @param mName
+     */
     public void setmName(String mName) {
         this.mName = mName;
     }
@@ -127,5 +161,23 @@ public class Budget implements Serializable {
      */
     public void setmCatIds(List<Long> mCatIds) {
         this.mCatIds = mCatIds;
+    }
+
+    /**
+     * Getter
+     *
+     * @return mCurrAmount
+     */
+    public double getmTotalAmount() {
+        return mTotalAmount;
+    }
+
+    /**
+     * Setter
+     *
+     * @param mTotalAmount
+     */
+    public void setmTotalAmount(double mTotalAmount) {
+        this.mTotalAmount = mTotalAmount;
     }
 }
