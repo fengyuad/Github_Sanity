@@ -38,10 +38,13 @@ public class TransactionModel extends Model implements java.io.Serializable{
     }
 
     public Transaction addTransaction(Transaction trans) {
-        //Long transactionId = System.currentTimeMillis() / 1000;
-        CategoryModel CModel = CategoryModel.GetInstance();
-        CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+
         WriteNewTransaction(trans);
+        CategoryModel CModel = CategoryModel.GetInstance();
+
+        CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+
+
         mTransactions.put(trans.getmTransactionId(), trans);
         return trans;
     }
@@ -61,9 +64,9 @@ public class TransactionModel extends Model implements java.io.Serializable{
     }
 
     public boolean WriteNewTransaction(Transaction trans){
-        Long key = System.currentTimeMillis()/1000;
-        trans.setmTransactionId(key);
-        addTransaction(trans);
+        Long key = trans.getmTransactionId();
+        //trans.setmTransactionId(key);
+        //addTransaction(trans);
         mDatabase.child(key.toString()).setValue(trans);
         return true;
     }
@@ -83,11 +86,20 @@ public class TransactionModel extends Model implements java.io.Serializable{
         });
     }
 
-    public Map<Long, Transaction> SelectTransactions(Timestamp from, Timestamp to){
+    public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay){
         Map<Long, Transaction> toReturn = new HashMap<>();
-        for(Long key : mTransactions.keySet()){
-            if(key >= from.getTimestamp().getTime() && key <= to.getTimestamp().getTime()){
+        for(Long key : mTransactions.keySet()) {
+            if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)) {
                 toReturn.put(key, mTransactions.get(key));
+            } else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear) {
+                if(mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth){
+                    toReturn.put(key, mTransactions.get(key));
+                }
+                else if(mTransactions.get(key).getmYear() == fromMonth || mTransactions.get(key).getmYear() == toMonth){
+                    if(mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay) {
+                        toReturn.put(key, mTransactions.get(key));
+                    }
+                }
             }
         }
         return toReturn;

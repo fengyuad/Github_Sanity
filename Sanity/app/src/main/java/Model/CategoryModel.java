@@ -135,6 +135,10 @@ public class CategoryModel extends Model implements Serializable {
      * @param amount
      */
     private void RemoveTransactionInCategory(Long catID, Long tranID, double amount){
+        Log.d("test", "size of category map: " + mIDToCategory.size());
+        for(Long l: mIDToCategory.keySet()){
+            Log.d("test", "category map: " + l);
+        }
         mIDToCategory.get(catID).RemoveTransaction(tranID, amount);
     }
 
@@ -173,7 +177,7 @@ public class CategoryModel extends Model implements Serializable {
         // check duplicate name
         if (CheckNameUsed(cat.getmName())) return false;
 
-        Long key = System.currentTimeMillis() / 1000;
+        Long key = System.currentTimeMillis();
         cat.setmID(key);
 
         AddCategory(cat);
@@ -189,6 +193,7 @@ public class CategoryModel extends Model implements Serializable {
      */
     public void ReadCategoryFromDatabase() {
         // read data from database and store in mIDToCategory
+        Log.d("test", "read from categroy db");
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -247,8 +252,7 @@ public class CategoryModel extends Model implements Serializable {
         AddTransactionToCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
-        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
-
+        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmCurrentAmount());
         BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
     }
 
