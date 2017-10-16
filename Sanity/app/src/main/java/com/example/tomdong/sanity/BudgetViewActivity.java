@@ -50,7 +50,6 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         list.add(new Category_card("pooping"));
         CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
         CateGory_ListView.setAdapter(adapter);
-
         final Calendar c = Calendar.getInstance();
         editDay = c.get(Calendar.DAY_OF_MONTH);
         editMonth = c.get(Calendar.MONTH);

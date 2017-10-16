@@ -77,6 +77,15 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 //        tranTest.ReadTransaction();
 //        budTest.CloudGet();
 
+
+        test.ReadCategoryFromDatabase();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -189,11 +198,11 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
+
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Register Succeeded", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
@@ -206,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         String pw = PassWord.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(MainActivity.this, "Email Empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
 
             return;
         }

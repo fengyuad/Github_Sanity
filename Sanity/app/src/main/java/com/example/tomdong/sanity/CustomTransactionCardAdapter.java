@@ -56,22 +56,23 @@ public class CustomTransactionCardAdapter extends ArrayAdapter<Transaction_card>
 //        String Note= getItem(position).GetNote();
 //        String amount= getItem(position).GetAmount();
 
-        ViewHolder holder;
-        holder = new ViewHolder();
-        LayoutInflater inflater = LayoutInflater.from(mContext);
-        convertView = inflater.inflate(mResource, parent, false);
-        holder.CategoryType = (TextView) convertView.findViewById(R.id.trans_cat);
-        holder.time = (TextView) convertView.findViewById(R.id.trans_date);
-        holder.Note = (TextView) convertView.findViewById(R.id.trans_note);
-        holder.amount = (TextView) convertView.findViewById(R.id.trans_amount);
-        Log.e(TAG, "getView: position: " + position);
-        holder.CategoryType.setText(mList.get(position).GetCategoryType());
-        holder.time.setText(mList.get(position).GetTime());
-        holder.Note.setText(mList.get(position).GetNote());
-        holder.amount.setText(mList.get(position).GetAmount());
-        lastPosition = position;
 
-        return convertView;
+            ViewHolder holder;
+            holder= new ViewHolder();
+            LayoutInflater inflater = LayoutInflater.from(mContext);
+            convertView = inflater.inflate(mResource, parent, false);
+            holder.CategoryType = (TextView) convertView.findViewById(R.id.trans_cat);
+            holder.time = (TextView) convertView.findViewById(R.id.trans_date);
+            holder.Note=(TextView) convertView.findViewById(R.id.trans_note);
+            holder.amount=(TextView)convertView.findViewById(R.id.trans_amount);
+            Log.e(TAG, "getView: position: "+position );
+            holder.CategoryType.setText(mList.get(position).GetCategoryType());
+            holder.time.setText(mList.get(position).GetTime());
+            holder.Note.setText(mList.get(position).GetNote());
+            holder.amount.setText("Amount: "+mList.get(position).GetAmount());
+            lastPosition = position;
+
+             return convertView;
 
     }
 

@@ -2,6 +2,8 @@ package com.example.tomdong.sanity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +12,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+
+
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
+import com.example.tomdong.sanity.dummy.DummyContent;
 
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
@@ -28,7 +37,7 @@ public class BudgetFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private ListView mListView;
+    private ListView  mListView;
     private ImageView mImageView;
 
     /**
@@ -77,6 +86,43 @@ public class BudgetFragment extends Fragment {
         list.add(new Budget_card("pooping"));
         final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
         mListView.setAdapter(adapter);
+//        SwipeMenuCreator creator = new SwipeMenuCreator() {
+//
+//            @Override
+//            public void create(SwipeMenu menu) {
+//
+//                // create "delete" item
+//                SwipeMenuItem deleteItem = new SwipeMenuItem(
+//                        getContext());
+//                // set item background
+////                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+////                        0x3F, 0x25)));
+//                // set item width
+//                deleteItem.setWidth(170);
+//                // set a icon
+//                deleteItem.setIcon(R.drawable.close_red);
+//
+//                // add to menu
+//                menu.addMenuItem(deleteItem);
+//
+//            }
+//        };
+
+// set creator
+//        mListView.setMenuCreator(creator);
+//
+//        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+//                switch (index) {
+//                    case 0:
+//                        adapter.remove(adapter.getItem(position));
+//                        break;
+//                }
+//                // false : close the menu; true : not close the menu
+//                return false;
+//            }
+//        });
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
