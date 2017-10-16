@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 //        budTest.CloudGet();
 
 
-        test.ReadCategoryFromDatabase();
+
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null)
         {
