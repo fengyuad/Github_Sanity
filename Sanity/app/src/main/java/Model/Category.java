@@ -125,6 +125,14 @@ public class Category implements java.io.Serializable{
         mTransactionIDs.add(id);
     }
 
+    public Category Reset(){
+        mName = "";
+        mBudgetID = 0L;
+        mAmount = 0.0;
+        mCurrentAmount = 0.0;
+        mTransactionIDs.clear();
+        return this;
+    }
 
 
 }

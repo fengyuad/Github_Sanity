@@ -29,6 +29,7 @@ public class CategoryModel extends Model implements Serializable {
     private DatabaseReference mDatabase;
 
 
+
     /**
      * Constructor, read from database
      */
@@ -116,6 +117,15 @@ public class CategoryModel extends Model implements Serializable {
 
     /**
      *
+     * @param id
+     * @return Category
+     */
+    public Category GetCategoryById(Long id){
+        return mIDToCategory.get(id);
+    }
+
+    /**
+     *
      * @param catID
      * @param tranID
      * @return
@@ -169,7 +179,7 @@ public class CategoryModel extends Model implements Serializable {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Category cat = ds.getValue(Category.class);
                     mIDToCategory.put(cat.getmID(), cat);
-                    Log.d("print", "put value");
+
                 }
             }
 
@@ -189,11 +199,15 @@ public class CategoryModel extends Model implements Serializable {
     public void DeleteCategoryAndUpdateDatabase(Long catID) {
         for(Long l: mIDToCategory.get(catID).getmTransactionIDs()){
             // remove transaction by id, call TransactionModel method
-            
+            TransactionModel.GetInstance().DeleteTransaction(l, false);
         }
+        Category cat = mIDToCategory.get(catID);
+        cat.getmID();
+        cat.getmBudgetID();
+        cat.getmAmount();
+
         DeleteCategory(catID);
         mDatabase.child(catID.toString()).removeValue();
-
     }
 
     /**
@@ -243,6 +257,15 @@ public class CategoryModel extends Model implements Serializable {
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
         mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
+    }
+
+    /**
+     *
+     * @param catID
+     */
+    public void ResetCategoryAndUpdateDatabase(Long catID){
+        Category cat = mIDToCategory.get(catID).Reset();
+        mDatabase.child(cat.toString()).setValue(cat);
     }
 
 }
