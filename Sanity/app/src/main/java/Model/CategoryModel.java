@@ -201,10 +201,13 @@ public class CategoryModel extends Model implements Serializable {
             // remove transaction by id, call TransactionModel method
             TransactionModel.GetInstance().DeleteTransaction(l, false);
         }
-        Category cat = mIDToCategory.get(catID);
+
+        Category cat =
         cat.getmID();
         cat.getmBudgetID();
-        cat.getmAmount();
+
+        // Update Budget Amount
+        BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
 
         DeleteCategory(catID);
         mDatabase.child(catID.toString()).removeValue();
