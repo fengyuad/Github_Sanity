@@ -78,7 +78,7 @@ public class Transaction implements java.io.Serializable{
         mDay = day;
         mAmount = amount;
         mCategoryId = categoryId;
-        mTransactionId = System.currentTimeMillis() / 1000;
+        mTransactionId = System.currentTimeMillis();
         mNotes = notes;
     }
 

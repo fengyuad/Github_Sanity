@@ -80,16 +80,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-        CategoryModel catTest = CategoryModel.GetInstance();
-        BudgetModel budTest = BudgetModel.GetInstance();
-        TransactionModel tranTest = TransactionModel.GetInstance();
-        catTest.ReadCategoryFromDatabase();
-        tranTest.ReadTransaction();
-
-//        Budget budget = new Budget("Budget1", 1508692133L, 30, 1000.0, new ArrayList<Long>());
-//        budTest.AddBudget(budget);
-//        catTest.WriteCategoryAndUpdateDatabase(new Category("Category1", 100.0, budget.getmBudgetId()));
-
+//        CategoryModel catTest = CategoryModel.GetInstance();
+//        BudgetModel budTest = BudgetModel.GetInstance();
+//        TransactionModel tranTest = TransactionModel.GetInstance();
+//        catTest.ReadCategoryFromDatabase();
+//        tranTest.ReadTransaction();
+//        budTest.CloudGet();
 
     }
 
@@ -129,9 +125,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
     @Override
     public void onClick(View view) {
-
-        Transaction transactionOne = new Transaction(20.0, 1508177224168L, "This is the first transaction", 2017, 10, 16);
-        TransactionModel.GetInstance().addTransaction(transactionOne);
 
         Log.d("MyApp", "I am here");
         Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();

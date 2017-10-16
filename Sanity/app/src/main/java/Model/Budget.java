@@ -19,6 +19,12 @@ public class Budget implements Serializable {
     private double mTotalAmount = 0.0;
     private double mPrevAmount = 0.0;
 
+    public Budget(){
+
+    }
+
+
+
     /**
      * Constructor - Initialize a Budget
      *
@@ -27,9 +33,10 @@ public class Budget implements Serializable {
      * @param amount  budget amount
      * @param catIds  category Ids
      */
+
     public Budget(String name, long dueTime, int period, double amount, List<Long> catIds) {
         mName = name;
-        mBudgetId = System.currentTimeMillis() / 1000;
+        mBudgetId = System.currentTimeMillis();
         mDueTime = dueTime;
         mPeriod = period;
         mAmount = amount;

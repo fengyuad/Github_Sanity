@@ -199,7 +199,7 @@ public class CategoryModel extends Model implements Serializable {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Category cat = ds.getValue(Category.class);
-                    mIDToCategory.put(cat.getmID(), cat);
+                    AddCategory(cat);
 
                 }
             }
