@@ -92,7 +92,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
         View v =  inflater.inflate(R.layout.fragment_transaction_picker, container, false);
 
         transFromButton = (Button) v.findViewById(R.id.trans_from_button);
-        transToButton = (Button) v.findViewById(R.id.trans_to_button);
+        transToButton = (Button) v.findViewById(R.id.edit_bgt_name);
         transFromText = (TextView) v.findViewById(R.id.trans_from_text);
         transToText = (TextView) v.findViewById(R.id.trans_to_text);
         transHistory =(ListView) v.findViewById(R.id.trans_picker_list);
