@@ -6,24 +6,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.security.Timestamp;
-import java.text.DateFormat;
-import java.util.*;
-import android.util.Log;
-import java.sql.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by zhongchu on 10/12/17.
  */
 
-public class TransactionModel extends Model implements java.io.Serializable{
+public class TransactionModel extends Model implements java.io.Serializable {
     private static TransactionModel instance = null;
     private Map<Long, Transaction> mTransactions;
     private DatabaseReference mDatabase;
 
-    public Map<Long, Transaction> getmTransactions(){
+    public Map<Long, Transaction> getmTransactions() {
         return mTransactions;
     }
+
     private TransactionModel() {
         super();
         mTransactions = new HashMap<>();
@@ -52,7 +50,7 @@ public class TransactionModel extends Model implements java.io.Serializable{
     //public
 
     public Transaction DeleteTransaction(Long transactionId, Boolean callCat) {
-        if(callCat) {
+        if (callCat) {
             CategoryModel CModel = CategoryModel.GetInstance();
             CModel.RemoveTransactionInCategoryAndUpdateDatabase
                     (mTransactions.get(transactionId).getmCategoryId(), transactionId, mTransactions.get(transactionId).getmAmount());
@@ -63,7 +61,7 @@ public class TransactionModel extends Model implements java.io.Serializable{
         return temp;
     }
 
-    public boolean WriteNewTransaction(Transaction trans){
+    public boolean WriteNewTransaction(Transaction trans) {
         Long key = trans.getmTransactionId();
         //trans.setmTransactionId(key);
         //addTransaction(trans);
@@ -71,33 +69,32 @@ public class TransactionModel extends Model implements java.io.Serializable{
         return true;
     }
 
-    public void ReadTransaction(){
+    public void ReadTransaction() {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot){
-                for(DataSnapshot ds: dataSnapshot.getChildren()) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Transaction trans = ds.getValue(Transaction.class);
                     mTransactions.put(trans.getmTransactionId(), trans);
                 }
             }
+
             public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
 
-    public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay){
+    public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay) {
         Map<Long, Transaction> toReturn = new HashMap<>();
-        for(Long key : mTransactions.keySet()) {
-            if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)){
+        for (Long key : mTransactions.keySet()) {
+            if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)) {
                 toReturn.put(key, mTransactions.get(key));
-            }
-            else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear){
-                if(mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth){
+            } else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear) {
+                if (mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth) {
                     toReturn.put(key, mTransactions.get(key));
-                }
-                else if(mTransactions.get(key).getmYear() == fromMonth || mTransactions.get(key).getmYear() == toMonth){
-                    if(mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay){
+                } else if (mTransactions.get(key).getmYear() == fromMonth || mTransactions.get(key).getmYear() == toMonth) {
+                    if (mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay) {
                         toReturn.put(key, mTransactions.get(key));
                     }
                 }

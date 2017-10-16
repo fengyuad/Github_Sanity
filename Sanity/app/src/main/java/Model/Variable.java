@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by EricWang on 10/15/17.
  */
 
-public class Variable implements Serializable{
+public class Variable implements Serializable {
     private static Variable instance = null;
     private double mThreshold = 0.75;
     private int mFrequency = 1;
@@ -46,5 +46,5 @@ public class Variable implements Serializable{
         this.mUserID = mUserID;
     }
 
-    
+
 }

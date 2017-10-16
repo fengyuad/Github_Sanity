@@ -12,16 +12,12 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +58,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     View myFragmentView;
     private TextView transDateText;
     private int transYear, transMonth, transDay;
+
     public OverviewFragment() {
         // Required empty public constructor
     }
@@ -99,32 +96,32 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         myFragmentView = inflater.inflate(R.layout.activity_overview, container, false);
-       // Budget_ListView = myFragmentView.findViewById(R.id.Budget_listview);
+        // Budget_ListView = myFragmentView.findViewById(R.id.Budget_listview);
         final Calendar c = Calendar.getInstance();
         transDay = c.get(Calendar.DAY_OF_MONTH);
         transMonth = c.get(Calendar.MONTH);
         transYear = c.get(Calendar.YEAR);
-        pieChart=(PieChart)myFragmentView.findViewById(R.id.overview_pie);
+        pieChart = (PieChart) myFragmentView.findViewById(R.id.overview_pie);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
-        pieChart.setExtraOffsets(5,10,5,5);
+        pieChart.setExtraOffsets(5, 10, 5, 5);
         pieChart.setDragDecelerationFrictionCoef(0.95f);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.TRANSPARENT);
         pieChart.setTransparentCircleRadius(61f);
         //pieChart.getDescription().setText("Budgets OverView");
-        ArrayList<PieEntry> yvalues= new ArrayList<>();
-        yvalues.add(new PieEntry(34f,"PartyA"));
-        yvalues.add(new PieEntry(23f,"USA"));
-        yvalues.add(new PieEntry(14f,"China"));
-        yvalues.add(new PieEntry(35f,"Japan"));
-        yvalues.add(new PieEntry(23f,"Russia"));
+        ArrayList<PieEntry> yvalues = new ArrayList<>();
+        yvalues.add(new PieEntry(34f, "PartyA"));
+        yvalues.add(new PieEntry(23f, "USA"));
+        yvalues.add(new PieEntry(14f, "China"));
+        yvalues.add(new PieEntry(35f, "Japan"));
+        yvalues.add(new PieEntry(23f, "Russia"));
 
-        PieDataSet dataSet= new PieDataSet(yvalues,"Counntries");
+        PieDataSet dataSet = new PieDataSet(yvalues, "Counntries");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        PieData data=new PieData(dataSet);
+        PieData data = new PieData(dataSet);
         data.setValueTextSize(10f);
         data.setValueTextColor(Color.YELLOW);
         pieChart.setData(data);
@@ -134,9 +131,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
                 Log.i("VAL SELECTED",
-                        "Value: " + ((PieEntry)e).getLabel() + ", index: " + h.getX()
+                        "Value: " + ((PieEntry) e).getLabel() + ", index: " + h.getX()
                                 + ", DataSet index: " + h.getDataSetIndex());
-                startActivity(new Intent(getContext(),BudgetViewActivity.class));
+                startActivity(new Intent(getContext(), BudgetViewActivity.class));
             }
 
             @Override
@@ -210,7 +207,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -225,6 +221,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
     protected void showInputDialog() {
 
         // get input_dialog.xml view
@@ -243,7 +240,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getContext(),"Add Transaction!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Add Transaction!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel",

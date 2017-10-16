@@ -1,10 +1,8 @@
 package com.example.tomdong.sanity;
 
 
-import android.os.Bundle;
-
 import android.content.Intent;
-
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -23,15 +21,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-
-import Model.Budget;
-import Model.BudgetModel;
-import Model.Category;
-import Model.CategoryModel;
 import Model.StorageModel;
-import Model.Transaction;
-import Model.TransactionModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -209,7 +199,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         });
     }
 
-
     public void LoginUser() {
 
 
@@ -230,17 +219,14 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
-                if(task.isSuccessful())
-                {
-                    Toast.makeText(MainActivity.this,"Login Succeeded",Toast.LENGTH_SHORT).show();
+                if (task.isSuccessful()) {
+                    Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
                     startActivity(intent);
                     finish();
-                }
-                else
-                {
-                    Toast.makeText(MainActivity.this,"Username does not match",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "Username does not match", Toast.LENGTH_SHORT).show();
 
                 }
             }

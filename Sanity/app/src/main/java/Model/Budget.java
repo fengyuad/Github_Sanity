@@ -19,11 +19,12 @@ public class Budget implements Serializable {
     private double mTotalAmount = 0.0;
     private double mPrevAmount = 0.0;
 
-    public Budget(){
+    /**
+     * Default Constructor
+     */
+    public Budget() {
 
     }
-
-
 
     /**
      * Constructor - Initialize a Budget
@@ -33,7 +34,6 @@ public class Budget implements Serializable {
      * @param amount  budget amount
      * @param catIds  category Ids
      */
-
     public Budget(String name, long dueTime, int period, double amount, List<Long> catIds) {
         mName = name;
         mBudgetId = System.currentTimeMillis();
@@ -46,6 +46,7 @@ public class Budget implements Serializable {
 
     //<editor-fold desc="Budget Update">
     /* =============== Budget Update =============== */
+
     /**
      * Update current balance of the budget
      * Should be triggered whenever a transaction/category change happends
@@ -87,6 +88,7 @@ public class Budget implements Serializable {
 
     //<editor-fold desc="Category Related">
     /* =============== Category Related =============== */
+
     /**
      * add a category to this budget
      *

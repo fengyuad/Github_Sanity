@@ -30,6 +30,7 @@ public class StorageModel {
 
     //<editor-fold desc="Singleton & Init">
     /* =============== Singleton & Init =============== */
+
     /**
      * Get the instance of this model
      *
@@ -55,6 +56,7 @@ public class StorageModel {
 
     //<editor-fold desc="File Operation">
     /* =============== File Operation =============== */
+
     /**
      * Test if all 3 model files exist in internal storage
      *
@@ -95,6 +97,7 @@ public class StorageModel {
 
     //<editor-fold desc="All Model R&W">
     /* =============== All Model R&W =============== */
+
     /**
      * Save all 3 models into internal storage
      *
@@ -123,6 +126,7 @@ public class StorageModel {
 
     //<editor-fold desc="One Model R&W">
     /* =============== One Model R&W =============== */
+
     /**
      * save one model into internal storage
      *
