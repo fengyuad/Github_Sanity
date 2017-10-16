@@ -38,8 +38,11 @@ public class TransactionModel extends Model implements java.io.Serializable{
     }
 
     public Transaction addTransaction(Transaction trans) {
-        Long transactionId = System.currentTimeMillis() / 1000;
-        mTransactions.put(transactionId, trans);
+        //Long transactionId = System.currentTimeMillis() / 1000;
+        CategoryModel CModel = CategoryModel.GetInstance();
+        CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+        WriteNewTransaction(trans);
+        mTransactions.put(trans.getmTransactionId(), trans);
         return trans;
     }
 
