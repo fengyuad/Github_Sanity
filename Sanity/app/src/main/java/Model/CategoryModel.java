@@ -145,7 +145,7 @@ public class CategoryModel extends Model implements Serializable {
      */
     public boolean WriteCategoryAndUpdateDatabase(Category cat) {
         // check duplicate name
-        if (mNameCategoryUsed.contains(cat.getmName())) return false;
+        if (CheckNameUsed(cat.getmName())) return false;
 
         Long key = System.currentTimeMillis() / 1000;
         cat.setmID(key);
@@ -187,8 +187,13 @@ public class CategoryModel extends Model implements Serializable {
      * @param catID
      */
     public void DeleteCategoryAndUpdateDatabase(Long catID) {
+        for(Long l: mIDToCategory.get(catID).getmTransactionIDs()){
+            // remove transaction by id, call TransactionModel method
+            
+        }
         DeleteCategory(catID);
         mDatabase.child(catID.toString()).removeValue();
+
     }
 
     /**
