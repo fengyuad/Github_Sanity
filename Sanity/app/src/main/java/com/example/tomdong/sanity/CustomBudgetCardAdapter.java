@@ -105,6 +105,8 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
         Log.e(TAG, "Delete Position: "+getItem(Position).GetBudgetType());
         remove(getItem(Position));
     }
+
+    
     public void toggleSelection(int position)
     {
         selectView(position,!mSelectedItemsIds.get(position));
