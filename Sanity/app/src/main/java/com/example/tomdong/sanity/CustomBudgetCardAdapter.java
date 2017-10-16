@@ -85,6 +85,14 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
                         remove(getItem(tempPos));
                     }
                 });
+                holder.BudgetType.setText(mList.get(position).GetBudgetType());
+                holder.CateGoryAmount.setText(Double.toString(mList.get(position).GetLimit()) + "$");
+                double limitAmount = mList.get(position).GetLimit();
+                double currAmount = mList.get(position).GetCurrent();
+                double P = ((currAmount/limitAmount) * 100);
+                holder.PBar.setProgress((int)P);
+
+                lastPosition = position;
                 result = convertView;
                 convertView.setTag(holder);
             }

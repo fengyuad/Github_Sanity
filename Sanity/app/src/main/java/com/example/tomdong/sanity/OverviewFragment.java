@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import Model.*;
 
 
 /**
@@ -114,10 +117,10 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         pieChart.setTransparentCircleRadius(61f);
         //pieChart.getDescription().setText("Budgets OverView");
         ArrayList<PieEntry> yvalues= new ArrayList<>();
-        yvalues.add(new PieEntry(34f,"PartyA"));
-        yvalues.add(new PieEntry(23f,"USA"));
-        yvalues.add(new PieEntry(14f,"China"));
-        yvalues.add(new PieEntry(35f,"Japan"));
+        yvalues.add(new PieEntry(100f,"PartyA"));
+        yvalues.add(new PieEntry(100f,"USA"));
+        yvalues.add(new PieEntry(100f,"China"));
+        yvalues.add(new PieEntry(100f,"Japan"));
         yvalues.add(new PieEntry(23f,"Russia"));
 
         PieDataSet dataSet= new PieDataSet(yvalues,"Counntries");
@@ -238,12 +241,15 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         transDateText = (TextView) promptView.findViewById(R.id.trans_date_text);
         transDateText.setText(transYear + "-" + (transMonth + 1) + "-" + transDay);
         transDateButton.setOnClickListener(this);
+        Spinner bgtSpinner = (Spinner) promptView.findViewById(R.id.bgt_spinner);
+        Spinner catSpinner = (Spinner) promptView.findViewById(R.id.cat_spinner);
 
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(getContext(),"Add Transaction!",Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .setNegativeButton("Cancel",
