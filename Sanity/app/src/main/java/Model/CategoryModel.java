@@ -221,6 +221,8 @@ public class CategoryModel extends Model implements Serializable {
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
         mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
+
+        BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
     }
 
     /**
@@ -234,6 +236,7 @@ public class CategoryModel extends Model implements Serializable {
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
         mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
+        BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
     }
 
     /**
