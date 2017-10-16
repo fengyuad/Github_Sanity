@@ -7,6 +7,7 @@ package com.example.tomdong.sanity;
 public class Budget_card {
     private String CatType;
     private String BudgetType;
+
     private double limit;
     private double current;
     public Budget_card(String BudgetType, String CatType, double limit, double current) {
@@ -14,13 +15,20 @@ public class Budget_card {
         this.BudgetType = CatType;
         this.limit = limit;
         this.current = current;
+
     }
 
     public String GetBudgetType() {
         return BudgetType;
     }
-    public String GetCatType() {
-        return CatType;
+
+    public String GetCatoryType() {
+        return CatoryType;
+    }
+
+    public void setCatoryType(String CatoryType) {
+        this.CatoryType = CatoryType;
+
     }
     public double GetLimit() { return limit; }
     public double GetCurrent() { return current; }

@@ -8,7 +8,7 @@ import java.util.List;
  * Created by EricWang on 10/12/17.
  */
 
-public class Category implements java.io.Serializable{
+public class Category implements java.io.Serializable {
     /**
      * Getter and Setter
      */
@@ -55,6 +55,7 @@ public class Category implements java.io.Serializable{
     public List<Long> getmTransactionIDs() {
         return mTransactionIDs;
     }
+
     public void setmTransactionIDs(List<Long> mTransactionIDs) {
         this.mTransactionIDs = mTransactionIDs;
     }
@@ -73,24 +74,27 @@ public class Category implements java.io.Serializable{
     /**
      * Constructor
      */
-    public Category(){
+    public Category() {
         mTransactionIDs = new ArrayList<>();
     }
-    public Category(String name, Long budgetID){
+
+    public Category(String name, Long budgetID) {
         mName = name;
         mAmount = 0.00;
         mCurrentAmount = 0.00;
         mBudgetID = budgetID;
         mTransactionIDs = new ArrayList<>();
     }
-    public Category(String name, double amount, Long budgetID){
+
+    public Category(String name, double amount, Long budgetID) {
         mName = name;
         mAmount = amount;
         mCurrentAmount = 0;
         mBudgetID = budgetID;
         mTransactionIDs = new ArrayList<>();
     }
-    public Category(String name, double amount, double currentAmount, Long budgetID){
+
+    public Category(String name, double amount, double currentAmount, Long budgetID) {
         mName = name;
         mAmount = amount;
         mCurrentAmount = currentAmount;
@@ -103,22 +107,22 @@ public class Category implements java.io.Serializable{
      */
 
 
-
-    public void RemoveTransaction(Long transID, double amount){
+    public void RemoveTransaction(Long transID, double amount) {
         mTransactionIDs.remove(transID);
         mCurrentAmount -= amount;
     }
 
     /**
      * Add a transaction id to the arrayList
+     *
      * @param id
      */
-    public void AddTransaction(Long id, double amount){
+    public void AddTransaction(Long id, double amount) {
         mTransactionIDs.add(id);
         mCurrentAmount += amount;
     }
 
-    public Category Reset(){
+    public Category Reset() {
         mName = "";
         mBudgetID = 0L;
         mAmount = 0.0;

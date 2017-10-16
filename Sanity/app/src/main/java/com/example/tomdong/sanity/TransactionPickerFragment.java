@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 /**
@@ -89,26 +88,26 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_transaction_picker, container, false);
+        View v = inflater.inflate(R.layout.fragment_transaction_picker, container, false);
 
         transFromButton = (Button) v.findViewById(R.id.trans_from_button);
         transToButton = (Button) v.findViewById(R.id.edit_bgt_name);
         transFromText = (TextView) v.findViewById(R.id.trans_from_text);
         transToText = (TextView) v.findViewById(R.id.trans_to_text);
-        transHistory =(ListView) v.findViewById(R.id.trans_picker_list);
+        transHistory = (ListView) v.findViewById(R.id.trans_picker_list);
         transFromButton.setOnClickListener(this);
         transToButton.setOnClickListener(this);
 
         ArrayList<Transaction_card> list = new ArrayList<>();
 
-        list.add(new Transaction_card("Parking","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("Eating","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("Studying","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("Working","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("Skiing","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("Gaming","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("Travelling","2017-10-9","400$","I love you"));
-        list.add(new Transaction_card("pooping","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Parking", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("Eating", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("Studying", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("Working", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("Skiing", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("Gaming", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("Travelling", "2017-10-9", "400$", "I love you"));
+        list.add(new Transaction_card("pooping", "2017-10-9", "400$", "I love you"));
         CustomTransactionCardAdapter adapter = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, list);
         transHistory.setAdapter(adapter);
         transFromText.setText(fromYear + "-" + (fromMonth + 1) + "-" + fromMonth);
@@ -143,7 +142,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        if(v == transFromButton) {
+        if (v == transFromButton) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -152,7 +151,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
             }, fromYear, fromMonth, fromDay);
             datePickerDialog.show();
         }
-        if(v == transToButton) {
+        if (v == transToButton) {
             DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {

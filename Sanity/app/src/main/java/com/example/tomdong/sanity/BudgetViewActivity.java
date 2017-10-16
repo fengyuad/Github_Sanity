@@ -8,18 +8,14 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-
-import android.support.v7.widget.ListViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -29,13 +25,12 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.logging.Handler;
 
 /**
  * Created by tomdong on 10/13/17.
  */
 
-public class BudgetViewActivity extends AppCompatActivity implements Button.OnClickListener{
+public class BudgetViewActivity extends AppCompatActivity implements Button.OnClickListener {
     private ProgressBar BudgetProgress;
     private ListView CateGory_ListView;
     private TextView BudgetPercent;
@@ -44,12 +39,13 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     TextView editBgtDateText;
     private int editYear, editMonth, editDay;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budgetview);
-        BudgetProgress=findViewById(R.id.Budget_progress);
-        CateGory_ListView=findViewById(R.id.category_listview);
-        BudgetPercent=findViewById(R.id.budget_percent);
+        BudgetProgress = findViewById(R.id.Budget_progress);
+        CateGory_ListView = findViewById(R.id.category_listview);
+        BudgetPercent = findViewById(R.id.budget_percent);
 
         ArrayList<Category_card> list = new ArrayList<>();
 
