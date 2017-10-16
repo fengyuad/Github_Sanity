@@ -1,5 +1,6 @@
 package com.example.tomdong.sanity;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,10 +16,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.PieChart;
@@ -31,6 +35,7 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 
 /**
@@ -41,7 +46,7 @@ import java.util.ArrayList;
  * Use the {@link OverviewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OverviewFragment extends Fragment {
+public class OverviewFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -55,6 +60,8 @@ public class OverviewFragment extends Fragment {
     PieChart pieChart;
     ListView Budget_ListView;
     View myFragmentView;
+    private TextView transDateText;
+    private int transYear, transMonth, transDay;
     public OverviewFragment() {
         // Required empty public constructor
     }
@@ -93,6 +100,10 @@ public class OverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         myFragmentView = inflater.inflate(R.layout.activity_overview, container, false);
        // Budget_ListView = myFragmentView.findViewById(R.id.Budget_listview);
+        final Calendar c = Calendar.getInstance();
+        transDay = c.get(Calendar.DAY_OF_MONTH);
+        transMonth = c.get(Calendar.MONTH);
+        transYear = c.get(Calendar.YEAR);
         pieChart=(PieChart)myFragmentView.findViewById(R.id.overview_pie);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -223,6 +234,11 @@ public class OverviewFragment extends Fragment {
         alertDialogBuilder.setView(promptView);
 
         final EditText editText = (EditText) promptView.findViewById(R.id.trans_amt);
+        Button transDateButton = (Button) promptView.findViewById(R.id.trans_date_button);
+        transDateText = (TextView) promptView.findViewById(R.id.trans_date_text);
+        transDateText.setText(transYear + "-" + (transMonth + 1) + "-" + transDay);
+        transDateButton.setOnClickListener(this);
+
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -241,4 +257,16 @@ public class OverviewFragment extends Fragment {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
+
+    @Override
+    public void onClick(View v) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                transDateText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+            }
+        }, transYear, transMonth, transDay);
+        datePickerDialog.show();
+    }
+
 }

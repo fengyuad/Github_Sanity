@@ -10,9 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -37,6 +40,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
 
     Button transFromButton, transToButton;
     TextView transFromText, transToText;
+    ListView transHistory;
     private int fromYear, fromMonth, fromDay;
     private int toYear, toMonth, toDay;
 
@@ -91,10 +95,22 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
         transToButton = (Button) v.findViewById(R.id.edit_bgt_name);
         transFromText = (TextView) v.findViewById(R.id.trans_from_text);
         transToText = (TextView) v.findViewById(R.id.trans_to_text);
-
+        transHistory =(ListView) v.findViewById(R.id.trans_picker_list);
         transFromButton.setOnClickListener(this);
         transToButton.setOnClickListener(this);
 
+        ArrayList<Transaction_card> list = new ArrayList<>();
+
+        list.add(new Transaction_card("Parking","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Eating","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Studying","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Working","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Skiing","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Gaming","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("Travelling","2017-10-9","400$","I love you"));
+        list.add(new Transaction_card("pooping","2017-10-9","400$","I love you"));
+        CustomTransactionCardAdapter adapter = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, list);
+        transHistory.setAdapter(adapter);
         transFromText.setText(fromYear + "-" + (fromMonth + 1) + "-" + fromMonth);
         transToText.setText(toYear + "-" + (toMonth + 1) + "-" + toMonth);
 

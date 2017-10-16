@@ -37,11 +37,9 @@ public class MenuActivity extends AppCompatActivity
             BudgetFragment.OnListFragmentInteractionListener,
             CategoryFragment.OnListFragmentInteractionListener,
             TransactionPickerFragment.OnFragmentInteractionListener,
-            OverviewFragment.OnFragmentInteractionListener, View.OnClickListener {
+            OverviewFragment.OnFragmentInteractionListener
+{
 
-
-    private TextView transDateText;
-    private int transYear, transMonth, transDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +51,6 @@ public class MenuActivity extends AppCompatActivity
 
 
 
-        final Calendar c = Calendar.getInstance();
-        transDay = c.get(Calendar.DAY_OF_MONTH);
-        transMonth = c.get(Calendar.MONTH);
-        transYear = c.get(Calendar.YEAR);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -202,49 +196,5 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
-
-    protected void showInputDialog() {
-
-        // get input_dialog.xml view
-        LayoutInflater layoutInflater = LayoutInflater.from(MenuActivity.this);
-        View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MenuActivity.this);
-        alertDialogBuilder.setView(promptView);
-
-        final EditText editText = (EditText) promptView.findViewById(R.id.trans_amt);
-        Button transDateButton = (Button) promptView.findViewById(R.id.trans_date_button);
-        transDateText = (TextView) promptView.findViewById(R.id.trans_date_text);
-        transDateText.setText(transYear + "-" + (transMonth + 1) + "-" + transDay);
-        transDateButton.setOnClickListener(this);
-
-        // setup a dialog window
-        alertDialogBuilder.setCancelable(false)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(MenuActivity.this,"Add Transaction!",Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
-
-        // create an alert dialog
-        AlertDialog alert = alertDialogBuilder.create();
-        alert.show();
-    }
-
-    @Override
-    public void onClick(View v) {
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                transDateText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-            }
-        }, transYear, transMonth, transDay);
-        datePickerDialog.show();
-    }
 
 }
