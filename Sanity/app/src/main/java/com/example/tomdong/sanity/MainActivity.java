@@ -186,11 +186,11 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
 
+
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Register Succeeded", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
