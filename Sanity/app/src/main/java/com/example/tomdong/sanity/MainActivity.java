@@ -76,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         CategoryModel test = CategoryModel.GetInstance();
 
         test.ReadCategoryFromDatabase();
+
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+        {
+            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
