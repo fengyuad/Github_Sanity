@@ -130,9 +130,9 @@ public class CategoryModel extends Model implements Serializable {
      * @param tranID
      * @return
      */
-    private void AddTransactionToCategory(Long catID, Long tranID){
+    private void AddTransactionToCategory(Long catID, Long tranID, double amount){
         Category cat = mIDToCategory.get(catID);
-        cat.AddTransaction(tranID);
+        cat.AddTransaction(tranID, amount);
     }
 
     /**
@@ -202,13 +202,8 @@ public class CategoryModel extends Model implements Serializable {
             TransactionModel.GetInstance().DeleteTransaction(l, false);
         }
 
-        Category cat =
-        cat.getmID();
-        cat.getmBudgetID();
-
         // Update Budget Amount
-        BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
-
+        BudgetModel.GetInstance().CategoryRemoved(mIDToCategory.get(catID).getmBudgetID(), mIDToCategory.get(catID).getmID());
         DeleteCategory(catID);
         mDatabase.child(catID.toString()).removeValue();
     }
@@ -227,13 +222,13 @@ public class CategoryModel extends Model implements Serializable {
     }
 
     /**
-     * @param id
+     * @param catId
      * @param amount
      * @return id's current amount
      */
-    public double AddCategoryAmountAndUpdateDatabase(Long id, double amount) {
-        double currentAmount = AddCategoryAmount(id, amount);
-        mDatabase.child(id.toString()).child("mCurrentAmount").setValue(currentAmount);
+    public double AddCategoryAmountAndUpdateDatabase(Long catId, double amount) {
+        double currentAmount = AddCategoryAmount(catId, amount);
+        mDatabase.child(catId.toString()).child("mCurrentAmount").setValue(currentAmount);
         return currentAmount;
     }
 
@@ -242,11 +237,11 @@ public class CategoryModel extends Model implements Serializable {
      * @param catID
      * @param tranID
      */
-    public void AddTransactionIDToCategoryAndUpdateDatabase(Long catID, Long tranID){
-        AddTransactionToCategory(catID, tranID);
+    public void AddTransactionIDToCategoryAndUpdateDatabase(Long catID, Long tranID, double amount){
+        AddTransactionToCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
-        mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
-
+        AddCategoryAmountAndUpdateDatabase(catID, amount);
+        mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list); 
     }
 
     /**

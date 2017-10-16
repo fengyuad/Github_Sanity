@@ -121,7 +121,8 @@ public class Category implements java.io.Serializable{
      * Add a transaction id to the arrayList
      * @param id
      */
-    public void AddTransaction(Long id){
+    public void AddTransaction(Long id, double amount){
+        AddCurrentAmount(amount);
         mTransactionIDs.add(id);
     }
 
