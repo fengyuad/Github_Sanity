@@ -14,13 +14,24 @@ import java.io.ObjectOutputStream;
  */
 
 public class StorageModel {
-    FileOutputStream fos;
-    FileInputStream fis;
-    ObjectOutputStream oos;
-    ObjectInputStream ois;
-    Context mContext;
+    private static StorageModel mInstance = null;
+    private static Context mContext;
+    private FileOutputStream fos;
+    private FileInputStream fis;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
 
-    public StorageModel(Context context) {
+    public StorageModel() {
+    }
+
+    public static StorageModel GetInstance() {
+        if (mInstance == null) {
+            mInstance = new StorageModel();
+        }
+        return mInstance;
+    }
+
+    public static void SetContext(Context context) {
         mContext = context;
     }
 

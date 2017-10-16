@@ -56,8 +56,12 @@ public class BudgetModel extends Model implements Serializable {
         if (mBudgetMap.containsKey(budget.getmBudgetId())) {
             return false;
         } else {
+            // Add
             mBudgetMap.put(budget.getmBudgetId(), budget);
+            // Firebase Update
             mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
+            // Local Update
+            StorageModel.GetInstance().SaveObject(this);
             return true;
         }
     }
@@ -73,13 +77,20 @@ public class BudgetModel extends Model implements Serializable {
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
-    public boolean UpdateBudget(long budgetId, long dueDate, int period, double amount, List<Long> catIds) {
+    public boolean UpdateBudget(String name, long budgetId, long dueDate, int period, double amount, List<Long> catIds) {
         if (mBudgetMap.containsKey(budgetId)) {
+            // Get Budget
             Budget curr = mBudgetMap.get(budgetId);
+            // Update
+            curr.setmName(name);
             curr.setmDueDate(dueDate);
             curr.setmPeriod(period);
             curr.setmAmount(amount);
             curr.setmCatIds(catIds);
+            // Firebase Update
+            mDatabase.child(Long.toString(curr.getmBudgetId())).setValue(curr);
+            // Local Update
+            StorageModel.GetInstance().SaveObject(this);
             return true;
         } else {
             return false;
@@ -96,7 +107,12 @@ public class BudgetModel extends Model implements Serializable {
      */
     public boolean DeleteBudget(long budgetId) {
         if (mBudgetMap.containsKey(budgetId)) {
+            // Delete
             mBudgetMap.remove(budgetId);
+            // Firebase Update
+            //mDatabase.child(Long.toString(curr.getmBudgetId())).setValue(curr);
+            // Local Update
+            //StorageModel.GetInstance().SaveObject(this);
             return true;
         } else {
             return false;
