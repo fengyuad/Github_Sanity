@@ -26,7 +26,7 @@
         android:layout_alignStart="@+id/trans_text" />
 
     <Button
-        android:id="@+id/trans_to_button"
+        android:id="@+id/edit_bgt_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/trans_from_button"
@@ -38,24 +38,30 @@
         android:id="@+id/trans_from_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/trans_to_button"
-        android:layout_centerHorizontal="true"
-        android:text="2017-01-01" />
+        android:text="2017-01-01"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:layout_marginEnd="61dp"
+        android:layout_alignBaseline="@+id/trans_from_button"
+        android:layout_alignBottom="@+id/trans_from_button"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:id="@+id/trans_to_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/trans_to_button"
-        android:layout_alignStart="@+id/trans_from_text"
-        android:text="2017-10-10" />
+        android:text="2017-10-10"
+        android:textSize="25dp"
+        android:gravity="center"
+        android:layout_above="@+id/trans_picker_list"
+        android:layout_alignStart="@+id/trans_from_text" />
 
     <ListView
         android:id="@+id/trans_picker_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/trans_to_button"
+        android:layout_below="@+id/edit_bgt_name"
         android:layout_marginTop="50dp"
         android:scrollbars="horizontal" />
 </RelativeLayout>
