@@ -151,29 +151,26 @@ public class BudgetModel extends Model implements Serializable {
     }
 
     /**
+     * Get notification
      *
      * @return list of the string displayed in notification
      */
-    public List<String> getNotification(){
+    public List<String> getNotification() {
         double threshold = Variable.GetInstance().getmThreshold();
         int frequency = Variable.GetInstance().getmFrequency();
         List<String> ret = new ArrayList<>();
-
-        for(Long l: mBudgetMap.keySet()){
-            Budget budget = mBudgetMap.get(l);
-            if(budget.getmAmount() >= budget.getmTotalAmount() * threshold){
+        for (Budget budget : mBudgetMap.values()) {
+            if (budget.getmAmount() >= budget.getmTotalAmount() * threshold) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
-                sb.append("Amount left: " + (budget.getmAmount() - budget.getmTotalAmount()) + "; "); // amount left
-                sb.append("Time remaining: " ); // time remaining
+                sb.append("Amount left: " + (budget.getmAmount() - budget.GetCurrAmount()) + "; "); // amount left
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + "Day(s)"); // time remaining
                 ret.add(sb.toString());
             }
         }
         return ret;
-
     }
-
 
     /**
      * Firebase SetValue Budget

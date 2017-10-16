@@ -1,8 +1,6 @@
 package Model;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -80,6 +78,10 @@ public class Budget implements Serializable {
     }
 
     // Getters and Setters
+
+    public double GetCurrAmount() {
+        return mTotalAmount - mPrevAmount;
+    }
 
     /**
      * Getter
