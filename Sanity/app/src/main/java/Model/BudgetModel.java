@@ -116,34 +116,62 @@ public class BudgetModel extends Model implements Serializable {
         }
     }
 
-    public void AddCategory(long budgetId, long catId) {
+    /**
+     * Called when Category is Added
+     *
+     * @param budgetId budget ID
+     * @param catId    category ID
+     */
+    public void CategoryAdded(long budgetId, long catId) {
         mBudgetMap.get(budgetId).AddCatId(catId);
         CalcTotalAmount(budgetId);
+    }
+
+    /**
+     * Calculate total amount and update local&DB
+     *
+     * @param budgetId budget ID
+     */
+    public void CalcTotalAmount(long budgetId) {
+        mBudgetMap.get(budgetId).UpdateTotalAmount();
         CloudSet(mBudgetMap.get(budgetId));
         LocalUpdate();
     }
 
-    public void CalcTotalAmount(long budgetId) {
-        mBudgetMap.get(budgetId).UpdateTotalAmount();
-    }
-
+    /**
+     * Called when Category is Removed
+     *
+     * @param budgetId budget ID
+     * @param catId    category ID
+     */
     public void CategoryRemoved(long budgetId, long catId) {
         mBudgetMap.get(budgetId).RemoveCatId(catId);
         CalcTotalAmount(budgetId);
-        CloudSet(mBudgetMap.get(budgetId));
-        LocalUpdate();
     }
 
+    /**
+     * Firebase SetValue Budget
+     *
+     * @param budget budget
+     */
     private void CloudSet(Budget budget) {
         // Firebase Set
         mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
     }
 
+    /**
+     * Firebase RemoveValue Budget
+     *
+     * @param budget budget
+     */
     private void CloudRemove(Budget budget) {
         // Firebase Remove
         mDatabase.child(Long.toString(budget.getmBudgetId())).removeValue();
     }
 
+    /**
+     * Local Storage
+     */
     private void LocalUpdate() {
         // Local Update
         StorageModel.GetInstance().SaveObject(this);
