@@ -76,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 //        catTest.ReadCategoryFromDatabase();
 //        tranTest.ReadTransaction();
 //        budTest.CloudGet();
-
-
-        test.ReadCategoryFromDatabase();
-
         if(FirebaseAuth.getInstance().getCurrentUser() != null)
         {
             Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
