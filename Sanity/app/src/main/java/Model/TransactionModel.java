@@ -51,8 +51,8 @@ public class TransactionModel extends Model implements java.io.Serializable{
 
     //public
 
-    public Transaction DeleteTransaction(Long transactionId, Boolean updateDB) {
-        if(updateDB) {
+    public Transaction DeleteTransaction(Long transactionId, Boolean callCat) {
+        if(callCat) {
             CategoryModel CModel = CategoryModel.GetInstance();
             CModel.RemoveTransactionInCategoryAndUpdateDatabase
                     (mTransactions.get(transactionId).getmCategoryId(), transactionId, mTransactions.get(transactionId).getmAmount());
