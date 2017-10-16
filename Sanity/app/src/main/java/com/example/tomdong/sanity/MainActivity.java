@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 }
                 else
                 {
-                    Toast.makeText(MainActivity.this,"Fail",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this,"Fail!!!",Toast.LENGTH_SHORT).show();
                 }
             }
         });
