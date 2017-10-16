@@ -46,12 +46,6 @@ public class TransactionModel extends Model implements java.io.Serializable{
         return trans;
     }
 
-    public Transaction UpdateTransaction(long transactionId, double amount, long categoryId) {
-        mTransactions.get(transactionId).setmAmount(amount);
-        mTransactions.get(transactionId).setmCategoryId(categoryId);
-        return mTransactions.get(transactionId);
-    }
-
     //public
 
     public Transaction DeleteTransaction(Long transactionId, Boolean callCat) {
