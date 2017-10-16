@@ -21,8 +21,13 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tomdong.sanity.dummy.DummyContent;
 
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import Model.Budget;
+import Model.BudgetModel;
 
 /**
  * A fragment representing a list of Items.
@@ -76,6 +81,10 @@ public class BudgetFragment extends Fragment {
 
         ArrayList<Budget_card> list = new ArrayList<>();
 
+        Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
+        for (Budget budget : budgetMap.values())
+            list.add(new Budget_card(budget.getmName()));
+/*
         list.add(new Budget_card("Parking"));
         list.add(new Budget_card("Eating"));
         list.add(new Budget_card("Studying"));
@@ -83,7 +92,7 @@ public class BudgetFragment extends Fragment {
         list.add(new Budget_card("Skiing"));
         list.add(new Budget_card("Gaming"));
         list.add(new Budget_card("Travelling"));
-        list.add(new Budget_card("pooping"));
+        list.add(new Budget_card("pooping"));*/
         final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
         mListView.setAdapter(adapter);
 //        SwipeMenuCreator creator = new SwipeMenuCreator() {

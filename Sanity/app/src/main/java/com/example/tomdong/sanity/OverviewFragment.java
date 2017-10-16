@@ -32,6 +32,10 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
+
+import Model.Budget;
+import Model.BudgetModel;
 
 
 /**
@@ -47,15 +51,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
     PieChart pieChart;
     ListView Budget_ListView;
     View myFragmentView;
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private OnFragmentInteractionListener mListener;
     private TextView transDateText;
     private int transYear, transMonth, transDay;
 
@@ -111,11 +113,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         pieChart.setTransparentCircleRadius(61f);
         //pieChart.getDescription().setText("Budgets OverView");
         ArrayList<PieEntry> yvalues = new ArrayList<>();
-        yvalues.add(new PieEntry(34f, "PartyA"));
-        yvalues.add(new PieEntry(23f, "USA"));
-        yvalues.add(new PieEntry(14f, "China"));
-        yvalues.add(new PieEntry(35f, "Japan"));
-        yvalues.add(new PieEntry(23f, "Russia"));
+        Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
+        for (Budget budget : budgetMap.values())
+            yvalues.add(new PieEntry((float) budget.getmAmount(), budget.getmName()));
 
         PieDataSet dataSet = new PieDataSet(yvalues, "Counntries");
         dataSet.setSliceSpace(3f);
@@ -206,22 +206,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         mListener = null;
     }
 
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-
     protected void showInputDialog() {
 
         // get input_dialog.xml view
@@ -264,6 +248,21 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
         }, transYear, transMonth, transDay);
         datePickerDialog.show();
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
     }
 
 }
