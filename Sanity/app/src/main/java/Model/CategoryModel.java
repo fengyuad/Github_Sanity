@@ -147,11 +147,12 @@ public class CategoryModel extends Model implements Serializable {
 
         Long key = System.currentTimeMillis() / 1000;
         cat.setmID(key);
-        mIDToCategory.put(key, cat);
-        mNameCategoryUsed.add(cat.getmName());
-        mDatabase.child(key.toString()).setValue(cat);
+
         AddCategory(cat);
-        mDatabase.child(cat.getmID().toString()).setValue(cat);
+
+        mDatabase.child(key.toString()).setValue(cat);
+        BudgetModel.GetInstance().CategoryAdded(cat.getmBudgetID(), cat.getmID());
+
         return true;
     }
 
