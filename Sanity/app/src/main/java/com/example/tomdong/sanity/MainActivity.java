@@ -19,11 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import Model.Budget;
 import Model.CategoryModel;
+import Model.StorageModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -65,15 +62,16 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         Register.setOnClickListener(this);
         ForgetPassword.setOnClickListener(this);
 
+        // Init StorageModel
+        StorageModel.GetInstance();
+        StorageModel.SetContext(getApplicationContext());
+
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
         CategoryModel test = CategoryModel.GetInstance();
 
         test.ReadCategoryFromDatabase();
-        test.PrintCategoryInfo();
-
-
     }
 
     @Override
