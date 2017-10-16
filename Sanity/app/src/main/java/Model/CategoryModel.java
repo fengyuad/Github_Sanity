@@ -63,7 +63,6 @@ public class CategoryModel extends Model implements Serializable {
      * @param category
      */
     private void AddCategory(Category category) {
-        category.setmID(System.currentTimeMillis()/1000);
         mIDToCategory.put(category.getmID(), category);
         mNameCategoryUsed.add(category.getmName());
     }
@@ -151,7 +150,6 @@ public class CategoryModel extends Model implements Serializable {
         mIDToCategory.put(key, cat);
         mNameCategoryUsed.add(cat.getmName());
         mDatabase.child(key.toString()).setValue(cat);
-        if(mNameCategoryUsed.contains(cat.getmName())) return false;
         AddCategory(cat);
         mDatabase.child(cat.getmID().toString()).setValue(cat);
         return true;
