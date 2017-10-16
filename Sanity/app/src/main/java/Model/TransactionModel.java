@@ -5,8 +5,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.security.Timestamp;
+import java.text.DateFormat;
 import java.util.*;
 import android.util.Log;
+import java.sql.Date;
 
 /**
  * Created by zhongchu on 10/12/17.
@@ -45,7 +49,15 @@ public class TransactionModel extends Model implements java.io.Serializable{
         return mTransactions.get(transactionId);
     }
 
-    public Transaction DeleteTransaction(long transactionId) {
+    //public
+
+    public Transaction DeleteTransaction(Long transactionId, Boolean updateDB) {
+        if(updateDB) {
+            CategoryModel CModel = CategoryModel.GetInstance();
+            CModel.RemoveTransactionInCategoryAndUpdateDatabase
+                    (mTransactions.get(transactionId).getmCategoryId(), transactionId, mTransactions.get(transactionId).getmAmount());
+        }
+        mDatabase.child(transactionId.toString()).removeValue();
         Transaction temp = mTransactions.get(transactionId);
         mTransactions.remove(transactionId);
         return temp;
@@ -72,5 +84,15 @@ public class TransactionModel extends Model implements java.io.Serializable{
 
             }
         });
+    }
+
+    public Map<Long, Transaction> SelectTransactions(Timestamp from, Timestamp to){
+        Map<Long, Transaction> toReturn = new HashMap<>();
+        for(Long key : mTransactions.keySet()){
+            if(key >= from.getTimestamp().getTime() && key <= to.getTimestamp().getTime()){
+                toReturn.put(key, mTransactions.get(key));
+            }
+        }
+        return toReturn;
     }
 }
