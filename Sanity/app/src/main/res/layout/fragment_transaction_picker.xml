@@ -20,10 +20,10 @@
         android:id="@+id/trans_from_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/trans_text"
+        android:layout_marginTop="27dp"
+        android:text="From"
         android:layout_below="@+id/trans_text"
-        android:layout_marginTop="29dp"
-        android:text="From" />
+        android:layout_alignStart="@+id/trans_text" />
 
     <Button
         android:id="@+id/trans_to_button"
