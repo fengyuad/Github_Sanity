@@ -155,35 +155,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 showInputDialog();
             }
         });
-//        ArrayList<Category_card> list = new ArrayList<>();
-//        list.add(new Category_card("Parking"));
-//        list.add(new Category_card("Eating"));
-//        list.add(new Category_card("Studying"));
-//        list.add(new Category_card("Working"));
-//        list.add(new Category_card("Skiing"));
-//        list.add(new Category_card("Gaming"));
-//        list.add(new Category_card("Travelling"));
-//        list.add(new Category_card("pooping"));
-//        CustomCardAdapter adapter = new CustomCardAdapter(getContext(), R.layout.card_layout, list);
-//        Budget_ListView.setAdapter(adapter);
-//        Budget_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                    long id) {
-//                startActivity(new Intent(getContext(),BudgetViewActivity.class));
-//
-//            }
-//        });
-//
-//        Budget_ListView.setOnTouchListener(new View.OnTouchListener() {
-//            // Setting on Touch Listener for handling the touch inside ScrollView
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                // Disallow the touch request for parent scroll on touch of child view
-//                v.getParent().requestDisallowInterceptTouchEvent(true);
-//                return false;
-//            }
-//        });
 
         return myFragmentView;
     }

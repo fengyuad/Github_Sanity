@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
- 
+
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null)
         {
