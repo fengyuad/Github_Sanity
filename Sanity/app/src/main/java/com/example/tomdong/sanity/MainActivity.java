@@ -1,6 +1,10 @@
 package com.example.tomdong.sanity;
 
+
 import android.os.Bundle;
+
+import android.content.Intent;
+
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -181,14 +185,17 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         firebaseAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
+
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Register Succeeded", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
     }
+
 
     public void LoginUser() {
 
@@ -198,6 +205,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(MainActivity.this, "Email Empty!", Toast.LENGTH_SHORT).show();
+
             return;
         }
         if (TextUtils.isEmpty(pw)) {
@@ -208,10 +216,19 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainActivity.this, "Username does not match", Toast.LENGTH_SHORT).show();
+
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(MainActivity.this,"Login Succeeded",Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this,"Username does not match",Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
