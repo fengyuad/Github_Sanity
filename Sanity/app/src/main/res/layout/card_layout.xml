@@ -17,8 +17,8 @@
         android:layout_height="100dp"
         android:layout_alignParentTop="true"
         app:cardCornerRadius="5dp"
-        app:cardElevation="10dp"
-        app:cardMaxElevation="15dp"
+        app:cardElevation="1dp"
+        app:cardMaxElevation="1dp"
         app:contentPaddingLeft="5dp"
         app:contentPaddingRight="5dp"
         android:layout_alignParentStart="true">
@@ -55,6 +55,7 @@
                 android:layout_marginRight="8dp"
                 android:progress="30"
                 android:scaleType="centerCrop"
+                android:progressDrawable="@drawable/green_progress"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHorizontal_bias="0.473"
                 app:layout_constraintLeft_toLeftOf="parent"

@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     {
         String email=Account.getText().toString();
         String pw=PassWord.getText().toString();
-        startActivity(new Intent(getApplicationContext(),OverViewActivity.class));
+       // startActivity(new Intent(getApplicationContext(),OverViewActivity.class));
         if(TextUtils.isEmpty(email))
         {
             Toast.makeText(MainActivity.this,"Email Empty!",Toast.LENGTH_SHORT).show();

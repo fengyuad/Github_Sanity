@@ -39,6 +39,7 @@ public class BudgetViewActivity extends AppCompatActivity {
         CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
         CateGory_ListView.setAdapter(adapter);
 
+
     }
 
 

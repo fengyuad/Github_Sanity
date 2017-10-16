@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -50,13 +51,7 @@ public class MenuActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showInputDialog();
-            }
-        });
+
 
         final Calendar c = Calendar.getInstance();
         transDay = c.get(Calendar.DAY_OF_MONTH);
@@ -207,6 +202,7 @@ public class MenuActivity extends AppCompatActivity
 
     }
 
+
     protected void showInputDialog() {
 
         // get input_dialog.xml view
@@ -250,4 +246,5 @@ public class MenuActivity extends AppCompatActivity
         }, transYear, transMonth, transDay);
         datePickerDialog.show();
     }
+
 }

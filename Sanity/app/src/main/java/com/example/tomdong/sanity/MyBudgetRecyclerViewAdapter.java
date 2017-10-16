@@ -65,8 +65,8 @@ public class MyBudgetRecyclerViewAdapter extends RecyclerView.Adapter<MyBudgetRe
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.bgt_id);
-            mContentView = (TextView) view.findViewById(R.id.bgt_content);
+            mIdView = (TextView) view.findViewById(R.id.Budget_type);
+            mContentView = (TextView) view.findViewById(R.id.budget_amount);
         }
 
         @Override
