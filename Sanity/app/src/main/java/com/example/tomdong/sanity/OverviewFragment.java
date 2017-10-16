@@ -18,6 +18,11 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +37,8 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import Model.*;
 
 
 /**
@@ -110,12 +117,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         pieChart.setHoleColor(Color.TRANSPARENT);
         pieChart.setTransparentCircleRadius(61f);
         //pieChart.getDescription().setText("Budgets OverView");
-        ArrayList<PieEntry> yvalues = new ArrayList<>();
-        yvalues.add(new PieEntry(34f, "PartyA"));
-        yvalues.add(new PieEntry(23f, "USA"));
-        yvalues.add(new PieEntry(14f, "China"));
-        yvalues.add(new PieEntry(35f, "Japan"));
-        yvalues.add(new PieEntry(23f, "Russia"));
+
+        ArrayList<PieEntry> yvalues= new ArrayList<>();
+        yvalues.add(new PieEntry(100f,"PartyA"));
+        yvalues.add(new PieEntry(100f,"USA"));
+        yvalues.add(new PieEntry(100f,"China"));
+        yvalues.add(new PieEntry(100f,"Japan"));
+        yvalues.add(new PieEntry(23f,"Russia"));
 
         PieDataSet dataSet = new PieDataSet(yvalues, "Counntries");
         dataSet.setSliceSpace(3f);
@@ -149,35 +157,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 showInputDialog();
             }
         });
-//        ArrayList<Category_card> list = new ArrayList<>();
-//        list.add(new Category_card("Parking"));
-//        list.add(new Category_card("Eating"));
-//        list.add(new Category_card("Studying"));
-//        list.add(new Category_card("Working"));
-//        list.add(new Category_card("Skiing"));
-//        list.add(new Category_card("Gaming"));
-//        list.add(new Category_card("Travelling"));
-//        list.add(new Category_card("pooping"));
-//        CustomCardAdapter adapter = new CustomCardAdapter(getContext(), R.layout.card_layout, list);
-//        Budget_ListView.setAdapter(adapter);
-//        Budget_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position,
-//                                    long id) {
-//                startActivity(new Intent(getContext(),BudgetViewActivity.class));
-//
-//            }
-//        });
-//
-//        Budget_ListView.setOnTouchListener(new View.OnTouchListener() {
-//            // Setting on Touch Listener for handling the touch inside ScrollView
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                // Disallow the touch request for parent scroll on touch of child view
-//                v.getParent().requestDisallowInterceptTouchEvent(true);
-//                return false;
-//            }
-//        });
 
         return myFragmentView;
     }
@@ -235,12 +214,16 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         transDateText = (TextView) promptView.findViewById(R.id.trans_date_text);
         transDateText.setText(transYear + "-" + (transMonth + 1) + "-" + transDay);
         transDateButton.setOnClickListener(this);
+        Spinner bgtSpinner = (Spinner) promptView.findViewById(R.id.bgt_spinner);
+        Spinner catSpinner = (Spinner) promptView.findViewById(R.id.cat_spinner);
 
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         Toast.makeText(getContext(), "Add Transaction!", Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .setNegativeButton("Cancel",

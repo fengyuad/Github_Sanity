@@ -17,6 +17,23 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
+
+
+import android.widget.ArrayAdapter;
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+
+import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by User on 4/4/2017.
  */
@@ -65,21 +82,32 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
                 holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
 
-                holder.CateGoryAmount = (TextView) convertView.findViewById(R.id.budget_amount);
-                holder.deleteButton = (Button) convertView.findViewById(R.id.deleteButton);
-                holder.deleteButton.setOnClickListener(new Button.OnClickListener() {
-                    public void onClick(View v) {
+                holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
+
+                holder.deleteButton=(Button)convertView.findViewById(R.id.deleteButton);
+                holder.deleteButton.setOnClickListener(new Button.OnClickListener(){
+                    public void onClick(View v)
+                    {
                         remove(getItem(tempPos));
                     }
                 });
+                holder.BudgetType.setText(mList.get(position).GetBudgetType());
+                holder.CateGoryAmount.setText(Double.toString(mList.get(position).GetLimit()) + "$");
+                double limitAmount = mList.get(position).GetLimit();
+                double currAmount = mList.get(position).GetCurrent();
+                double P = ((currAmount/limitAmount) * 100);
+                holder.PBar.setProgress((int)P);
 
+                lastPosition = position;
                 result = convertView;
                 convertView.setTag(holder);
-            } else {
+                holder.BudgetType.setText(mList.get(position).GetBudgetType());
+            }
+            else{
+
                 holder = (ViewHolder) convertView.getTag();
                 result = convertView;
             }
-
             lastPosition = position;
 
             holder.BudgetType.setText(BudgetCat);
@@ -92,13 +120,17 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
 
     }
 
-    public void Remove(Budget_card budgetCard) {
-        mList.remove(budgetCard);
-        notifyDataSetChanged();
+
+    public void Remove(int Position)
+    {
+        Log.e(TAG, "Delete Position: "+getItem(Position).GetBudgetType());
+        remove(getItem(Position));
     }
 
-    public void toggleSelection(int position) {
-        selectView(position, !mSelectedItemsIds.get(position));
+    
+    public void toggleSelection(int position)
+    {
+        selectView(position,!mSelectedItemsIds.get(position));
     }
 
     public void removeSelection() {

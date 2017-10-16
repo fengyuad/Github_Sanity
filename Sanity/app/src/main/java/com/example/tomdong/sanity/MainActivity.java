@@ -70,12 +70,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-//        CategoryModel catTest = CategoryModel.GetInstance();
-//        BudgetModel budTest = BudgetModel.GetInstance();
-//        TransactionModel tranTest = TransactionModel.GetInstance();
-//        catTest.ReadCategoryFromDatabase();
-//        tranTest.ReadTransaction();
-//        budTest.CloudGet();
+
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null)
         {

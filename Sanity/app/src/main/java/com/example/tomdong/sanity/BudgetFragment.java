@@ -6,6 +6,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +32,11 @@ import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 
+
+import static android.content.ContentValues.TAG;
+import static android.provider.AlarmClock.EXTRA_MESSAGE;
+
+
 /**
  * A fragment representing a list of Items.
  * <p/>
@@ -37,7 +50,7 @@ public class BudgetFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private ListView  mListView;
+    private SwipeMenuListView  mListView;
     private ImageView mImageView;
 
     /**
@@ -76,53 +89,52 @@ public class BudgetFragment extends Fragment {
 
         ArrayList<Budget_card> list = new ArrayList<>();
 
-        list.add(new Budget_card("Parking"));
-        list.add(new Budget_card("Eating"));
-        list.add(new Budget_card("Studying"));
-        list.add(new Budget_card("Working"));
-        list.add(new Budget_card("Skiing"));
-        list.add(new Budget_card("Gaming"));
-        list.add(new Budget_card("Travelling"));
-        list.add(new Budget_card("pooping"));
-        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
-        mListView.setAdapter(adapter);
-//        SwipeMenuCreator creator = new SwipeMenuCreator() {
-//
-//            @Override
-//            public void create(SwipeMenu menu) {
-//
-//                // create "delete" item
-//                SwipeMenuItem deleteItem = new SwipeMenuItem(
-//                        getContext());
-//                // set item background
-////                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-////                        0x3F, 0x25)));
-//                // set item width
-//                deleteItem.setWidth(170);
-//                // set a icon
-//                deleteItem.setIcon(R.drawable.close_red);
-//
-//                // add to menu
-//                menu.addMenuItem(deleteItem);
-//
-//            }
-//        };
 
-// set creator
-//        mListView.setMenuCreator(creator);
-//
-//        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-//                switch (index) {
-//                    case 0:
-//                        adapter.remove(adapter.getItem(position));
-//                        break;
-//                }
-//                // false : close the menu; true : not close the menu
-//                return false;
-//            }
-//        });
+        list.add(new Budget_card("Parking", "Parking", 2, 1));
+        list.add(new Budget_card("Parking", "Eating", 20, 15));
+        list.add(new Budget_card("Parking", "Studying", 5, 2));
+        list.add(new Budget_card("Parking", "Working", 10, 2));
+        list.add(new Budget_card("Parking", "Skiing", 14, 6));
+        list.add(new Budget_card("Parking", "Gaming", 109,78));
+        list.add(new Budget_card("Parking", "Travelling", 77, 60));
+        list.add(new Budget_card("shit", "pooping", 30, 17));
+        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
+
+        mListView.setAdapter(adapter);
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(170);
+                menu.addMenuItem(deleteItem);
+
+            }
+        };
+
+        mListView.setMenuCreator(creator);
+        mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        Log.e(TAG, "Delete Position: "+position);
+                        adapter.Remove(position);
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -131,66 +143,6 @@ public class BudgetFragment extends Fragment {
 
             }
         });
-//        mListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-//        mListView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-//
-//            @Override
-//            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-//                 final int checkedCount=mListView.getCheckedItemCount();
-//                mode.setTitle(checkedCount+"Selected");
-//                adapter.toggleSelection(position);
-//            }
-//
-//            @Override
-//            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//                mode.getMenuInflater().inflate(R.menu.menu_delete,menu);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//                switch (item.getItemId())
-//                {
-//                    case R.id.delete:
-//                        SparseBooleanArray selected = adapter.getSeectedIds();
-//                        for(int i=(selected.size()-1);i>=0;i--)
-//                        {
-//                            if(selected.valueAt(i))
-//                            {
-//                                Budget_card selecteditem=adapter.getItem(selected.keyAt(i));
-//                                adapter.remove(selecteditem);
-//                            }
-//                        }
-//                        mode.finish();
-//                        default:
-//                            return false;
-//                }
-//            }
-//
-//            @Override
-//            public void onDestroyActionMode(ActionMode mode) {
-//                adapter.removeSelection();
-//            }
-//
-//
-//        });
-        // Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            RecyclerView recyclerView = (RecyclerView) view;
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            recyclerView.setAdapter(new MyBudgetRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-//
-//        }
         return view;
     }
 
