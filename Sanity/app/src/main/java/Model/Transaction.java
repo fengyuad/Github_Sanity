@@ -1,10 +1,21 @@
 package Model;
 
+import java.security.Timestamp;
+
 /**
  * Created by zhongchu on 10/12/17.
  */
 
 public class Transaction implements java.io.Serializable{
+
+    private double mAmount;
+    private long mCategoryId;
+    private long mTransactionId;
+    private String mNotes;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+
     public double getmAmount() {
         return mAmount;
     }
@@ -37,12 +48,34 @@ public class Transaction implements java.io.Serializable{
         this.mNotes = mNotes;
     }
 
-    private double mAmount;
-    private long mCategoryId;
-    private long mTransactionId;
-    private String mNotes;
+    public void setmYear(int mYear) {
+        this.mYear = mYear;
+    }
 
-    public Transaction(double amount, long categoryId, long transID, String notes){
+    public void setmMonth(int mMonth) {
+        this.mMonth = mMonth;
+    }
+
+    public void setmDay(int mDay) {
+        this.mDay = mDay;
+    }
+
+    public int getmYear() {
+        return mYear;
+    }
+
+    public int getmMonth() {
+        return mMonth;
+    }
+
+    public int getmDay() {
+        return mDay;
+    }
+
+    public Transaction(double amount, long categoryId, long transID, String notes, int year, int month, int day){
+        mYear = year;
+        mMonth = month;
+        mDay = day;
         mAmount = amount;
         mCategoryId = categoryId;
         mTransactionId = transID;
