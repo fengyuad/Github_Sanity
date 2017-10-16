@@ -170,6 +170,7 @@ public class MenuActivity extends AppCompatActivity
                     firebaseAuth.signOut();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             });
             alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
