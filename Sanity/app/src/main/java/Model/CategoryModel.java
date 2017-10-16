@@ -125,8 +125,14 @@ public class CategoryModel extends Model implements Serializable {
         cat.AddTransaction(tranID);
     }
 
-    private void RemoveTransactionInCategory(Long catID, Long tranID){
-        mIDToCategory.get(catID).RemoveTransaction(tranID);
+    /**
+     *
+     * @param catID
+     * @param tranID
+     * @param amount
+     */
+    private void RemoveTransactionInCategory(Long catID, Long tranID, double amount){
+        mIDToCategory.get(catID).RemoveTransaction(tranID, amount);
     }
 
     /**
@@ -139,7 +145,7 @@ public class CategoryModel extends Model implements Serializable {
      */
     public boolean WriteCategoryAndUpdateDatabase(Category cat) {
         // check duplicate name
-        if (mNameCategoryUsed.contains(cat.getmName())) return false;
+        if (CheckNameUsed(cat.getmName())) return false;
 
         Long key = System.currentTimeMillis() / 1000;
         cat.setmID(key);
@@ -181,8 +187,13 @@ public class CategoryModel extends Model implements Serializable {
      * @param catID
      */
     public void DeleteCategoryAndUpdateDatabase(Long catID) {
+        for(Long l: mIDToCategory.get(catID).getmTransactionIDs()){
+            // remove transaction by id, call TransactionModel method
+            
+        }
         DeleteCategory(catID);
         mDatabase.child(catID.toString()).removeValue();
+
     }
 
     /**
@@ -221,11 +232,17 @@ public class CategoryModel extends Model implements Serializable {
 
     }
 
-
-    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID){
-        RemoveTransactionInCategory(catID, tranID);
+    /**
+     *
+     * @param catID
+     * @param tranID
+     * @param amount
+     */
+    public void RemoveTransactionInCategoryAndUpdateDatabase(Long catID, Long tranID, double amount){
+        RemoveTransactionInCategory(catID, tranID, amount);
         List<Long> list = mIDToCategory.get(catID).getmTransactionIDs();
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
+        mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
     }
 
 }
