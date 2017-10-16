@@ -3,6 +3,7 @@ package Model;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,6 +149,31 @@ public class BudgetModel extends Model implements Serializable {
         mBudgetMap.get(budgetId).RemoveCatId(catId);
         CalcTotalAmount(budgetId);
     }
+
+    /**
+     *
+     * @return list of the string displayed in notification
+     */
+    public List<String> getNotification(){
+        double threshold = Variable.GetInstance().getmThreshold();
+        int frequency = Variable.GetInstance().getmFrequency();
+        List<String> ret = new ArrayList<>();
+
+        for(Long l: mBudgetMap.keySet()){
+            Budget budget = mBudgetMap.get(l);
+            if(budget.getmAmount() >= budget.getmTotalAmount() * threshold){
+                StringBuilder sb = new StringBuilder();
+                sb.append(budget.getmName() + " has reached "); // name of the category
+                sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
+                sb.append("Amount left: " + (budget.getmAmount() - budget.getmTotalAmount()) + "; "); // amount left
+                sb.append("Time remaining: " ); // time remaining
+                ret.add(sb.toString());
+            }
+        }
+        return ret;
+
+    }
+
 
     /**
      * Firebase SetValue Budget
