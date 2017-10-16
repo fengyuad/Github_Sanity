@@ -92,6 +92,19 @@ public class BudgetModel extends Model implements Serializable {
     //<editor-fold desc="Budget Related">
     /* =============== Budget Related =============== */
 
+    public Budget getBudgetById(Long id){
+        return mBudgetMap.get(id);
+    }
+
+    public List<Category> getCategoriesUnderBudget(Long id){
+        List<Category> cats = new ArrayList<>();
+        CategoryModel catModel = CategoryModel.GetInstance();
+        for(Long l: getBudgetById(id).getmCatIds()){
+            cats.add(catModel.GetCategoryById(l));
+        }
+        return cats;
+    }
+
     /**
      * Add a new budget
      *
