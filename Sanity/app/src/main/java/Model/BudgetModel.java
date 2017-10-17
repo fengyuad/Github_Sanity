@@ -94,14 +94,14 @@ public class BudgetModel extends Model implements Serializable {
     //<editor-fold desc="Budget Related">
     /* =============== Budget Related =============== */
 
-    public Budget getBudgetById(Long id){
+    public Budget getBudgetById(Long id) {
         return mBudgetMap.get(id);
     }
 
-    public List<Category> getCategoriesUnderBudget(Long id){
+    public List<Category> getCategoriesUnderBudget(Long id) {
         List<Category> cats = new ArrayList<>();
         CategoryModel catModel = CategoryModel.GetInstance();
-        for(Long l: getBudgetById(id).getmCatIds()){
+        for (Long l : getBudgetById(id).getmCatIds()) {
             cats.add(catModel.GetCategoryById(l));
         }
         return cats;
@@ -184,11 +184,18 @@ public class BudgetModel extends Model implements Serializable {
         mBudgetMap.clear();
     }
 
+    public void ResetAllBudgets() {
+        for (Budget b : mBudgetMap.values())
+            b.ResetBudget();
+        LocalUpdate();
+    }
+
     /**
      * Return budget map
+     *
      * @return <b>Map</b>
      */
-    public Map<Long,Budget> GetBudgetMap(){
+    public Map<Long, Budget> GetBudgetMap() {
         return mBudgetMap;
     }
     //</editor-fold>
@@ -241,7 +248,7 @@ public class BudgetModel extends Model implements Serializable {
      *
      * @param budget budget
      */
-    private void CloudSet(Budget budget) {
+    public void CloudSet(Budget budget) {
         // Firebase Set
         mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());

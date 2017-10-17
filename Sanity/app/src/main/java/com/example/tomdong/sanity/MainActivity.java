@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-        //StorageModel.GetInstance().DeleteFiles();
+        StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
@@ -250,12 +250,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     protected void LoadData() {
         // set the current user uid to Variable object
         Variable.GetInstance().setmUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
-
         if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
             // TODO: NEED UPDATE TIME FROM FIREBASE
             //if (Variable.GetInstance().getmUpdateTime())
+            BudgetModel.GetInstance().ResetAllBudgets();
             StartActivity();
         } else {
             // If not, load from firebase
@@ -291,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                                     newList = new ArrayList<Long>();
                                     BudgetModel.GetInstance().AddBudget(new Budget("Other", 1508457600L, 30, newList));*/
                                 StorageModel.GetInstance().SaveAll();
+                                BudgetModel.GetInstance().ResetAllBudgets();
                                 StartActivity();
                             }
 
