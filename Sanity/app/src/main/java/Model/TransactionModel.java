@@ -5,9 +5,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
+import android.util.Log;
 import java.util.HashMap;
 import java.util.Map;
+
+import Controller.OnGetDataListener;
 
 /**
  * Created by zhongchu on 10/12/17.
@@ -18,14 +20,11 @@ public class TransactionModel extends Model implements java.io.Serializable {
     private Map<Long, Transaction> mTransactions;
     private DatabaseReference mDatabase;
 
-    public Map<Long, Transaction> getmTransactions() {
-        return mTransactions;
-    }
-
     private TransactionModel() {
         super();
         mTransactions = new HashMap<>();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
+
     }
 
     public static TransactionModel GetInstance() {
@@ -33,6 +32,10 @@ public class TransactionModel extends Model implements java.io.Serializable {
             instance = new TransactionModel();
         }
         return instance;
+    }
+
+    public Map<Long, Transaction> getmTransactions() {
+        return mTransactions;
     }
 
     public Transaction addTransaction(Transaction trans) {
@@ -69,7 +72,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
         return true;
     }
 
-    public void ReadTransaction() {
+    public void ReadTransaction(final OnGetDataListener listener) {
+        listener.onStart();
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,29 +81,34 @@ public class TransactionModel extends Model implements java.io.Serializable {
                     Transaction trans = ds.getValue(Transaction.class);
                     mTransactions.put(trans.getmTransactionId(), trans);
                 }
+                listener.onSuccess(dataSnapshot);
             }
-
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.onFailed(databaseError);
             }
         });
     }
 
     public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay) {
         Map<Long, Transaction> toReturn = new HashMap<>();
+        Log.d("MyTestRiqi", "" + "" + fromYear + " " + fromMonth + " " + fromDay);
+        Log.d("MyTestRiqi", "" + "" + toYear + " " + toMonth + " " + toDay);
+        Log.d("MapSize", "" + mTransactions.size());
         for (Long key : mTransactions.keySet()) {
+            Log.d("Mapitem", "" + mTransactions.size());
             if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)) {
                 toReturn.put(key, mTransactions.get(key));
             } else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear) {
                 if (mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth) {
                     toReturn.put(key, mTransactions.get(key));
-                } else if (mTransactions.get(key).getmYear() == fromMonth || mTransactions.get(key).getmYear() == toMonth) {
+                } else if (mTransactions.get(key).getmMonth() == fromMonth || mTransactions.get(key).getmMonth() == toMonth) {
                     if (mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay) {
                         toReturn.put(key, mTransactions.get(key));
                     }
                 }
             }
         }
+        Log.d("returnsize", "" + toReturn.size());
         return toReturn;
     }
 }

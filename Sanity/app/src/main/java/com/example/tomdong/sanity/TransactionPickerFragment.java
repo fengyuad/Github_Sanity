@@ -12,9 +12,16 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
+
+import Model.CategoryModel;
+import Model.StorageModel;
+import Model.Transaction;
+import Model.TransactionModel;
 
 
 /**
@@ -42,7 +49,8 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
     ListView transHistory;
     private int fromYear, fromMonth, fromDay;
     private int toYear, toMonth, toDay;
-
+    ArrayList<Transaction_card> list;
+    CustomTransactionCardAdapter adapter;
     public TransactionPickerFragment() {
         // Required empty public constructor
     }
@@ -98,21 +106,14 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
         transFromButton.setOnClickListener(this);
         transToButton.setOnClickListener(this);
 
-        ArrayList<Transaction_card> list = new ArrayList<>();
+        list = new ArrayList<>();
+        list.add(new Transaction_card("working","2017-5-10","600$","I love you"));
 
-        list.add(new Transaction_card("Parking", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("Eating", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("Studying", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("Working", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("Skiing", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("Gaming", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("Travelling", "2017-10-9", "400$", "I love you"));
-        list.add(new Transaction_card("pooping", "2017-10-9", "400$", "I love you"));
-        CustomTransactionCardAdapter adapter = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, list);
+        adapter = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, list);
         transHistory.setAdapter(adapter);
         transFromText.setText(fromYear + "-" + (fromMonth + 1) + "-" + fromMonth);
         transToText.setText(toYear + "-" + (toMonth + 1) + "-" + toMonth);
-
+       // showTransactions();
         return v;
     }
 
@@ -147,8 +148,13 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     transFromText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    fromYear=year;
+                    fromMonth=month;
+                    fromDay=dayOfMonth;
+                    showTransactions();
                 }
             }, fromYear, fromMonth, fromDay);
+
             datePickerDialog.show();
         }
         if (v == transToButton) {
@@ -156,12 +162,41 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     transToText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                    toYear=year;
+                    toMonth=month+1;
+                    toDay=dayOfMonth;
+                    showTransactions();
                 }
             }, toYear, toMonth, toDay);
             datePickerDialog.show();
+
         }
     }
-
+    public void showTransactions()
+    {
+        TransactionModel tmodel=TransactionModel.GetInstance();
+        Map<Long, Transaction> myTrasactions =tmodel.SelectTransactions(fromYear,fromMonth,fromDay,toYear, toMonth, toDay);
+        Log.d("fromDay:", "" +fromDay);
+        Log.d("toDay:", "" +toDay);
+        ArrayList<Transaction_card>nList=new ArrayList<>();
+        Log.d("myTrasactionSize", "" + myTrasactions.size());
+        for (Long key : myTrasactions.keySet()){
+            String catName = CategoryModel.GetInstance().GetCategoryById(myTrasactions.get(key).getmCategoryId()).getmName();
+            int y= myTrasactions.get(key).getmYear();
+            int m= myTrasactions.get(key).getmMonth();
+            int d= myTrasactions.get(key).getmDay();
+            String timeStamp=y + "-" + (m + 1) + "-" + d;
+            double amount=myTrasactions.get(key).getmAmount();
+            String moneyAMount=""+amount+"$";
+            String notes=myTrasactions.get(key).getmNotes();
+            nList.add(new Transaction_card(catName,timeStamp,moneyAMount,notes));
+        }
+        CustomTransactionCardAdapter adapter1=new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, nList);
+        adapter= adapter1;
+        transHistory.setAdapter(adapter);
+        Log.d("MyTest", "" + nList.size());
+        adapter.notifyDataSetChanged();
+    }
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);

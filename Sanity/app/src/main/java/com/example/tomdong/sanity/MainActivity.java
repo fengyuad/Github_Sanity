@@ -20,8 +20,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
+import Controller.OnGetDataListener;
+import Model.BudgetModel;
+import Model.CategoryModel;
 import Model.StorageModel;
+import Model.TransactionModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -72,11 +78,10 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          */
 
 
-        if(FirebaseAuth.getInstance().getCurrentUser() != null)
-        {
-            Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-            startActivity(intent);
-            finish();
+        StorageModel.GetInstance().DeleteFiles();
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            LoadData();
         }
     }
 
@@ -116,10 +121,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
     @Override
     public void onClick(View view) {
-
+        view.setEnabled(false);
         Log.d("MyApp", "I am here");
         Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
-
         if (view == Register) {
             Log.d("MyApp", "Register");
             RegisterUser();
@@ -150,11 +154,11 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         exists = sm.FilesExist();
         bm.InitDataBase();
         exists = sm.FilesExist();*/
-
-
     }
 
     public void ResetPassword() {
+        Account.setEnabled(false);
+        PassWord.setEnabled(false);
         String emailAdd = Account.getText().toString();
         if (emailAdd.isEmpty()) {
             Toast.makeText(MainActivity.this, "Email Empty!", Toast.LENGTH_SHORT).show();
@@ -171,11 +175,16 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                         } else {
                             Toast.makeText(MainActivity.this, "Email sent Failed!!!", Toast.LENGTH_SHORT).show();
                         }
+                        Account.setEnabled(true);
+                        PassWord.setEnabled(true);
+                        ForgetPassword.setEnabled(true);
                     }
                 });
     }
 
     public void RegisterUser() {
+        Account.setEnabled(false);
+        PassWord.setEnabled(false);
         String email = Account.getText().toString();
         String pw = PassWord.getText().toString();
         if (TextUtils.isEmpty(email)) {
@@ -189,11 +198,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         firebaseAuth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
-
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Register Succeeded", Toast.LENGTH_SHORT).show();
                 } else {
+                    Account.setEnabled(true);
+                    PassWord.setEnabled(true);
+                    Register.setEnabled(true);
                     Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -201,14 +211,13 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     }
 
     public void LoginUser() {
-
-
+        Account.setEnabled(false);
+        PassWord.setEnabled(false);
         String email = Account.getText().toString();
         String pw = PassWord.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
-
             return;
         }
         if (TextUtils.isEmpty(pw)) {
@@ -222,17 +231,72 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(intent);
-                    finish();
+                    LoadData();
                 } else {
-                    Toast.makeText(MainActivity.this, "Username does not match", Toast.LENGTH_SHORT).show();
-
+                    Account.setEnabled(true);
+                    PassWord.setEnabled(true);
+                    Login.setEnabled(true);
+                    Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
 
+    }
+
+    protected void LoadData() {
+        if (StorageModel.GetInstance().AreFilesExist())
+            // If internal storage files exist, load locally
+            StorageModel.GetInstance().ReadAll();
+        else {
+            // If not, load from firebase
+            BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
+                @Override
+                public void onStart() {
+                }
+
+                @Override
+                public void onSuccess(DataSnapshot data) {
+                    CategoryModel.GetInstance().ReadCategoryFromDatabase(new OnGetDataListener() {
+                        @Override
+                        public void onStart() {
+                        }
+
+                        @Override
+                        public void onSuccess(DataSnapshot data) {
+                            TransactionModel.GetInstance().ReadTransaction(new OnGetDataListener() {
+                                @Override
+                                public void onStart() {
+                                }
+
+                                @Override
+                                public void onSuccess(DataSnapshot data) {
+                                    StartActivity();
+                                }
+
+                                @Override
+                                public void onFailed(DatabaseError databaseError) {
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailed(DatabaseError databaseError) {
+                        }
+                    });
+                }
+
+                @Override
+                public void onFailed(DatabaseError databaseError) {
+                }
+            });
+            StartActivity();
+        }
+    }
+
+    private void StartActivity() {
+        Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
