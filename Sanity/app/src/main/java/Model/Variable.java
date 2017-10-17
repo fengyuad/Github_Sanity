@@ -1,5 +1,7 @@
 package Model;
 
+import android.content.Intent;
+
 import java.io.Serializable;
 
 /**
@@ -29,6 +31,7 @@ public class Variable implements Serializable {
     public static void UpdateInstance(Variable v) {
         instance = v;
     }
+
 
     /**
      * Getter and Setter
@@ -65,7 +68,4 @@ public class Variable implements Serializable {
         this.mUpdateTime = mUpdateTime;
     }
 
-    public void test(){
-
-    }
 }
