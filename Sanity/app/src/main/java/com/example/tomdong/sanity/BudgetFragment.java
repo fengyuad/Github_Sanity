@@ -42,11 +42,13 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
+import com.github.mikephil.charting.data.PieEntry;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Calendar;
 
@@ -77,6 +79,8 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
     TextView addBgtDateText;
     private int addBgtYear, addBgtMonth, addBgtDay;
     CustomBudgetCardAdapter adapter;
+
+    private Map<PieEntry,Long> pieMap = new HashMap<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -194,7 +198,9 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
-                startActivity(new Intent(getContext(), BudgetViewActivity.class));
+                Intent i = new Intent(getContext(), BudgetViewActivity.class);
+
+                startActivity(i);
 
             }
         });

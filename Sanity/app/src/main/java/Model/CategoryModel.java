@@ -101,7 +101,7 @@ public class CategoryModel extends Model implements Serializable {
     private boolean CheckNameUsed(String name) {
         return mNameCategoryUsed.contains(name);
     }
-    
+
 
     /**
      * @param id

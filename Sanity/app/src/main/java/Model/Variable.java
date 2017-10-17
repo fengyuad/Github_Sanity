@@ -1,5 +1,7 @@
 package Model;
 
+import android.content.Intent;
+
 import java.io.Serializable;
 
 /**
@@ -19,7 +21,6 @@ public class Variable implements Serializable {
         }
         return instance;
     }
-    
 
     /**
      * When loading from local storage, a new instance should be updated
@@ -29,6 +30,7 @@ public class Variable implements Serializable {
     public static void UpdateInstance(Variable v) {
         instance = v;
     }
+
 
     /**
      * Getter and Setter
@@ -65,7 +67,4 @@ public class Variable implements Serializable {
         this.mUpdateTime = mUpdateTime;
     }
 
-    public void test(){
-
-    }
 }
