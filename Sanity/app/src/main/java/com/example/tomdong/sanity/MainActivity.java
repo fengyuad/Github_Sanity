@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 
 import Controller.OnGetDataListener;
 import Model.BudgetModel;
+import Model.Category;
+import Model.CategoryModel;
 import Model.StorageModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
+
 
         StorageModel.GetInstance().DeleteFiles();
 

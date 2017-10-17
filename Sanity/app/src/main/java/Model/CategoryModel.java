@@ -39,18 +39,6 @@ public class CategoryModel extends Model implements Serializable {
         mNameCategoryUsed = new ArrayList<String>();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
 
-        FirebaseDatabase.getInstance().getReference(mUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                FirebaseDatabase.getInstance().getReference(mUserID).child("update").setValue(System.currentTimeMillis());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     /**
