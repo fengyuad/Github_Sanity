@@ -5,16 +5,19 @@ package com.example.tomdong.sanity;
  */
 
 public class Budget_card {
-    private String CatType;
     private String BudgetType;
 
     private double limit;
     private double current;
-    public Budget_card(String BudgetType, String CatType, double limit, double current) {
+    private String date;
+    private int period;
+
+    public Budget_card(String BudgetType, String date, int period, double limit, double current) {
         this.BudgetType = BudgetType;
-        this.BudgetType = CatType;
         this.limit = limit;
         this.current = current;
+        this.date = date;
+        this.period = period;
 
     }
 
@@ -22,20 +25,13 @@ public class Budget_card {
         return BudgetType;
     }
 
-    public String GetCatoryType() {
-        return CatType;
-    }
 
-    public void setCatoryType(String CatoryType) {
-        this.CatType = CatoryType;
 
-    }
     public double GetLimit() { return limit; }
     public double GetCurrent() { return current; }
+    public String GetDate() { return date; }
+    public int GetPeriod() { return period; }
 
-    public void setCatType(String CatType) {
-        this.CatType = CatType;
-    }
     public void setBudgetType(String BudgetType) {
         this.BudgetType = BudgetType;
     }

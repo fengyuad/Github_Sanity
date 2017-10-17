@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,6 +67,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
     Button addBgtDateButton;
     TextView addBgtDateText;
     private int addBgtYear, addBgtMonth, addBgtDay;
+    CustomBudgetCardAdapter adapter;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -117,15 +119,15 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         ArrayList<Budget_card> list = new ArrayList<>();
 
 
-        list.add(new Budget_card("Parking", "Parking", 2, 1));
-        list.add(new Budget_card("Parking", "Eating", 20, 15));
-        list.add(new Budget_card("Parking", "Studying", 5, 2));
-        list.add(new Budget_card("Parking", "Working", 10, 2));
-        list.add(new Budget_card("Parking", "Skiing", 14, 6));
-        list.add(new Budget_card("Parking", "Gaming", 109,78));
-        list.add(new Budget_card("Parking", "Travelling", 77, 60));
-        list.add(new Budget_card("shit", "pooping", 30, 17));
-        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
+        list.add(new Budget_card("Parking", "2017-10-10", 30, 2, 1));
+        list.add(new Budget_card("Eating", "2017-10-10", 30, 20, 15));
+        list.add(new Budget_card("Studying", "2017-10-10", 30, 5, 2));
+        list.add(new Budget_card("Working", "2017-10-10", 30, 10, 2));
+        list.add(new Budget_card("Skiing", "2017-10-10", 30, 14, 6));
+        list.add(new Budget_card("Gaming", "2017-10-10", 30, 109,78));
+        list.add(new Budget_card("Travelling", "2017-10-10", 30, 77, 60));
+        list.add(new Budget_card("pooping", "2017-10-10", 30, 30, 17));
+        adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
 
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -216,12 +218,22 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         addBgtDateButton = (Button) promptView.findViewById(R.id.add_bgt_date_button);
         addBgtDateButton.setOnClickListener(this);
 
-        EditText addBgtText = (EditText) promptView.findViewById(R.id.add_bgt_name);
+        final EditText bgtName = (EditText) promptView.findViewById(R.id.add_bgt_name);
+        final TextView bgtDate = (TextView) promptView.findViewById(R.id.add_bgt_date);
+        final TextView bgtPeriod = (EditText) promptView.findViewById(R.id.add_bgt_period);
+
+
+        //EditText addBgtText = (EditText) promptView.findViewById(R.id.add_bgt_name);
 
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(getContext(),"Add Budget!",Toast.LENGTH_SHORT).show();
+                        adapter.Add(new Budget_card(bgtName.getText().toString(),
+                                bgtDate.getText().toString(),
+                                Integer.valueOf(bgtPeriod.getText().toString()),
+                                0,
+                                0));
                     }
                 })
                 .setNegativeButton("Cancel",
