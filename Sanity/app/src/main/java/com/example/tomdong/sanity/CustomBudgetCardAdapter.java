@@ -87,7 +87,7 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
 
                 holder.BudgetType.setText(mList.get(position).GetBudgetType());
-                holder.CateGoryAmount.setText(Double.toString(mList.get(position).GetLimit()) + "$");
+                holder.CateGoryAmount.setText("$" + Double.toString(mList.get(position).GetLimit()));
                 double limitAmount = mList.get(position).GetLimit();
                 double currAmount = mList.get(position).GetCurrent();
                 double P = ((currAmount/limitAmount) * 100);
@@ -150,5 +150,7 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
     public SparseBooleanArray getSeectedIds() {
         return mSelectedItemsIds;
     }
+
+    public void Add(Budget_card bgt) { add(bgt); }
 
 }
