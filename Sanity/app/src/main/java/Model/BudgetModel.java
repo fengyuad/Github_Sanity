@@ -244,6 +244,8 @@ public class BudgetModel extends Model implements Serializable {
     private void CloudSet(Budget budget) {
         // Firebase Set
         mDatabase.child(Long.toString(budget.getmBudgetId())).setValue(budget);
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**
@@ -267,6 +269,8 @@ public class BudgetModel extends Model implements Serializable {
                 listener.onFailed(databaseError);
             }
         });
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**
@@ -277,6 +281,8 @@ public class BudgetModel extends Model implements Serializable {
     private void CloudRemove(Budget budget) {
         // Firebase Remove
         mDatabase.child(Long.toString(budget.getmBudgetId())).removeValue();
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**

@@ -55,7 +55,7 @@ public class Budget implements Serializable {
     public void UpdateTotalAmount() {
         double totalAmount = 0.0;
         for (long catId : mCatIds)
-            totalAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
+            totalAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmCurrentAmount();
         mTotalAmount = totalAmount;
     }
 
@@ -137,6 +137,7 @@ public class Budget implements Serializable {
      * @return <b>double</b> budget balance
      */
     public double GetCurrAmount() {
+        UpdateTotalAmount();
         return mTotalAmount - mPrevAmount;
     }
 

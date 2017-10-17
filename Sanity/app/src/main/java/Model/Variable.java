@@ -11,12 +11,23 @@ public class Variable implements Serializable {
     private double mThreshold = 0.75;
     private int mFrequency = 1;
     private String mUserID = "";
+    private Long mUpdateTime = 0L;
 
     public static Variable GetInstance() {
         if (instance == null) {
             instance = new Variable();
         }
         return instance;
+    }
+    
+
+    /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param bm a <b>BudgetModel</b> instance
+     */
+    public static void UpdateInstance(Variable v) {
+        instance = v;
     }
 
     /**
@@ -46,5 +57,15 @@ public class Variable implements Serializable {
         this.mUserID = mUserID;
     }
 
+    public Long getmUpdateTime() {
+        return mUpdateTime;
+    }
 
+    public void setmUpdateTime(Long mUpdateTime) {
+        this.mUpdateTime = mUpdateTime;
+    }
+
+    public void test(){
+
+    }
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +28,9 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
+
+import Model.BudgetModel;
+import Model.Category;
 
 import static android.content.ContentValues.TAG;
 
@@ -89,46 +93,6 @@ public class CategoryFragment extends Fragment {
         });
 
         // Set the adapter
-        ArrayList<Category_card> list=new ArrayList<>();
-//        list.add(new Category_card("Parking"));
-//        list.add(new Category_card("Eating"));
-//        list.add(new Category_card("Studying"));
-//        list.add(new Category_card("Working"));
-//        list.add(new Category_card("Skiing"));
-//        list.add(new Category_card("Gaming"));
-//        list.add(new Category_card("Travelling"));
-//        list.add(new Category_card("pooping"));
-        adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, list);
-        mListView.setAdapter(adapter);
-        SwipeMenuCreator creator = new SwipeMenuCreator() {
-            @Override
-            public void create(SwipeMenu menu) {
-                // create "delete" item
-                SwipeMenuItem deleteItem = new SwipeMenuItem(
-                        getContext());
-                // set item background
-                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
-                        0x3F, 0x25)));
-                // set item width
-                deleteItem.setWidth(170);
-                menu.addMenuItem(deleteItem);
-            }
-        };
-        mListView.setMenuCreator(creator);
-        mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
-                switch (index) {
-                    case 0:
-                        Log.e(TAG, "Delete Position: "+position);
-                        adapter.Remove(position);
-                        break;
-                }
-                // false : close the menu; true : not close the menu
-                return false;
-            }
-        });
         return view;
     }
 
@@ -178,7 +142,49 @@ public class CategoryFragment extends Fragment {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
+    public void GetCategoriesShows()
+    {
 
+        BudgetModel bmodel=BudgetModel.GetInstance();
+        ArrayList<Category>nlist= (ArrayList<Category>) bmodel.getCategoriesUnderBudget(1L);
+        ArrayList<String>catNames=new ArrayList<>();
+        for(int i=0;i<nlist.size();i++)
+        {
+            catNames.add(nlist.get(i).getmName());
+        }
+        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,catNames);
+        mListView.setAdapter(adapter);
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(170);
+                menu.addMenuItem(deleteItem);
+            }
+        };
+        mListView.setMenuCreator(creator);
+        mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        Log.e(TAG, "Delete Position: " + position);
+                        adapter.remove(adapter.getItem(position));
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
