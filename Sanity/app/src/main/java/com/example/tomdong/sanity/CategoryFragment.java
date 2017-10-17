@@ -1,13 +1,27 @@
 package com.example.tomdong.sanity;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PointerIconCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.baoyz.swipemenulistview.SwipeMenu;
+import com.baoyz.swipemenulistview.SwipeMenuCreator;
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
+
+import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A fragment representing a list of Items.
@@ -22,6 +36,8 @@ public class CategoryFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+
+    SwipeMenuListView mListView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,8 +69,48 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_list, container, false);
-
+        mListView=view.findViewById(R.id.my_catgory_listview);
         // Set the adapter
+        ArrayList<Category_card> list=new ArrayList<>();
+        list.add(new Category_card("Parking"));
+        list.add(new Category_card("Eating"));
+        list.add(new Category_card("Studying"));
+        list.add(new Category_card("Working"));
+        list.add(new Category_card("Skiing"));
+        list.add(new Category_card("Gaming"));
+        list.add(new Category_card("Travelling"));
+        list.add(new Category_card("pooping"));
+       final MyCatgoryAdapter adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, list);
+        mListView.setAdapter(adapter);
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+            @Override
+            public void create(SwipeMenu menu) {
+                // create "delete" item
+                SwipeMenuItem deleteItem = new SwipeMenuItem(
+                        getContext());
+                // set item background
+                deleteItem.setBackground(new ColorDrawable(Color.rgb(0xF9,
+                        0x3F, 0x25)));
+                // set item width
+                deleteItem.setWidth(170);
+                menu.addMenuItem(deleteItem);
+            }
+        };
+        mListView.setMenuCreator(creator);
+        mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
+        mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
+                switch (index) {
+                    case 0:
+                        Log.e(TAG, "Delete Position: "+position);
+                        adapter.Remove(position);
+                        break;
+                }
+                // false : close the menu; true : not close the menu
+                return false;
+            }
+        });
         return view;
     }
 

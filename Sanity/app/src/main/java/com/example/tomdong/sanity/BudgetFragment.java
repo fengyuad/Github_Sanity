@@ -7,26 +7,19 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.example.tomdong.sanity.dummy.DummyContent;
 
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
@@ -34,7 +27,6 @@ import java.util.ArrayList;
 
 
 import static android.content.ContentValues.TAG;
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 /**
@@ -83,7 +75,7 @@ public class BudgetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget_list, container, false);
-        mListView = view.findViewById(R.id.my_budgets_listview);
+        mListView = view.findViewById(R.id.my_catgory_listview);
         mImageView = view.findViewById(R.id.my_budgets_icon);
 
 

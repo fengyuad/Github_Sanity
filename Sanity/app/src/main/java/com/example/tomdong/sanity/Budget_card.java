@@ -23,11 +23,11 @@ public class Budget_card {
     }
 
     public String GetCatoryType() {
-        return CatoryType;
+        return CatType;
     }
 
     public void setCatoryType(String CatoryType) {
-        this.CatoryType = CatoryType;
+        this.CatType = CatoryType;
 
     }
     public double GetLimit() { return limit; }
