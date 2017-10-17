@@ -226,6 +226,7 @@ public class BudgetModel extends Model implements Serializable {
      */
     public void CalcTotalAmount(long budgetId) {
         mBudgetMap.get(budgetId).UpdateTotalAmount();
+        mBudgetMap.get(budgetId).UpdateAmountLimit();
         CloudSet(mBudgetMap.get(budgetId));
         LocalUpdate();
     }

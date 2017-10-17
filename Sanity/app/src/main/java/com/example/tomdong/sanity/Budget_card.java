@@ -23,6 +23,7 @@ public class Budget_card {
         this.period = period;
 
     }
+
     public String GetBudgetType() {
         return BudgetType;
     }
