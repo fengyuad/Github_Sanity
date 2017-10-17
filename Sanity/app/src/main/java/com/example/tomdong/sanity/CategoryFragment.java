@@ -1,17 +1,24 @@
 package com.example.tomdong.sanity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PointerIconCompat;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -38,6 +45,8 @@ public class CategoryFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
 
     SwipeMenuListView mListView;
+
+    MyCatgoryAdapter adapter = null;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -70,6 +79,15 @@ public class CategoryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_list, container, false);
         mListView=view.findViewById(R.id.my_catgory_listview);
+
+        FloatingActionButton addBgtFab = (FloatingActionButton) view.findViewById(R.id.add_cat_fab);
+        addBgtFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddCatDialog();
+            }
+        });
+
         // Set the adapter
         ArrayList<Category_card> list=new ArrayList<>();
         list.add(new Category_card("Parking"));
@@ -80,7 +98,7 @@ public class CategoryFragment extends Fragment {
         list.add(new Category_card("Gaming"));
         list.add(new Category_card("Travelling"));
         list.add(new Category_card("pooping"));
-       final MyCatgoryAdapter adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, list);
+        adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, list);
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
             @Override
@@ -130,6 +148,35 @@ public class CategoryFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    protected void showAddCatDialog() {
+
+        // get input_dialog.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View promptView = layoutInflater.inflate(R.layout.cat_add_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setView(promptView);
+
+        final EditText addCatText = (EditText) promptView.findViewById(R.id.add_cat_name);
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getContext(),"Add Category!",Toast.LENGTH_SHORT).show();
+                        adapter.Add(new Category_card(addCatText.getText().toString()));
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     /**
