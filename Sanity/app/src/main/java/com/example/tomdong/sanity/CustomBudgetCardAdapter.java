@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 
 
+
 import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.util.Log;
@@ -37,14 +38,14 @@ import static android.content.ContentValues.TAG;
  * Created by User on 4/4/2017.
  */
 
-public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
+public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
 
     private static final String TAG = "CustomListAdapter";
 
     private Context mContext;
     private int mResource;
     private int lastPosition = -1;
-    ArrayList<Budget_card>mList;
+    ArrayList<Budget_card> mList;
     SparseBooleanArray mSelectedItemsIds;
 
     /**
@@ -56,11 +57,12 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
         TextView CateGoryAmount;
         Button deleteButton;
     }
+
     public CustomBudgetCardAdapter(Context context, int resource, ArrayList<Budget_card> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
-        mList=objects;
+        mList = objects;
 
     }
 
@@ -68,37 +70,31 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         //get the persons information
-        final int tempPos=position;
+        final int tempPos = position;
         String BudgetCat = getItem(position).GetBudgetType();
-        try{
+        double amount=getItem(position).GetLimit();
+        double current=getItem(position).GetCurrent();
+
+        try {
             final View result;
             final ViewHolder holder;
-            if(convertView == null){
+            if (convertView == null) {
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 convertView = inflater.inflate(mResource, parent, false);
-                holder= new ViewHolder();
+                holder = new ViewHolder();
                 holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
 
-//                holder.deleteButton=(Button)convertView.findViewById(R.id.deleteButton);
-//                holder.deleteButton.setOnClickListener(new Button.OnClickListener(){
-//                    public void onClick(View v)
-//                    {
-//                        remove(getItem(tempPos));
-//                    }
-//                });
                 holder.BudgetType.setText(mList.get(position).GetBudgetType());
                 holder.CateGoryAmount.setText(Double.toString(mList.get(position).GetLimit()) + "$");
                 double limitAmount = mList.get(position).GetLimit();
                 double currAmount = mList.get(position).GetCurrent();
                 double P = ((currAmount/limitAmount) * 100);
                 holder.PBar.setProgress((int)P);
-
                 lastPosition = position;
                 result = convertView;
                 convertView.setTag(holder);
-                holder.BudgetType.setText(mList.get(position).GetBudgetType());
             }
             else{
                 holder = (ViewHolder) convertView.getTag();
@@ -107,14 +103,18 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
             lastPosition = position;
 
             holder.BudgetType.setText(BudgetCat);
+            holder.CateGoryAmount.setText(""+amount+"$");
+            double P = ((current/amount) * 100);
+            holder.PBar.setProgress((int)P);
 
             return convertView;
-        }catch (IllegalArgumentException e){
-            Log.e(TAG, "getView: IllegalArgumentException: " + e.getMessage() );
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "getView: IllegalArgumentException: " + e.getMessage());
             return convertView;
         }
 
     }
+
 
     public void Remove(int Position)
     {
@@ -127,30 +127,27 @@ public class CustomBudgetCardAdapter  extends ArrayAdapter<Budget_card> {
     {
         selectView(position,!mSelectedItemsIds.get(position));
     }
-    public void removeSelection()
-    {
-        mSelectedItemsIds=new SparseBooleanArray();
+
+    public void removeSelection() {
+        mSelectedItemsIds = new SparseBooleanArray();
         notifyDataSetChanged();
     }
-    public void selectView(int position,boolean value)
-    {
-        if(value)
-        {
-            mSelectedItemsIds.put(position,value);
 
-        }
-        else
-        {
+    public void selectView(int position, boolean value) {
+        if (value) {
+            mSelectedItemsIds.put(position, value);
+
+        } else {
             mSelectedItemsIds.delete(position);
         }
         notifyDataSetChanged();
     }
-    public int getSelectedCount()
-    {
+
+    public int getSelectedCount() {
         return mSelectedItemsIds.size();
     }
-    public SparseBooleanArray getSeectedIds()
-    {
+
+    public SparseBooleanArray getSeectedIds() {
         return mSelectedItemsIds;
     }
 
