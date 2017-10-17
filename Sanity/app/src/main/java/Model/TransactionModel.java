@@ -53,6 +53,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
         CategoryModel CModel = CategoryModel.GetInstance();
 
         CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
 
 
         mTransactions.put(trans.getmTransactionId(), trans);
@@ -66,10 +67,13 @@ public class TransactionModel extends Model implements java.io.Serializable {
             CategoryModel CModel = CategoryModel.GetInstance();
             CModel.RemoveTransactionInCategoryAndUpdateDatabase
                     (mTransactions.get(transactionId).getmCategoryId(), transactionId, mTransactions.get(transactionId).getmAmount());
+            Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         }
         mDatabase.child(transactionId.toString()).removeValue();
         Transaction temp = mTransactions.get(transactionId);
         mTransactions.remove(transactionId);
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         return temp;
     }
 
@@ -78,6 +82,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
         //trans.setmTransactionId(key);
         //addTransaction(trans);
         mDatabase.child(key.toString()).setValue(trans);
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         return true;
     }
 
@@ -96,6 +102,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
                 listener.onFailed(databaseError);
             }
         });
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay) {

@@ -187,6 +187,8 @@ public class CategoryModel extends Model implements Serializable {
 
         mDatabase.child(key.toString()).setValue(cat);
         BudgetModel.GetInstance().CategoryAdded(cat.getmBudgetID(), cat.getmID());
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
 
         return true;
     }
@@ -213,6 +215,8 @@ public class CategoryModel extends Model implements Serializable {
                 listener.onFailed(databaseError);
             }
         });
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**
@@ -230,6 +234,8 @@ public class CategoryModel extends Model implements Serializable {
         BudgetModel.GetInstance().CategoryRemoved(mIDToCategory.get(catID).getmBudgetID(), mIDToCategory.get(catID).getmID());
         DeleteCategory(catID);
         mDatabase.child(catID.toString()).removeValue();
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**
@@ -242,6 +248,8 @@ public class CategoryModel extends Model implements Serializable {
         if (!ChangeCategoryName(id, name)) return false;
 
         mDatabase.child(id.toString()).child("mName").setValue(name);
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         return true;
     }
 
@@ -256,6 +264,8 @@ public class CategoryModel extends Model implements Serializable {
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
         mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmCurrentAmount());
         BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**
@@ -269,6 +279,8 @@ public class CategoryModel extends Model implements Serializable {
         mDatabase.child(catID.toString()).child("mTransactionIDs").setValue(list);
         mDatabase.child(catID.toString()).child("mCurrentAmount").setValue(mIDToCategory.get(catID).getmAmount());
         BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
     /**
@@ -277,6 +289,8 @@ public class CategoryModel extends Model implements Serializable {
     public void ResetCategoryAndUpdateDatabase(Long catID) {
         Category cat = mIDToCategory.get(catID).Reset();
         mDatabase.child(cat.toString()).setValue(cat);
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
 }
