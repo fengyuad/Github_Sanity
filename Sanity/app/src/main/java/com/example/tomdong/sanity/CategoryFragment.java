@@ -128,7 +128,7 @@ public class CategoryFragment extends Fragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(getContext(),"Add Category!",Toast.LENGTH_SHORT).show();
-                        adapter.Add(new Category_card(addCatText.getText().toString()));
+                        adapter.Add(new Category_card(addCatText.getText().toString(), 0, 0));
                     }
                 })
                 .setNegativeButton("Cancel",
