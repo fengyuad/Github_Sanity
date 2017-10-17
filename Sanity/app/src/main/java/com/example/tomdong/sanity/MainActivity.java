@@ -28,6 +28,7 @@ import Model.BudgetModel;
 import Model.CategoryModel;
 import Model.StorageModel;
 import Model.TransactionModel;
+import Model.Variable;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -241,6 +242,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     }
 
     protected void LoadData() {
+        // set the current user uid to Variable object
+        Variable.GetInstance().setmUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
         if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
