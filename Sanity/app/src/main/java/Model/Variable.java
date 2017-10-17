@@ -21,7 +21,6 @@ public class Variable implements Serializable {
         }
         return instance;
     }
-    
 
     /**
      * When loading from local storage, a new instance should be updated
