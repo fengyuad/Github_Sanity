@@ -10,7 +10,6 @@
         android:id="@+id/edit_bgt_date"
         android:layout_width="213dp"
         android:layout_height="43dp"
-        android:text="TextView"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/edit_bgt_period"
         android:layout_marginRight="16dp"
