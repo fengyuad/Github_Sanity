@@ -123,7 +123,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         ArrayList<PieEntry> yvalues = new ArrayList<>();
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
-            yvalues.add(new PieEntry((float) budget.getmAmount(), budget.getmName()));
+            yvalues.add(new PieEntry((float) budget.GetAmountLimit(), budget.getmName()));
 /*
         ArrayList<PieEntry> yvalues= new ArrayList<>();
         yvalues.add(new PieEntry(100f,"PartyA"));

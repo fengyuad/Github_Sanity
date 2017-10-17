@@ -23,7 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Controller.OnGetDataListener;
+import Model.Budget;
 import Model.BudgetModel;
 import Model.CategoryModel;
 import Model.StorageModel;
@@ -46,12 +50,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         setContentView(R.layout.activity_main);
         //Declare and Initialization
         firebaseAuth = FirebaseAuth.getInstance();
-        SanityImage = (ImageView) findViewById(R.id.SanityImage);
-        Account = (EditText) findViewById(R.id.UserT);
-        PassWord = (EditText) findViewById(R.id.PwT);
-        Login = (Button) findViewById(R.id.LoginButton);
-        Register = (Button) findViewById(R.id.RegisterButton);
-        ForgetPassword = (TextView) findViewById(R.id.ForgetTextView);
+        SanityImage = findViewById(R.id.SanityImage);
+        Account = findViewById(R.id.UserT);
+        PassWord = findViewById(R.id.PwT);
+        Login = findViewById(R.id.LoginButton);
+        Register = findViewById(R.id.RegisterButton);
+        ForgetPassword = findViewById(R.id.ForgetTextView);
 
         //Login Animation
         Account.setVisibility(View.GONE);
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
 
-        //StorageModel.GetInstance().DeleteFiles();
+        StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
@@ -268,6 +272,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
                                 @Override
                                 public void onSuccess(DataSnapshot data) {
+                                    //List<Long> newList = new ArrayList<Long>();
+                                    //newList.add(1508182321027L);
+                                    //BudgetModel.GetInstance().AddBudget(new Budget("Food", 1508457600L, 10, newList));
                                     StorageModel.GetInstance().SaveAll();
                                     StartActivity();
                                 }

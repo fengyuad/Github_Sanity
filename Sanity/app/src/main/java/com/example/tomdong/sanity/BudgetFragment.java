@@ -123,8 +123,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
-            list.add(new Budget_card(budget.getmName(), "", 1, 2));
-        // TODO
+            list.add(new Budget_card(budget.getmName(), budget.GetCurrAmount(), budget.GetAmountLimit()));
 /*
         list.add(new Budget_card("Parking"));
         list.add(new Budget_card("Eating"));
