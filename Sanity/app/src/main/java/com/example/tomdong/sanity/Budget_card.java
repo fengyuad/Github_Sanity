@@ -5,27 +5,48 @@ package com.example.tomdong.sanity;
  */
 
 public class Budget_card {
-    private String CatoryType;
+    private String CatType;
     private String BudgetType;
 
-    public Budget_card(String CatoryType) {
-        //this.BudgetType = BudgetType;
-        this.BudgetType = CatoryType;
+    private double limit;
+    private double current;
+
+    public Budget_card(String BudgetType, String CatType, double limit, double current) {
+        this.BudgetType = BudgetType;
+        this.BudgetType = CatType;
+        this.limit = limit;
+        this.current = current;
+    }
+
+    public String GetCatType() {
+        return CatType;
     }
 
     public String GetBudgetType() {
         return BudgetType;
     }
 
-    public String GetCatoryType() {
-        return CatoryType;
+    public double GetLimit() {
+        return limit;
     }
 
-    public void setCatoryType(String CatoryType) {
-        this.CatoryType = CatoryType;
+    public double GetCurrent() {
+        return current;
+    }
+
+    public void setCatType(String CatType) {
+        this.CatType = CatType;
     }
 
     public void setBudgetType(String BudgetType) {
         this.BudgetType = BudgetType;
+    }
+
+    public void setLimit(double limit) {
+        this.limit = limit;
+    }
+
+    public void setCurrent(double current) {
+        this.current = current;
     }
 }
