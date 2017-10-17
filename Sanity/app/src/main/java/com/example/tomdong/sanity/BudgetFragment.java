@@ -43,7 +43,10 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.Calendar;
 
@@ -123,11 +126,12 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
 
         ArrayList<Budget_card> list = new ArrayList<>();
+        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
-            list.add(new Budget_card(budget.getmName(), budget.GetCurrAmount(), budget.GetAmountLimit()));
+            list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime()*1000)),budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount()));
 /*
         list.add(new Budget_card("Parking"));
         list.add(new Budget_card("Eating"));
