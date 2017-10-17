@@ -40,6 +40,7 @@ public class Budget implements Serializable {
         mDueTime = dueTime;
         mPeriod = period;
         mCatIds = catIds;
+        UpdateTotalAmount();
         UpdateAmountLimit();
     }
 
