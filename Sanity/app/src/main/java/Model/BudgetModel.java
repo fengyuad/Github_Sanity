@@ -28,8 +28,6 @@ public class BudgetModel extends Model implements Serializable {
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
         InitDataBase();
-
-
     }
 
 
@@ -79,11 +77,11 @@ public class BudgetModel extends Model implements Serializable {
         int frequency = Variable.GetInstance().getmFrequency();
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
-            if (budget.getmAmount() >= budget.getmTotalAmount() * threshold) {
+            if (budget.GetCurrAmount() >= budget.GetAmountLimit() * threshold) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
-                sb.append("Amount left: " + (budget.getmAmount() - budget.GetCurrAmount()) + "; "); // amount left
+                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
                 sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + "Day(s)"); // time remaining
                 ret.add(sb.toString());
             }
@@ -135,12 +133,11 @@ public class BudgetModel extends Model implements Serializable {
      * @param budgetId ID of the budget you want to update
      * @param dueTime  due date
      * @param period   budget period
-     * @param amount   budget amount
      * @param catIds   category Ids
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
-    public boolean UpdateBudget(String name, long budgetId, long dueTime, int period, double amount, List<Long> catIds) {
+    public boolean UpdateBudget(String name, long budgetId, long dueTime, int period, List<Long> catIds) {
         if (mBudgetMap.containsKey(budgetId)) {
             // Get Budget
             Budget curr = mBudgetMap.get(budgetId);
@@ -148,7 +145,6 @@ public class BudgetModel extends Model implements Serializable {
             curr.setmName(name);
             curr.setmDueTime(dueTime);
             curr.setmPeriod(period);
-            curr.setmAmount(amount);
             curr.setmCatIds(catIds);
             CloudSet(curr);
             LocalUpdate();

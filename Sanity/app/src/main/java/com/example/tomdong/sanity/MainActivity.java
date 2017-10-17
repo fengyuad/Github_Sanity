@@ -50,12 +50,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         setContentView(R.layout.activity_main);
         //Declare and Initialization
         firebaseAuth = FirebaseAuth.getInstance();
-        SanityImage = (ImageView) findViewById(R.id.SanityImage);
-        Account = (EditText) findViewById(R.id.UserT);
-        PassWord = (EditText) findViewById(R.id.PwT);
-        Login = (Button) findViewById(R.id.LoginButton);
-        Register = (Button) findViewById(R.id.RegisterButton);
-        ForgetPassword = (TextView) findViewById(R.id.ForgetTextView);
+        SanityImage = findViewById(R.id.SanityImage);
+        Account = findViewById(R.id.UserT);
+        PassWord = findViewById(R.id.PwT);
+        Login = findViewById(R.id.LoginButton);
+        Register = findViewById(R.id.RegisterButton);
+        ForgetPassword = findViewById(R.id.ForgetTextView);
 
         //Login Animation
         Account.setVisibility(View.GONE);
@@ -81,13 +81,13 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
 
-        //StorageModel.GetInstance().DeleteFiles();
+        StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
-        BudgetModel.GetInstance().AddBudget(new Budget("Budget1", 1508457600L, 30, 1200.0, new ArrayList<Long>()));
-        BudgetModel.GetInstance().AddBudget(new Budget("Budget2", 1508457600L, 30, 1300.0, new ArrayList<Long>()));
-        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, 1400.0, new ArrayList<Long>()));
+//        BudgetModel.GetInstance().AddBudget(new Budget("Budget1", 1508457600L, 30, new ArrayList<Long>()));
+//        BudgetModel.GetInstance().AddBudget(new Budget("Budget2", 1508457600L, 30, new ArrayList<Long>()));
+//        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, new ArrayList<Long>()));
 
     }
 
@@ -279,6 +279,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
                                 @Override
                                 public void onSuccess(DataSnapshot data) {
+                                    //List<Long> newList = new ArrayList<Long>();
+                                    //newList.add(1508182321027L);
+                                    //BudgetModel.GetInstance().AddBudget(new Budget("Food", 1508457600L, 10, newList));
                                     StorageModel.GetInstance().SaveAll();
                                     StartActivity();
                                 }
