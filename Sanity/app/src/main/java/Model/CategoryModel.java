@@ -168,6 +168,15 @@ public class CategoryModel extends Model implements Serializable {
 
     }
 
+
+    public List<Category> getAllNoUsedCategory(){
+        List<Category> list = new ArrayList<>();
+        for(Category cat: mIDToCategory.values()){
+            if(cat.getmBudgetID() == 0) list.add(cat);
+        }
+        return list;
+    }
+
     /**
      *----------------- Database Related -----------------
      */
