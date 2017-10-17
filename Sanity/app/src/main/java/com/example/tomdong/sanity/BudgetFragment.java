@@ -6,35 +6,26 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.ActionMode;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
-
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-import com.example.tomdong.sanity.dummy.DummyContent;
-
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
+import java.util.Map;
 
+import Model.Budget;
+import Model.BudgetModel;
 
 import static android.content.ContentValues.TAG;
-import static android.provider.AlarmClock.EXTRA_MESSAGE;
 
 
 /**
@@ -50,7 +41,7 @@ public class BudgetFragment extends Fragment {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private SwipeMenuListView  mListView;
+    private SwipeMenuListView mListView;
     private ImageView mImageView;
 
     /**
@@ -89,7 +80,21 @@ public class BudgetFragment extends Fragment {
 
         ArrayList<Budget_card> list = new ArrayList<>();
 
-
+        Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
+        for (Budget budget : budgetMap.values())
+            list.add(new Budget_card(budget.getmName(), "", 1, 2));
+        // TODO
+/*
+        list.add(new Budget_card("Parking"));
+        list.add(new Budget_card("Eating"));
+        list.add(new Budget_card("Studying"));
+        list.add(new Budget_card("Working"));
+        list.add(new Budget_card("Skiing"));
+        list.add(new Budget_card("Gaming"));
+        list.add(new Budget_card("Travelling"));
+        list.add(new Budget_card("pooping"));*/
+        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
+/*
         list.add(new Budget_card("Parking", "Parking", 2, 1));
         list.add(new Budget_card("Parking", "Eating", 20, 15));
         list.add(new Budget_card("Parking", "Studying", 5, 2));
@@ -99,7 +104,7 @@ public class BudgetFragment extends Fragment {
         list.add(new Budget_card("Parking", "Travelling", 77, 60));
         list.add(new Budget_card("shit", "pooping", 30, 17));
         final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
-
+*/
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -127,7 +132,7 @@ public class BudgetFragment extends Fragment {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Log.e(TAG, "Delete Position: "+position);
+                        Log.e(TAG, "Delete Position: " + position);
                         adapter.Remove(position);
                         break;
                 }
