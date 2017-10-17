@@ -23,7 +23,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
+
 import Controller.OnGetDataListener;
+import Model.Budget;
 import Model.BudgetModel;
 import Model.CategoryModel;
 import Model.StorageModel;
@@ -82,6 +85,10 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
+        BudgetModel.GetInstance().AddBudget(new Budget("Budget1", 1508457600L, 30, 1200.0, new ArrayList<Long>()));
+        BudgetModel.GetInstance().AddBudget(new Budget("Budget2", 1508457600L, 30, 1300.0, new ArrayList<Long>()));
+        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, 1400.0, new ArrayList<Long>()));
+
     }
 
     @Override
