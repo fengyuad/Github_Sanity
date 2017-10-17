@@ -90,14 +90,14 @@ public class CategoryFragment extends Fragment {
 
         // Set the adapter
         ArrayList<Category_card> list=new ArrayList<>();
-        list.add(new Category_card("Parking"));
-        list.add(new Category_card("Eating"));
-        list.add(new Category_card("Studying"));
-        list.add(new Category_card("Working"));
-        list.add(new Category_card("Skiing"));
-        list.add(new Category_card("Gaming"));
-        list.add(new Category_card("Travelling"));
-        list.add(new Category_card("pooping"));
+//        list.add(new Category_card("Parking"));
+//        list.add(new Category_card("Eating"));
+//        list.add(new Category_card("Studying"));
+//        list.add(new Category_card("Working"));
+//        list.add(new Category_card("Skiing"));
+//        list.add(new Category_card("Gaming"));
+//        list.add(new Category_card("Travelling"));
+//        list.add(new Category_card("pooping"));
         adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, list);
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
@@ -164,7 +164,7 @@ public class CategoryFragment extends Fragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(getContext(),"Add Category!",Toast.LENGTH_SHORT).show();
-                        adapter.Add(new Category_card(addCatText.getText().toString()));
+                        adapter.Add(new Category_card(addCatText.getText().toString(), 0, 0));
                     }
                 })
                 .setNegativeButton("Cancel",

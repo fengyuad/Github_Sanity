@@ -37,6 +37,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 import Model.Budget;
@@ -67,6 +68,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private OnFragmentInteractionListener mListener;
     private TextView transDateText;
     private int transYear, transMonth, transDay;
+    private Map<PieEntry,Long> pieMap = new HashMap<>();
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -122,8 +124,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         ArrayList<PieEntry> yvalues = new ArrayList<>();
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
-        for (Budget budget : budgetMap.values())
-            yvalues.add(new PieEntry((float) budget.GetAmountLimit(), budget.getmName()));
+        for (Budget budget : budgetMap.values()) {
+            PieEntry e = new PieEntry((float) budget.GetAmountLimit(), budget.getmName());
+            yvalues.add(e);
+            pieMap.put(e, budget.getmBudgetId());
+        }
 /*
         ArrayList<PieEntry> yvalues= new ArrayList<>();
         yvalues.add(new PieEntry(100f,"PartyA"));
@@ -146,10 +151,14 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
             @Override
             public void onValueSelected(Entry e, Highlight h) {
-                Log.i("VAL SELECTED",
-                        "Value: " + ((PieEntry) e).getLabel() + ", index: " + h.getX()
-                                + ", DataSet index: " + h.getDataSetIndex());
-                startActivity(new Intent(getContext(), BudgetViewActivity.class));
+//                Log.i("VAL SELECTED",
+//                        "Value: " + BudgetModel.GetInstance().getBudgetById( Long.valueOf(((PieEntry) e).getLabel()) ).getmName()+ ", index: " + h.getX()
+//                                + ", DataSet index: " + h.getDataSetIndex());
+                long bgtID = pieMap.get(e);
+                //Log.d("Budget ID", Long.toString(bgtID));
+                Intent i = new Intent(getContext(), BudgetViewActivity.class);
+                i.putExtra("bgtID", bgtID);
+                startActivity(i);
             }
 
             @Override

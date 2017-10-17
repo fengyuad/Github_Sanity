@@ -23,8 +23,17 @@ import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.lang.reflect.Array;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import Model.Budget;
+import Model.BudgetModel;
+import Model.Category;
 
 /**
  * Created by tomdong on 10/13/17.
@@ -38,6 +47,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     Button editBgtDateButton;
     TextView editBgtDateText;
     private int editYear, editMonth, editDay;
+    private long id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,16 +57,32 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         CateGory_ListView = findViewById(R.id.category_listview);
         BudgetPercent = findViewById(R.id.budget_percent);
 
+        id = getIntent().getExtras().getLong("bgtID");
+
         ArrayList<Category_card> list = new ArrayList<>();
 
-        list.add(new Category_card("Parking"));
-        list.add(new Category_card("Eating"));
-        list.add(new Category_card("Studying"));
-        list.add(new Category_card("Working"));
-        list.add(new Category_card("Skiing"));
-        list.add(new Category_card("Gaming"));
-        list.add(new Category_card("Travelling"));
-        list.add(new Category_card("pooping"));
+        List<Category> catList = BudgetModel.GetInstance().getCategoriesUnderBudget(id);
+        double bgtTotal = 0;
+        double bgtCurr = 0;
+
+        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()*1000));
+
+        for (Category c : catList) {
+            list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount()));
+            bgtCurr += c.getmCurrentAmount();
+            bgtTotal += c.getmAmount();
+        }
+
+        int bgtProgress = (int)((bgtCurr/bgtTotal)*100);
+
+        TextView bgtPct = (TextView) findViewById(R.id.budget_percent);
+        bgtPct.setText(Integer.toString(bgtProgress) + "%");
+
+        TextView bgtDue = (TextView) findViewById(R.id.Budget_time);
+        bgtDue.setText("Due on: " + dueDate);
+
+
         CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
         CateGory_ListView.setAdapter(adapter);
         final Calendar c = Calendar.getInstance();
@@ -71,6 +97,8 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                 showEditDialog();
             }
         });
+
+
     }
 
     protected void showEditDialog() {
