@@ -10,7 +10,7 @@ public class Variable implements Serializable {
     private static Variable instance = null;
     private double mThreshold = 0.75;
     private int mFrequency = 1;
-    private String mUserID = "60WQP281jXVqW57q3JP6vQeMeq73";
+    private String mUserID = "";
 
     public static Variable GetInstance() {
         if (instance == null) {

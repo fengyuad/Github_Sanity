@@ -8,7 +8,7 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class Model {
-    protected String mUserID = "60WQP281jXVqW57q3JP6vQeMeq73";
+    protected String mUserID = Variable.GetInstance().getmUserID();
     protected DatabaseReference mDatabase;
 
     public void updateDBTime(){
