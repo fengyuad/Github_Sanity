@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class Budget implements Serializable {
     private double mAmount = 0.0;
     private double mPrevAmount = 0.0;
     private double mTotalAmount = 0.0;
-    private List<Long> mCatIds;
+    private List<Long> mCatIds = new ArrayList<>();
 
     /**
      * Default Constructor

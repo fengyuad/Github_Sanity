@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
 
-        StorageModel.GetInstance().DeleteFiles();
+        //StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
@@ -276,9 +276,11 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
                                 @Override
                                 public void onSuccess(DataSnapshot data) {
-                                    //List<Long> newList = new ArrayList<Long>();
-                                    //newList.add(1508182321027L);
-                                    //BudgetModel.GetInstance().AddBudget(new Budget("Food", 1508457600L, 10, newList));
+                                    /*List<Long> newList = new ArrayList<Long>();
+                                    newList.add(1508202725272L);
+                                    BudgetModel.GetInstance().AddBudget(new Budget("Transportation", 1508457600L, 10, newList));
+                                    newList = new ArrayList<Long>();
+                                    BudgetModel.GetInstance().AddBudget(new Budget("Other", 1508457600L, 30, newList));*/
                                     StorageModel.GetInstance().SaveAll();
                                     StartActivity();
                                 }
