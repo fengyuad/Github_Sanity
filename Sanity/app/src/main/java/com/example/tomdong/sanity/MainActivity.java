@@ -23,10 +23,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-
 import Controller.OnGetDataListener;
 import Model.BudgetModel;
+import Model.CategoryModel;
 import Model.StorageModel;
+import Model.TransactionModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -251,19 +252,44 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
                 @Override
                 public void onStart() {
-
                 }
 
                 @Override
                 public void onSuccess(DataSnapshot data) {
-                    StartActivity();
+                    CategoryModel.GetInstance().ReadCategoryFromDatabase(new OnGetDataListener() {
+                        @Override
+                        public void onStart() {
+                        }
+
+                        @Override
+                        public void onSuccess(DataSnapshot data) {
+                            TransactionModel.GetInstance().ReadTransaction(new OnGetDataListener() {
+                                @Override
+                                public void onStart() {
+                                }
+
+                                @Override
+                                public void onSuccess(DataSnapshot data) {
+                                    StartActivity();
+                                }
+
+                                @Override
+                                public void onFailed(DatabaseError databaseError) {
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailed(DatabaseError databaseError) {
+                        }
+                    });
                 }
 
                 @Override
                 public void onFailed(DatabaseError databaseError) {
-
                 }
             });
+            StartActivity();
         }
     }
 
