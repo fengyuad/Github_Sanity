@@ -55,6 +55,16 @@ public class CategoryModel extends Model implements Serializable {
         return mInstance;
     }
 
+
+    /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param cm a <b>CategoryModel</b> instance
+     */
+    public static void UpdateInstance(CategoryModel cm) {
+        mInstance = cm;
+    }
+
     /**
      *----------------- Public method on local -----------------
      */

@@ -77,12 +77,10 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
 
+        //StorageModel.GetInstance().DeleteFiles();
 
-        StorageModel.GetInstance().DeleteFiles();
-
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
-        }
     }
 
     @Override
@@ -240,15 +238,14 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 }
             }
         });
-
-
     }
 
     protected void LoadData() {
-        if (StorageModel.GetInstance().AreFilesExist())
+        if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
-        else {
+            StartActivity();
+        } else {
             // If not, load from firebase
             BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
                 @Override
@@ -271,6 +268,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
                                 @Override
                                 public void onSuccess(DataSnapshot data) {
+                                    StorageModel.GetInstance().SaveAll();
                                     StartActivity();
                                 }
 
@@ -290,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 public void onFailed(DatabaseError databaseError) {
                 }
             });
-            StartActivity();
         }
     }
 

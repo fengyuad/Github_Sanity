@@ -34,6 +34,16 @@ public class TransactionModel extends Model implements java.io.Serializable {
         return instance;
     }
 
+
+    /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param tm a <b>TransactionModel</b> instance
+     */
+    public static void UpdateInstance(TransactionModel tm) {
+        instance = tm;
+    }
+
     public Map<Long, Transaction> getmTransactions() {
         return mTransactions;
     }
