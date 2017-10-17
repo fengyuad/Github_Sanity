@@ -63,7 +63,10 @@ public class StorageModel {
      * @return <b>boolean</b> Yes or No
      */
     public boolean AreFilesExist() {
-        File file = mContext.getFileStreamPath("SanityBudgetModel.dat");
+        File file = mContext.getFileStreamPath("SanityVariable.dat");
+        if (!file.exists())
+            return false;
+        file = mContext.getFileStreamPath("SanityBudgetModel.dat");
         if (!file.exists())
             return false;
         file = mContext.getFileStreamPath("SanityCategoryModel.dat");
@@ -81,7 +84,10 @@ public class StorageModel {
      * @return <b>boolean</b> Success or not
      */
     public boolean DeleteFiles() {
-        File file = mContext.getFileStreamPath("SanityBudgetModel.dat");
+        File file = mContext.getFileStreamPath("SanityVariable.dat");
+        if (!file.delete())
+            return false;
+        file = mContext.getFileStreamPath("SanityBudgetModel.dat");
         if (!file.delete())
             return false;
         file = mContext.getFileStreamPath("SanityCategoryModel.dat");
@@ -104,6 +110,8 @@ public class StorageModel {
      * @return <b>boolean</b> Success or not
      */
     public boolean SaveAll() {
+        if (!SaveObject(Variable.GetInstance()))
+            return false;
         if (!SaveObject(BudgetModel.GetInstance()))
             return false;
         if (!SaveObject(CategoryModel.GetInstance()))
@@ -117,6 +125,7 @@ public class StorageModel {
      * Read all 3 models from internal storage
      */
     public void ReadAll() {
+        Variable.UpdateInstance((Variable) ReadObject("Variable"));
         BudgetModel.UpdateInstance((BudgetModel) ReadObject("BudgetModel"));
         CategoryModel.UpdateInstance((CategoryModel) ReadObject("CategoryModel"));
         TransactionModel.UpdateInstance((TransactionModel) ReadObject("TransactionModel"));
@@ -134,14 +143,14 @@ public class StorageModel {
      * @param <E>   <b>Model</b> class
      * @return <b>boolean</b> Success or not
      */
-    public <E extends Model> boolean SaveObject(E model) {
+    public <E> boolean SaveObject(E model) {
         try {
             fos = mContext.openFileOutput("Sanity" + model.getClass().getSimpleName() + ".dat", Context.MODE_PRIVATE);
             oos = new ObjectOutputStream(fos);
             oos.writeObject(model);
             oos.close();
             fos.close();
-            Log.d("DEBUG", "Object Saved");
+            //Log.d("DEBUG", "Object Saved");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +165,7 @@ public class StorageModel {
      * @param <E>       <b>Model</b> class
      * @return <b>E</b> a model class
      */
-    public <E extends Model> E ReadObject(String className) {
+    public <E> E ReadObject(String className) {
         try {
             E currModel;
             fis = mContext.openFileInput("Sanity" + className + ".dat");
@@ -164,7 +173,7 @@ public class StorageModel {
             currModel = (E) ois.readObject();
             ois.close();
             fis.close();
-            Log.d("DEBUG", "Object Read");
+            //Log.d("DEBUG", "Object Read");
             return currModel;
         } catch (Exception e) {
             e.printStackTrace();
