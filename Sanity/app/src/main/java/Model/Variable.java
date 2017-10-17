@@ -22,6 +22,15 @@ public class Variable implements Serializable {
     
 
     /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param bm a <b>BudgetModel</b> instance
+     */
+    public static void UpdateInstance(Variable v) {
+        instance = v;
+    }
+
+    /**
      * Getter and Setter
      */
     public double getmThreshold() {
