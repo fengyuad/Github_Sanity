@@ -2,6 +2,7 @@ package com.example.tomdong.sanity;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -86,17 +88,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         editBgtDateButton.setOnClickListener(this);
         SwipeMenuListView lv=promptView.findViewById(R.id.budget_edit_catgoryList);
         // setup a dialog window
-        ArrayList<String>testlist=new ArrayList<>();
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        testlist.add("Fengyuad");
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(BudgetViewActivity.this,android.R.layout.simple_list_item_1,testlist);
+        ArrayList<Category_card>testlist=new ArrayList<>();
+        testlist.add(new Category_card("working"));
+        testlist.add(new Category_card("playing"));
+        testlist.add(new Category_card("dining"));
+        final ArrayAdapter<Category_card> adapter=new ArrayAdapter<Category_card>(BudgetViewActivity.this,android.R.layout.simple_list_item_1,testlist);
         lv.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -119,7 +115,14 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         lv.setMenuCreator(creator);
         lv.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
 
+                editBgtDateText.setText(adapter.getItem(position).GetCatoryType());
+            }
+        });
 
 
         alertDialogBuilder.setCancelable(false)
