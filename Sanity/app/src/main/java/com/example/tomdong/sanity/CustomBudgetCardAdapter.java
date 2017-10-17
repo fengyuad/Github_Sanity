@@ -85,6 +85,7 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
                 holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
+
                 holder.BudgetType.setText(mList.get(position).GetBudgetType());
                 holder.CateGoryAmount.setText(Double.toString(mList.get(position).GetLimit()) + "$");
                 double limitAmount = mList.get(position).GetLimit();
