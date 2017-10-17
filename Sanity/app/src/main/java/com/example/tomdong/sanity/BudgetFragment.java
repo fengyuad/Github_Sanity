@@ -133,6 +133,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 
+
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
             list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime()*1000)),budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount()));

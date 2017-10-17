@@ -21,8 +21,8 @@ public class Budget_card {
         this.current = current;
         this.date = date;
         this.period = period;
-    }
 
+    }
 
     public String GetBudgetType() {
         return BudgetType;
