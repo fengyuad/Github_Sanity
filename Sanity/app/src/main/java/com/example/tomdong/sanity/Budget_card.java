@@ -40,6 +40,7 @@ public class Budget_card {
         return limit;
     }
 
+
     public double GetCurrent() {
         return current;
     }

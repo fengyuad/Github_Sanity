@@ -12,32 +12,33 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import Model.Category;
+
 /**
  * Created by User on 4/4/2017.
  */
 
-public class CustomCardAdapter extends ArrayAdapter<Category_card> {
+public class MyCatgoryAdapter extends ArrayAdapter<Category_card> {
 
     private static final String TAG = "CustomListAdapter";
 
     private Context mContext;
     private int mResource;
     private int lastPosition = -1;
-
+    ArrayList<Category_card> mList;
     /**
      * Holds variables in a View
      */
     private static class ViewHolder {
         TextView CategoryType;
-        ProgressBar PBar;
     }
 
-    public CustomCardAdapter(Context context, int resource, ArrayList<Category_card> objects) {
+    public MyCatgoryAdapter(Context context, int resource, ArrayList<Category_card> objects) {
         super(context, resource, objects);
         mContext = context;
         mResource = resource;
+        mList=objects;
     }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -50,19 +51,16 @@ public class CustomCardAdapter extends ArrayAdapter<Category_card> {
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 convertView = inflater.inflate(mResource, parent, false);
                 holder = new ViewHolder();
-                holder.CategoryType = (TextView) convertView.findViewById(R.id.CategoryType);
-                holder.PBar = (ProgressBar) convertView.findViewById(R.id.bar_in_card);
+                holder.CategoryType = (TextView) convertView.findViewById(R.id.cat_id);
+                holder.CategoryType.setText(mList.get(position).GetCatoryType());
                 result = convertView;
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
                 result = convertView;
             }
-
             lastPosition = position;
-
             holder.CategoryType.setText(CatoryType);
-
             return convertView;
         } catch (IllegalArgumentException e) {
             Log.e(TAG, "getView: IllegalArgumentException: " + e.getMessage());
@@ -72,8 +70,13 @@ public class CustomCardAdapter extends ArrayAdapter<Category_card> {
     }
     public void Remove(int Position)
     {
-        Log.e(TAG, "Delete Position: "+getItem(Position).GetBudgetType());
+        Log.e(TAG, "Delete Position: "+getItem(Position).GetCatoryType());
         remove(getItem(Position));
     }
+    public void Add(Category_card card)
+    {
+        add(card);
+    }
+
 
 }

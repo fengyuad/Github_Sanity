@@ -72,6 +72,9 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
         //get the persons information
         final int tempPos = position;
         String BudgetCat = getItem(position).GetBudgetType();
+        double amount=getItem(position).GetLimit();
+        double current=getItem(position).GetCurrent();
+
         try {
             final View result;
             final ViewHolder holder;
@@ -81,7 +84,6 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
                 holder = new ViewHolder();
                 holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
-
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
 
                 holder.BudgetType.setText(mList.get(position).GetBudgetType());
@@ -90,20 +92,20 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
                 double currAmount = mList.get(position).GetCurrent();
                 double P = ((currAmount/limitAmount) * 100);
                 holder.PBar.setProgress((int)P);
-
                 lastPosition = position;
                 result = convertView;
                 convertView.setTag(holder);
-                holder.BudgetType.setText(mList.get(position).GetBudgetType());
             }
             else{
-
                 holder = (ViewHolder) convertView.getTag();
                 result = convertView;
             }
             lastPosition = position;
 
             holder.BudgetType.setText(BudgetCat);
+            holder.CateGoryAmount.setText(""+amount+"$");
+            double P = ((current/amount) * 100);
+            holder.PBar.setProgress((int)P);
 
             return convertView;
         } catch (IllegalArgumentException e) {
