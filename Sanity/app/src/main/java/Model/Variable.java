@@ -11,6 +11,7 @@ public class Variable implements Serializable {
     private double mThreshold = 0.75;
     private int mFrequency = 1;
     private String mUserID = "";
+    private Long mUpdateTime = 0L;
 
     public static Variable GetInstance() {
         if (instance == null) {
@@ -46,5 +47,11 @@ public class Variable implements Serializable {
         this.mUserID = mUserID;
     }
 
+    public Long getmUpdateTime() {
+        return mUpdateTime;
+    }
 
+    public void setmUpdateTime(Long mUpdateTime) {
+        this.mUpdateTime = mUpdateTime;
+    }
 }
