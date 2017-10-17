@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Controller.OnGetDataListener;
+
 /**
  * Created by Yifan on 10/12 012.
  */
@@ -26,6 +28,8 @@ public class BudgetModel extends Model implements Serializable {
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
         InitDataBase();
+
+
     }
 
 
@@ -183,6 +187,14 @@ public class BudgetModel extends Model implements Serializable {
     public void DeleteAllBudgets() {
         mBudgetMap.clear();
     }
+
+    /**
+     * Return budget map
+     * @return <b>Map</b>
+     */
+    public Map<Long,Budget> GetBudgetMap(){
+        return mBudgetMap;
+    }
     //</editor-fold>
 
 
@@ -240,7 +252,8 @@ public class BudgetModel extends Model implements Serializable {
     /**
      * Firebase GetValue Budget
      */
-    public void CloudGet() {
+    public void CloudGet(final OnGetDataListener listener) {
+        listener.onStart();
         // read data from database and store in mIDToCategory
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -249,10 +262,12 @@ public class BudgetModel extends Model implements Serializable {
                     Budget budget = ds.getValue(Budget.class);
                     mBudgetMap.put(budget.getmBudgetId(), budget);
                 }
+                listener.onSuccess(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                listener.onFailed(databaseError);
             }
         });
     }

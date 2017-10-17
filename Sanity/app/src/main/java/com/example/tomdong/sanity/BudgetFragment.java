@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -40,8 +42,12 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Calendar;
 
+
+import Model.Budget;
+import Model.BudgetModel;
 
 import static android.content.ContentValues.TAG;
 
@@ -59,7 +65,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private SwipeMenuListView  mListView;
+    private SwipeMenuListView mListView;
     private ImageView mImageView;
 
     Button addBgtDateButton;
@@ -115,7 +121,21 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
         ArrayList<Budget_card> list = new ArrayList<>();
 
-
+        Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
+        for (Budget budget : budgetMap.values())
+            list.add(new Budget_card(budget.getmName(), "", 1, 2));
+        // TODO
+/*
+        list.add(new Budget_card("Parking"));
+        list.add(new Budget_card("Eating"));
+        list.add(new Budget_card("Studying"));
+        list.add(new Budget_card("Working"));
+        list.add(new Budget_card("Skiing"));
+        list.add(new Budget_card("Gaming"));
+        list.add(new Budget_card("Travelling"));
+        list.add(new Budget_card("pooping"));*/
+        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
+/*
         list.add(new Budget_card("Parking", "Parking", 2, 1));
         list.add(new Budget_card("Parking", "Eating", 20, 15));
         list.add(new Budget_card("Parking", "Studying", 5, 2));
@@ -125,7 +145,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         list.add(new Budget_card("Parking", "Travelling", 77, 60));
         list.add(new Budget_card("shit", "pooping", 30, 17));
         final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
-
+*/
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -153,7 +173,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Log.e(TAG, "Delete Position: "+position);
+                        Log.e(TAG, "Delete Position: " + position);
                         adapter.Remove(position);
                         break;
                 }

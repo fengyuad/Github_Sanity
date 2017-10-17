@@ -9,6 +9,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import Controller.OnGetDataListener;
+
 /**
  * Created by zhongchu on 10/12/17.
  */
@@ -18,14 +20,11 @@ public class TransactionModel extends Model implements java.io.Serializable {
     private Map<Long, Transaction> mTransactions;
     private DatabaseReference mDatabase;
 
-    public Map<Long, Transaction> getmTransactions() {
-        return mTransactions;
-    }
-
     private TransactionModel() {
         super();
         mTransactions = new HashMap<>();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
+
     }
 
     public static TransactionModel GetInstance() {
@@ -33,6 +32,10 @@ public class TransactionModel extends Model implements java.io.Serializable {
             instance = new TransactionModel();
         }
         return instance;
+    }
+
+    public Map<Long, Transaction> getmTransactions() {
+        return mTransactions;
     }
 
     public Transaction addTransaction(Transaction trans) {
@@ -69,7 +72,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
         return true;
     }
 
-    public void ReadTransaction() {
+    public void ReadTransaction(final OnGetDataListener listener) {
+        listener.onStart();
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -77,10 +81,10 @@ public class TransactionModel extends Model implements java.io.Serializable {
                     Transaction trans = ds.getValue(Transaction.class);
                     mTransactions.put(trans.getmTransactionId(), trans);
                 }
+                listener.onSuccess(dataSnapshot);
             }
-
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.onFailed(databaseError);
             }
         });
     }

@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import Controller.OnGetDataListener;
+
 
 /**
  * Created by EricWang on 10/12/17.
@@ -38,6 +40,7 @@ public class CategoryModel extends Model implements Serializable {
         mIDToCategory = new HashMap<>();
         mNameCategoryUsed = new ArrayList<String>();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
+
     }
 
     /**
@@ -182,7 +185,8 @@ public class CategoryModel extends Model implements Serializable {
     /**
      * read all category
      */
-    public void ReadCategoryFromDatabase() {
+    public void ReadCategoryFromDatabase(final OnGetDataListener listener) {
+        listener.onStart();
         // read data from database and store in mIDToCategory
         Log.d("test", "read from categroy db");
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -191,16 +195,15 @@ public class CategoryModel extends Model implements Serializable {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Category cat = ds.getValue(Category.class);
                     AddCategory(cat);
-
                 }
+                listener.onSuccess(dataSnapshot);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                listener.onFailed(databaseError);
             }
         });
-
     }
 
     /**
