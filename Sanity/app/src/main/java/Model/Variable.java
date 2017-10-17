@@ -19,6 +19,7 @@ public class Variable implements Serializable {
         }
         return instance;
     }
+    
 
     /**
      * Getter and Setter
