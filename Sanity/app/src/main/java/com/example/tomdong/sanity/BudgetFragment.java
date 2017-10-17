@@ -1,11 +1,15 @@
 package com.example.tomdong.sanity;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,11 +23,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
@@ -33,6 +40,7 @@ import com.example.tomdong.sanity.dummy.DummyContent;
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
 import static android.provider.AlarmClock.EXTRA_MESSAGE;
@@ -43,7 +51,7 @@ import static android.provider.AlarmClock.EXTRA_MESSAGE;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -52,6 +60,10 @@ public class BudgetFragment extends Fragment {
     private OnListFragmentInteractionListener mListener;
     private SwipeMenuListView  mListView;
     private ImageView mImageView;
+
+    Button addBgtDateButton;
+    TextView addBgtDateText;
+    private int addBgtYear, addBgtMonth, addBgtDay;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -77,6 +89,11 @@ public class BudgetFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        final Calendar c = Calendar.getInstance();
+        addBgtDay = c.get(Calendar.DAY_OF_MONTH);
+        addBgtMonth = c.get(Calendar.MONTH);
+        addBgtYear = c.get(Calendar.YEAR);
     }
 
     @Override
@@ -85,7 +102,13 @@ public class BudgetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_budget_list, container, false);
         mListView=view.findViewById(R.id.my_budgets_listview);
         mImageView=view.findViewById(R.id.my_budgets_icon);
-
+        FloatingActionButton addBgtFab = (FloatingActionButton) view.findViewById(R.id.add_budget_fab);
+        addBgtFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddBgtDialog();
+            }
+        });
 
         ArrayList<Budget_card> list = new ArrayList<>();
 
@@ -160,6 +183,49 @@ public class BudgetFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View v) {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                addBgtDateText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+            }
+        }, addBgtYear, addBgtMonth, addBgtDay);
+        datePickerDialog.show();
+    }
+
+
+    protected void showAddBgtDialog() {
+
+        // get input_dialog.xml view
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View promptView = layoutInflater.inflate(R.layout.budget_add_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+        alertDialogBuilder.setView(promptView);
+
+        addBgtDateText = (TextView) promptView.findViewById(R.id.add_bgt_date);
+        addBgtDateText.setText(addBgtYear + "-" + (addBgtMonth + 1) + "-" + addBgtDay);
+        addBgtDateButton = (Button) promptView.findViewById(R.id.add_bgt_date_button);
+        addBgtDateButton.setOnClickListener(this);
+
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Toast.makeText(getContext(),"Add Budget!",Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     /**
