@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-        StorageModel.GetInstance().DeleteFiles();
+        //StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
@@ -254,56 +254,62 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
+            // TODO: NEED UPDATE TIME FROM FIREBASE
+            //if (Variable.GetInstance().getmUpdateTime())
             StartActivity();
         } else {
             // If not, load from firebase
-            BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
-                @Override
-                public void onStart() {
-                }
+            ReadModelsFromFirebase();
+        }
+    }
 
-                @Override
-                public void onSuccess(DataSnapshot data) {
-                    CategoryModel.GetInstance().ReadCategoryFromDatabase(new OnGetDataListener() {
-                        @Override
-                        public void onStart() {
-                        }
+    private void ReadModelsFromFirebase(){
+        BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
+            @Override
+            public void onStart() {
+            }
 
-                        @Override
-                        public void onSuccess(DataSnapshot data) {
-                            TransactionModel.GetInstance().ReadTransaction(new OnGetDataListener() {
-                                @Override
-                                public void onStart() {
-                                }
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                CategoryModel.GetInstance().ReadCategoryFromDatabase(new OnGetDataListener() {
+                    @Override
+                    public void onStart() {
+                    }
 
-                                @Override
-                                public void onSuccess(DataSnapshot data) {
+                    @Override
+                    public void onSuccess(DataSnapshot data) {
+                        TransactionModel.GetInstance().ReadTransaction(new OnGetDataListener() {
+                            @Override
+                            public void onStart() {
+                            }
+
+                            @Override
+                            public void onSuccess(DataSnapshot data) {
                                     /*List<Long> newList = new ArrayList<Long>();
                                     newList.add(1508202725272L);
                                     BudgetModel.GetInstance().AddBudget(new Budget("Transportation", 1508457600L, 10, newList));
                                     newList = new ArrayList<Long>();
                                     BudgetModel.GetInstance().AddBudget(new Budget("Other", 1508457600L, 30, newList));*/
-                                    StorageModel.GetInstance().SaveAll();
-                                    StartActivity();
-                                }
+                                StorageModel.GetInstance().SaveAll();
+                                StartActivity();
+                            }
 
-                                @Override
-                                public void onFailed(DatabaseError databaseError) {
-                                }
-                            });
-                        }
+                            @Override
+                            public void onFailed(DatabaseError databaseError) {
+                            }
+                        });
+                    }
 
-                        @Override
-                        public void onFailed(DatabaseError databaseError) {
-                        }
-                    });
-                }
+                    @Override
+                    public void onFailed(DatabaseError databaseError) {
+                    }
+                });
+            }
 
-                @Override
-                public void onFailed(DatabaseError databaseError) {
-                }
-            });
-        }
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+            }
+        });
     }
 
     private void StartActivity() {
