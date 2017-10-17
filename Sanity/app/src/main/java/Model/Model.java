@@ -9,4 +9,6 @@ import com.google.firebase.database.DatabaseReference;
 public class Model {
     protected String mUserID = "60WQP281jXVqW57q3JP6vQeMeq73";
     protected DatabaseReference mDatabase;
+
+
 }

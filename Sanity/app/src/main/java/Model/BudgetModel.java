@@ -26,6 +26,18 @@ public class BudgetModel extends Model implements Serializable {
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
         InitDataBase();
+
+        FirebaseDatabase.getInstance().getReference(mUserID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                FirebaseDatabase.getInstance().getReference(mUserID).child("update").setValue(System.currentTimeMillis());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

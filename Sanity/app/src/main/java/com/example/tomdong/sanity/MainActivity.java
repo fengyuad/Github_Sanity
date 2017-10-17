@@ -21,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import Model.Category;
+import Model.CategoryModel;
 import Model.StorageModel;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
+
+        CategoryModel.GetInstance().ReadCategoryFromDatabase();
 
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null)

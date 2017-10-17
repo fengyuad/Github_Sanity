@@ -84,13 +84,6 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
 
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
 
-                holder.deleteButton=(Button)convertView.findViewById(R.id.deleteButton);
-                holder.deleteButton.setOnClickListener(new Button.OnClickListener(){
-                    public void onClick(View v)
-                    {
-                        remove(getItem(tempPos));
-                    }
-                });
                 holder.BudgetType.setText(mList.get(position).GetBudgetType());
                 holder.CateGoryAmount.setText(Double.toString(mList.get(position).GetLimit()) + "$");
                 double limitAmount = mList.get(position).GetLimit();
