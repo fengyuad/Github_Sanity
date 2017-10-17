@@ -68,6 +68,13 @@ public class CategoryModel extends Model implements Serializable {
      *----------------- Public method on local -----------------
      */
 
+    public List<Category> GetAllCategories(){
+        List<Category> list = new ArrayList<>();
+        for(Category cat: mIDToCategory.values()){
+            list.add(cat);
+        }
+        return list;
+    }
 
     /**
      * add category to map and nameCategoryUsed
@@ -94,7 +101,7 @@ public class CategoryModel extends Model implements Serializable {
     private boolean CheckNameUsed(String name) {
         return mNameCategoryUsed.contains(name);
     }
-
+    
 
     /**
      * @param id

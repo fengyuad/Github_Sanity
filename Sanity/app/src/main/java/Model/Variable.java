@@ -64,4 +64,8 @@ public class Variable implements Serializable {
     public void setmUpdateTime(Long mUpdateTime) {
         this.mUpdateTime = mUpdateTime;
     }
+
+    public void test(){
+
+    }
 }
