@@ -10,6 +10,7 @@ public class Budget_card {
     private double limit;
     private double current;
 
+
     private String date;
     private int period;
 
@@ -22,13 +23,10 @@ public class Budget_card {
         this.period = period;
 
 
-    public String GetCatType() {
-        return CatType;
-    }
-
     public String GetBudgetType() {
         return BudgetType;
     }
+
 
 
 

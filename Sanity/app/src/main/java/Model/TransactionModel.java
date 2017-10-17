@@ -18,7 +18,6 @@ import Controller.OnGetDataListener;
 public class TransactionModel extends Model implements java.io.Serializable {
     private static TransactionModel instance = null;
     private Map<Long, Transaction> mTransactions;
-    private DatabaseReference mDatabase;
 
     private TransactionModel() {
         super();
@@ -32,6 +31,16 @@ public class TransactionModel extends Model implements java.io.Serializable {
             instance = new TransactionModel();
         }
         return instance;
+    }
+
+
+    /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param tm a <b>TransactionModel</b> instance
+     */
+    public static void UpdateInstance(TransactionModel tm) {
+        instance = tm;
     }
 
     public Map<Long, Transaction> getmTransactions() {

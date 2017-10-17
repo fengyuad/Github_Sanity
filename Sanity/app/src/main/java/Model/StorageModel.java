@@ -118,8 +118,8 @@ public class StorageModel {
      */
     public void ReadAll() {
         BudgetModel.UpdateInstance((BudgetModel) ReadObject("BudgetModel"));
-        BudgetModel.UpdateInstance((BudgetModel) ReadObject("CategoryModel"));
-        BudgetModel.UpdateInstance((BudgetModel) ReadObject("TransactionModel"));
+        CategoryModel.UpdateInstance((CategoryModel) ReadObject("CategoryModel"));
+        TransactionModel.UpdateInstance((TransactionModel) ReadObject("TransactionModel"));
     }
     //</editor-fold>
 

@@ -23,11 +23,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
+
 import Controller.OnGetDataListener;
+import Model.Budget;
 import Model.BudgetModel;
 import Model.CategoryModel;
 import Model.StorageModel;
 import Model.TransactionModel;
+import Model.Variable;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
@@ -46,12 +50,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         setContentView(R.layout.activity_main);
         //Declare and Initialization
         firebaseAuth = FirebaseAuth.getInstance();
-        SanityImage = (ImageView) findViewById(R.id.SanityImage);
-        Account = (EditText) findViewById(R.id.UserT);
-        PassWord = (EditText) findViewById(R.id.PwT);
-        Login = (Button) findViewById(R.id.LoginButton);
-        Register = (Button) findViewById(R.id.RegisterButton);
-        ForgetPassword = (TextView) findViewById(R.id.ForgetTextView);
+        SanityImage = findViewById(R.id.SanityImage);
+        Account = findViewById(R.id.UserT);
+        PassWord = findViewById(R.id.PwT);
+        Login = findViewById(R.id.LoginButton);
+        Register = findViewById(R.id.RegisterButton);
+        ForgetPassword = findViewById(R.id.ForgetTextView);
 
         //Login Animation
         Account.setVisibility(View.GONE);
@@ -77,12 +81,14 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
          * ------------------ Test Database Model Functionality -------------------
          */
 
+        //StorageModel.GetInstance().DeleteFiles();
 
-        StorageModel.GetInstance().DeleteFiles();
-
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+        if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
-        }
+//        BudgetModel.GetInstance().AddBudget(new Budget("Budget1", 1508457600L, 30, new ArrayList<Long>()));
+//        BudgetModel.GetInstance().AddBudget(new Budget("Budget2", 1508457600L, 30, new ArrayList<Long>()));
+//        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, new ArrayList<Long>()));
+
     }
 
     @Override
@@ -123,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     public void onClick(View view) {
         view.setEnabled(false);
         Log.d("MyApp", "I am here");
-        Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
         if (view == Register) {
             Log.d("MyApp", "Register");
             RegisterUser();
@@ -217,11 +223,11 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         String pw = PassWord.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(pw)) {
-            Toast.makeText(MainActivity.this, "Password Empty!", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MainActivity.this, "Password Empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -230,25 +236,27 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-                    Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
                     LoadData();
                 } else {
                     Account.setEnabled(true);
                     PassWord.setEnabled(true);
                     Login.setEnabled(true);
-                    Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
     }
 
     protected void LoadData() {
-        if (StorageModel.GetInstance().AreFilesExist())
+        // set the current user uid to Variable object
+        Variable.GetInstance().setmUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+        if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
-        else {
+            StartActivity();
+        } else {
             // If not, load from firebase
             BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
                 @Override
@@ -271,6 +279,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
                                 @Override
                                 public void onSuccess(DataSnapshot data) {
+                                    /*List<Long> newList = new ArrayList<Long>();
+                                    newList.add(1508202725272L);
+                                    BudgetModel.GetInstance().AddBudget(new Budget("Transportation", 1508457600L, 10, newList));
+                                    newList = new ArrayList<Long>();
+                                    BudgetModel.GetInstance().AddBudget(new Budget("Other", 1508457600L, 30, newList));*/
+                                    StorageModel.GetInstance().SaveAll();
                                     StartActivity();
                                 }
 
@@ -290,7 +304,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 public void onFailed(DatabaseError databaseError) {
                 }
             });
-            StartActivity();
         }
     }
 

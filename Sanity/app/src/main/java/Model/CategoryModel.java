@@ -28,7 +28,6 @@ public class CategoryModel extends Model implements Serializable {
     private static CategoryModel mInstance = null;
     public Map<Long, Category> mIDToCategory;
     private List<String> mNameCategoryUsed;
-    private DatabaseReference mDatabase;
 
 
     /**
@@ -53,6 +52,16 @@ public class CategoryModel extends Model implements Serializable {
             mInstance = new CategoryModel();
         }
         return mInstance;
+    }
+
+
+    /**
+     * When loading from local storage, a new instance should be updated
+     *
+     * @param cm a <b>CategoryModel</b> instance
+     */
+    public static void UpdateInstance(CategoryModel cm) {
+        mInstance = cm;
     }
 
     /**

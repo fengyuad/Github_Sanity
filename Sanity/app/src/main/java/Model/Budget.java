@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,14 +11,14 @@ import java.util.List;
 public class Budget implements Serializable {
     private long mBudgetId = 0;
     private String mName = "";
-    private int mDueDate = 1;
-    private boolean mIsWeek = true;
+    //private int mDueDate = 1;
+    //private boolean mIsWeek = true;
     private long mDueTime = 0;
     private int mPeriod = 0;
     private double mAmount = 0.0;
-    private List<Long> mCatIds;
-    private double mTotalAmount = 0.0;
     private double mPrevAmount = 0.0;
+    private double mTotalAmount = 0.0;
+    private List<Long> mCatIds = new ArrayList<>();
 
     /**
      * Default Constructor
@@ -31,16 +32,15 @@ public class Budget implements Serializable {
      *
      * @param dueTime due time
      * @param period  budget period
-     * @param amount  budget amount
      * @param catIds  category Ids
      */
-    public Budget(String name, long dueTime, int period, double amount, List<Long> catIds) {
-        mName = name;
+    public Budget(String name, long dueTime, int period, List<Long> catIds) {
         mBudgetId = System.currentTimeMillis();
+        mName = name;
         mDueTime = dueTime;
         mPeriod = period;
-        mAmount = amount;
         mCatIds = catIds;
+        UpdateAmountLimit();
     }
 
 
@@ -111,6 +111,24 @@ public class Budget implements Serializable {
 
     //<editor-fold desc="Getters and Setters">
     /* =============== Getters and Setters =============== */
+
+
+    /**
+     * Getter
+     *
+     * @return mAmount
+     */
+    public double GetAmountLimit() {
+        UpdateAmountLimit();
+        return mAmount;
+    }
+
+    public void UpdateAmountLimit() {
+        double tempAmount = 0.0;
+        for (Long catId : mCatIds)
+            tempAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
+        mAmount = tempAmount;
+    }
 
     /**
      * return current budget balance
@@ -187,24 +205,6 @@ public class Budget implements Serializable {
     /**
      * Getter
      *
-     * @return mAmount
-     */
-    public double getmAmount() {
-        return mAmount;
-    }
-
-    /**
-     * Setter
-     *
-     * @param mAmount
-     */
-    public void setmAmount(double mAmount) {
-        this.mAmount = mAmount;
-    }
-
-    /**
-     * Getter
-     *
      * @return mCatIds
      */
     public List<Long> getmCatIds() {
@@ -223,19 +223,19 @@ public class Budget implements Serializable {
     /**
      * Getter
      *
-     * @return mCurrAmount
+     * @return mPrevAmount
      */
-    public double getmTotalAmount() {
-        return mTotalAmount;
+    public double getmPrevAmount() {
+        return mPrevAmount;
     }
 
     /**
      * Setter
      *
-     * @param mTotalAmount
+     * @param mPrevAmount
      */
-    public void setmTotalAmount(double mTotalAmount) {
-        this.mTotalAmount = mTotalAmount;
+    public void setmPrevAmount(double mPrevAmount) {
+        this.mPrevAmount = mPrevAmount;
     }
     //</editor-fold>
 }
