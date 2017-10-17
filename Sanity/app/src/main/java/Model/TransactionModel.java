@@ -25,17 +25,6 @@ public class TransactionModel extends Model implements java.io.Serializable {
         mTransactions = new HashMap<>();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
 
-        FirebaseDatabase.getInstance().getReference(mUserID).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                FirebaseDatabase.getInstance().getReference(mUserID).child("update").setValue(System.currentTimeMillis());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     public static TransactionModel GetInstance() {
@@ -94,7 +83,6 @@ public class TransactionModel extends Model implements java.io.Serializable {
                 }
                 listener.onSuccess(dataSnapshot);
             }
-
             public void onCancelled(DatabaseError databaseError) {
                 listener.onFailed(databaseError);
             }
