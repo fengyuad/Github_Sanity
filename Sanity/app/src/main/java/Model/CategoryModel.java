@@ -28,7 +28,6 @@ public class CategoryModel extends Model implements Serializable {
     private static CategoryModel mInstance = null;
     public Map<Long, Category> mIDToCategory;
     private List<String> mNameCategoryUsed;
-    private DatabaseReference mDatabase;
 
 
     /**

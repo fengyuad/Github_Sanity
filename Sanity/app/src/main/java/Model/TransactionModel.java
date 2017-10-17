@@ -18,7 +18,6 @@ import Controller.OnGetDataListener;
 public class TransactionModel extends Model implements java.io.Serializable {
     private static TransactionModel instance = null;
     private Map<Long, Transaction> mTransactions;
-    private DatabaseReference mDatabase;
 
     private TransactionModel() {
         super();
