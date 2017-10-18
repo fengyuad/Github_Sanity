@@ -18,6 +18,7 @@ import Controller.OnGetDataListener;
 public class TransactionModel extends Model implements java.io.Serializable {
     private static TransactionModel instance = null;
     private Map<Long, Transaction> mTransactions;
+    private String mUserID;
 
     private TransactionModel() {
         super();
@@ -27,6 +28,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
     }
 
     public void InitDataBase() {
+        mUserID = Variable.GetInstance().getmUserID();
         mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
     }
 
@@ -96,6 +98,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mTransactions.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Transaction trans = ds.getValue(Transaction.class);
                     mTransactions.put(trans.getmTransactionId(), trans);
