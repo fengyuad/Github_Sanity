@@ -58,6 +58,7 @@ public class CategoryFragment extends Fragment {
      * fragment (e.g. upon screen orientation changes).
      */
     public CategoryFragment() {
+
     }
 
     // TODO: Customize parameter initialization
@@ -130,6 +131,7 @@ public class CategoryFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(getContext(),"Add Category!",Toast.LENGTH_SHORT).show();
                         adapter.Add(new Category_card(addCatText.getText().toString(), 0, 0));
+                        CategoryModel.GetInstance().WriteCategoryAndUpdateDatabase(new Category(addCatText.getText().toString(), 0L));
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -148,12 +150,12 @@ public class CategoryFragment extends Fragment {
 
         final CategoryModel catModel=CategoryModel.GetInstance();
         ArrayList<Category>nlist= (ArrayList<Category>) catModel.GetAllCategories();
-        ArrayList<String>catNames=new ArrayList<>();
+        ArrayList<Category_card>catNames=new ArrayList<>();
         for(int i=0;i<nlist.size();i++)
         {
-            catNames.add(nlist.get(i).getmName());
+            catNames.add(new Category_card(nlist.get(i).getmName(), 0, 0));
         }
-        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,catNames);
+        adapter=new MyCatgoryAdapter(getContext(),R.layout.fragment_category,catNames);
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
