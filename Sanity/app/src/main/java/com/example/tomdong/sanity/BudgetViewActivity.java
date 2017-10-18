@@ -56,6 +56,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     private TextView BudgetPercent;
     private EditText edit_cat;
     private EditText edit_buddget_name;
+    private EditText edit_cat_amount;
     Button editBgtDateButton;
     TextView editBgtDateText;
     SwipeMenuListView lv;
@@ -138,6 +139,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         editBgtDateButton.setOnClickListener(this);
         edit_cat=promptView.findViewById(R.id.edit_catgory_name);
         edit_buddget_name=promptView.findViewById(R.id.edit_bgt_name);
+        edit_cat_amount=(EditText) promptView.findViewById(R.id.budget_edit_catamount);
         lv=promptView.findViewById(R.id.budget_edit_catgoryList);
         // setup a dialog window
        GetCategoriesShows();
@@ -230,7 +232,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     public void GetCategoriesShows()
     {
         BudgetModel bmodel=BudgetModel.GetInstance();
-       ArrayList<Category>nlist= (ArrayList<Category>) bmodel.getCategoriesUnderBudget(id);
+       final ArrayList<Category>nlist= (ArrayList<Category>) bmodel.getCategoriesUnderBudget(id);
         ArrayList<String>catNames=new ArrayList<>();
         for(int i=0;i<nlist.size();i++)
         {
@@ -262,6 +264,9 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                                     long id) {
 
                 edit_cat.setText(adapter.getItem(position));
+                edit_cat_amount.setText(nlist.get(position).getmAmount()+"");
+                edit_buddget_name.setText(BudgetModel.GetInstance().getBudgetById(nlist.get(position).getmBudgetID()).getmName());
+
             }
         });
 

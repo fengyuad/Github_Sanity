@@ -263,6 +263,11 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        if(bgtName.getText().toString().isEmpty()||bgtDate.getText().toString().isEmpty()||bgtPeriod.getText().toString().isEmpty())
+                        {
+                            Toast.makeText(getContext(), "please fill out the form!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
 
                         adapter.Add(new Budget_card(bgtName.getText().toString(),
                                 bgtDate.getText().toString(),
