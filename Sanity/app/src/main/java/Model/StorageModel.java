@@ -150,7 +150,7 @@ public class StorageModel {
             oos.writeObject(model);
             oos.close();
             fos.close();
-            //Log.d("DEBUG", "Object Saved");
+            Log.d("DEBUG", model.getClass().getSimpleName() + " Object Saved");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -173,7 +173,7 @@ public class StorageModel {
             currModel = (E) ois.readObject();
             ois.close();
             fis.close();
-            //Log.d("DEBUG", "Object Read");
+            Log.d("DEBUG", className + " Object Read");
             return currModel;
         } catch (Exception e) {
             e.printStackTrace();

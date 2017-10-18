@@ -183,7 +183,6 @@ public class CategoryFragment extends Fragment {
                         Log.e(TAG, "Delete Position: " + adapter.getItem(position).GetId());
                         catModel.DeleteCategoryAndUpdateDatabase(adapter.getItem(position).GetId());
                         adapter.remove(adapter.getItem(position));
-
                         break;
                 }
                 // false : close the menu; true : not close the menu
