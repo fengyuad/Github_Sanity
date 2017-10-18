@@ -132,14 +132,14 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         });
 
 
-        ArrayList<Budget_card> list = new ArrayList<>();
+        final ArrayList<Budget_card> list = new ArrayList<>();
         DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 
 
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
-            list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime()*1000)),budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount()));
+            list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime()*1000)),budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount(), budget.getmBudgetId()));
 /*
         list.add(new Budget_card("Parking"));
         list.add(new Budget_card("Eating"));
@@ -202,7 +202,8 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position,
                                     long id) {
                 Intent i = new Intent(getContext(), BudgetViewActivity.class);
-
+                long bgtID = list.get(position).GetId();
+                i.putExtra("bgtID", bgtID);
                 startActivity(i);
 
             }
@@ -263,17 +264,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if(bgtName.getText().toString().isEmpty()||bgtDate.getText().toString().isEmpty()||bgtPeriod.getText().toString().isEmpty())
-                        {
-                            Toast.makeText(getContext(), "please fill out the form!", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
 
-                        adapter.Add(new Budget_card(bgtName.getText().toString(),
-                                bgtDate.getText().toString(),
-                                Integer.valueOf(bgtPeriod.getText().toString()),
-                                0,
-                                0));
                         SimpleDateFormat datetimeFormatter = new SimpleDateFormat(
                                 "yyyy-MM-dd");
                         Date dueDate = null;
@@ -285,11 +276,20 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
                         Toast.makeText(getContext(),"Add Budget! Timestamp: " + dueDate.getTime(),Toast.LENGTH_SHORT).show();
                         Log.d("add bgt period", bgtPeriod.getText().toString());
 
-                        BudgetModel.GetInstance().AddBudget(
-                                new Budget(bgtName.getText().toString(),
+                        Budget bgtToAdd = new Budget(bgtName.getText().toString(),
                                 dueDate.getTime(),
                                 Integer.parseInt(bgtPeriod.getText().toString()),
-                                new ArrayList<Long>()));
+                                new ArrayList<Long>());
+
+                        BudgetModel.GetInstance().AddBudget(bgtToAdd);
+
+                        adapter.Add(new Budget_card(bgtName.getText().toString(),
+                                bgtDate.getText().toString(),
+                                Integer.valueOf(bgtPeriod.getText().toString()),
+                                0,
+                                0,
+                                bgtToAdd.getmBudgetId()));
+
                     }
                 })
                 .setNegativeButton("Cancel",
