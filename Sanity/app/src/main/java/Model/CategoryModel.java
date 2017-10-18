@@ -28,6 +28,7 @@ public class CategoryModel extends Model implements Serializable {
     private static CategoryModel mInstance = null;
     public Map<Long, Category> mIDToCategory;
     private List<String> mNameCategoryUsed;
+    private String mUserID;
 
 
     /**
@@ -38,8 +39,13 @@ public class CategoryModel extends Model implements Serializable {
         // initialize the data struture
         mIDToCategory = new HashMap<>();
         mNameCategoryUsed = new ArrayList<String>();
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
+        InitDataBase();
 
+    }
+
+    public void InitDataBase() {
+        mUserID = Variable.GetInstance().getmUserID();
+        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
     }
 
     /**
@@ -219,6 +225,7 @@ public class CategoryModel extends Model implements Serializable {
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                mIDToCategory.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Category cat = ds.getValue(Category.class);
                     AddCategory(cat);

@@ -264,6 +264,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+
                         SimpleDateFormat datetimeFormatter = new SimpleDateFormat(
                                 "yyyy-MM-dd");
                         Date dueDate = null;

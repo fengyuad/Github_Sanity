@@ -182,7 +182,6 @@ public class CategoryFragment extends Fragment {
                         Log.e(TAG, "Delete Position: " + position);
                       //  catModel.DeleteCategoryAndUpdateDatabase(adapter.getItem(position));
                         adapter.remove(adapter.getItem(position));
-
                         break;
                 }
                 // false : close the menu; true : not close the menu
