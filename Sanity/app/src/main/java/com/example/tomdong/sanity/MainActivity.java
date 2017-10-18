@@ -23,10 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
-import java.util.ArrayList;
-
 import Controller.OnGetDataListener;
-import Model.Budget;
 import Model.BudgetModel;
 import Model.CategoryModel;
 import Model.StorageModel;
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-        StorageModel.GetInstance().DeleteFiles();
+        //StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
             LoadData();
@@ -139,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         }
         if (view == ForgetPassword) {
             Log.d("MyApp", "Forget");
+            StorageModel.GetInstance().DeleteFiles();
             ResetPassword();
         }
         // 下面的Code不要删！测试用
@@ -161,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         exists = sm.FilesExist();*/
     }
 
-    public void ResetPassword(){
+    public void ResetPassword() {
         Account.setEnabled(false);
         PassWord.setEnabled(false);
         String emailAdd = Account.getText().toString();
@@ -253,17 +251,26 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
-            // TODO: NEED UPDATE TIME FROM FIREBASE
-            //if (Variable.GetInstance().getmUpdateTime())
-            BudgetModel.GetInstance().ResetAllBudgets();
-            StartActivity();
+            if (!Variable.GetInstance().getmUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                StorageModel.GetInstance().DeleteFiles();
+                Variable.GetInstance().setmUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                BudgetModel.GetInstance().InitDataBase();
+                CategoryModel.GetInstance().InitDataBase();
+                TransactionModel.GetInstance().InitDataBase();
+                ReadModelsFromFirebase();
+            } else {
+                // TODO: NEED UPDATE TIME FROM FIREBASE
+                //if (Variable.GetInstance().getmUpdateTime())
+                BudgetModel.GetInstance().ResetAllBudgets();
+                StartActivity();
+            }
         } else {
             // If not, load from firebase
             ReadModelsFromFirebase();
         }
     }
 
-    private void ReadModelsFromFirebase(){
+    private void ReadModelsFromFirebase() {
         BudgetModel.GetInstance().CloudGet(new OnGetDataListener() {
             @Override
             public void onStart() {

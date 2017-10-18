@@ -38,8 +38,12 @@ public class CategoryModel extends Model implements Serializable {
         // initialize the data struture
         mIDToCategory = new HashMap<>();
         mNameCategoryUsed = new ArrayList<String>();
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
+        InitDataBase();
 
+    }
+
+    public void InitDataBase() {
+        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
     }
 
     /**

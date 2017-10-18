@@ -22,8 +22,12 @@ public class TransactionModel extends Model implements java.io.Serializable {
     private TransactionModel() {
         super();
         mTransactions = new HashMap<>();
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
+        InitDataBase();
 
+    }
+
+    public void InitDataBase() {
+        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
     }
 
     public static TransactionModel GetInstance() {
