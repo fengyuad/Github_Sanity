@@ -189,7 +189,8 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Log.e(TAG, "Delete Position: " + position);
+                        Log.d(TAG, "Delete Budget: " + list.get(position).GetId());
+                        BudgetModel.GetInstance().DeleteBudget(list.get(position).GetId());
                         adapter.Remove(position);
                         break;
                 }

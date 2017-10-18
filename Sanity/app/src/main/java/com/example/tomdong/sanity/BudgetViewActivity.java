@@ -82,7 +82,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()*1000));
 
         for (Category c : catList) {
-            list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount()));
+            list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount(), c.getmID()));
             bgtCurr += c.getmCurrentAmount();
             bgtTotal += c.getmAmount();
         }

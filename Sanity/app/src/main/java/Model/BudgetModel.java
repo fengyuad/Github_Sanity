@@ -165,11 +165,11 @@ public class BudgetModel extends Model implements Serializable {
     public boolean DeleteBudget(long budgetId) {
         if (mBudgetMap.containsKey(budgetId)) {
             // Delete
-            mBudgetMap.remove(budgetId);
             for (long catId : mBudgetMap.get(budgetId).getmCatIds()) {
-                CategoryModel.GetInstance().DeleteCategoryAndUpdateDatabase(catId);
+                CategoryModel.GetInstance().ResetCategoryAndUpdateDatabase(catId);
             }
             CloudRemove(mBudgetMap.get(budgetId));
+            mBudgetMap.remove(budgetId);
             LocalUpdate();
             return true;
         } else {

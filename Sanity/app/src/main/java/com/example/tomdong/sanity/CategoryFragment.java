@@ -130,8 +130,9 @@ public class CategoryFragment extends Fragment {
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Toast.makeText(getContext(),"Add Category!",Toast.LENGTH_SHORT).show();
-                        adapter.Add(new Category_card(addCatText.getText().toString(), 0, 0));
-                        CategoryModel.GetInstance().WriteCategoryAndUpdateDatabase(new Category(addCatText.getText().toString(), 0L));
+                        Category catToAdd = new Category(addCatText.getText().toString(), 0L);
+                        CategoryModel.GetInstance().WriteCategoryAndUpdateDatabase(catToAdd);
+                        adapter.Add(new Category_card(addCatText.getText().toString(), 0, 0, catToAdd.getmID()));
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -153,7 +154,7 @@ public class CategoryFragment extends Fragment {
         ArrayList<Category_card>catNames=new ArrayList<>();
         for(int i=0;i<nlist.size();i++)
         {
-            catNames.add(new Category_card(nlist.get(i).getmName(), 0, 0));
+            catNames.add(new Category_card(nlist.get(i).getmName(), 0, 0, nlist.get(i).getmID()));
         }
         adapter=new MyCatgoryAdapter(getContext(),R.layout.fragment_category,catNames);
         mListView.setAdapter(adapter);
@@ -179,8 +180,8 @@ public class CategoryFragment extends Fragment {
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {
                 switch (index) {
                     case 0:
-                        Log.e(TAG, "Delete Position: " + position);
-                      //  catModel.DeleteCategoryAndUpdateDatabase(adapter.getItem(position));
+                        Log.e(TAG, "Delete Position: " + adapter.getItem(position).GetId());
+                        catModel.DeleteCategoryAndUpdateDatabase(adapter.getItem(position).GetId());
                         adapter.remove(adapter.getItem(position));
 
                         break;
