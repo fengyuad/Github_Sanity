@@ -1,9 +1,19 @@
 package com.example.tomdong.sanity;
 
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -80,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
+        sendNotification();
         StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
@@ -88,7 +99,52 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 //        BudgetModel.GetInstance().AddBudget(new Budget("Budget2", 1508457600L, 30, new ArrayList<Long>()));
 //        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, new ArrayList<Long>()));
 
+
+
     }
+
+
+    public void sendNotification() {
+        Log.d("test", "notify");
+        int id = 1;
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.app_icon);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+        //设置小图标
+        mBuilder.setSmallIcon(R.drawable.app_icon);
+        //设置大图标
+        mBuilder.setLargeIcon(bitmap);
+        //设置标题
+        mBuilder.setContentTitle("这是标题");
+        //设置通知正文
+        mBuilder.setContentText("这是正文，当前ID是：" + id);
+        //设置摘要
+//        mBuilder.setSubText("这是摘要");
+//        //设置是否点击消息后自动clean
+//        mBuilder.setAutoCancel(true);
+//        //显示指定文本
+//        mBuilder.setContentInfo("Info");
+//        //与setContentInfo类似，但如果设置了setContentInfo则无效果
+//        //用于当显示了多个相同ID的Notification时，显示消息总数
+//        mBuilder.setNumber(2);
+//        //通知在状态栏显示时的文本
+//        mBuilder.setTicker("在状态栏上显示的文本");
+//        //设置优先级
+//        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
+//
+//        mBuilder.setOngoing(true);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        mBuilder.setContentIntent(pIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(id++, mBuilder.build());
+
+
+    }
+
 
     @Override
     public void onAnimationStart(Animation animation) {
@@ -126,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
     @Override
     public void onClick(View view) {
+
         view.setEnabled(false);
         Log.d("MyApp", "I am here");
         //Toast.makeText(this, "clicked", Toast.LENGTH_SHORT).show();
@@ -216,16 +273,23 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     }
 
     public void LoginUser() {
+
         Account.setEnabled(false);
         PassWord.setEnabled(false);
         String email = Account.getText().toString();
         String pw = PassWord.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
+            Account.setEnabled(true);
+            PassWord.setEnabled(true);
+            Login.setEnabled(true);
             //Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(pw)) {
+            Account.setEnabled(true);
+            PassWord.setEnabled(true);
+            Login.setEnabled(true);
             //Toast.makeText(MainActivity.this, "Password Empty!", Toast.LENGTH_SHORT).show();
             return;
         }
