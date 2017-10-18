@@ -248,6 +248,13 @@ public class CategoryModel extends Model implements Serializable {
      * @param catID
      */
     public void DeleteCategoryAndUpdateDatabase(Long catID) {
+        if(mIDToCategory.get(catID).getmBudgetID() == 0 || BudgetModel.GetInstance().getBudgetById(mIDToCategory.get(catID).getmBudgetID()) == null) {
+            DeleteCategory(catID);
+            mDatabase.child(catID.toString()).removeValue();
+            FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+            Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+            return;
+        }
         for (Long l : mIDToCategory.get(catID).getmTransactionIDs()) {
             // remove transaction by id, call TransactionModel method
             TransactionModel.GetInstance().DeleteTransaction(l, false);
