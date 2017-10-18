@@ -21,6 +21,7 @@ public class BudgetModel extends Model implements Serializable {
 
     private static BudgetModel mInstance = null;
     private Map<Long, Budget> mBudgetMap;
+    private String mUserID;
 
     /**
      * Constructor - Initialize a BudgetModel
@@ -59,6 +60,7 @@ public class BudgetModel extends Model implements Serializable {
      * Initialize Firebase database connection
      */
     public void InitDataBase() {
+        mUserID = Variable.GetInstance().getmUserID();
         mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("budget");
     }
     //</editor-fold>
