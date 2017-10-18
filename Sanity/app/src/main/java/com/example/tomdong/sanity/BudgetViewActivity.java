@@ -29,6 +29,7 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 
 import java.lang.reflect.Array;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -59,9 +60,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     private EditText edit_cat_amount;
     Button editBgtDateButton;
     TextView editBgtDateText;
+    EditText edit_bgt_period;
     SwipeMenuListView lv;
     private int editYear, editMonth, editDay;
     private long id;
+    private long catid;
 
 
     EditText cat_add_dialog_Amount;
@@ -139,18 +142,36 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         editBgtDateButton.setOnClickListener(this);
         edit_cat=promptView.findViewById(R.id.edit_catgory_name);
         edit_buddget_name=promptView.findViewById(R.id.edit_bgt_name);
+        edit_bgt_period=promptView.findViewById(R.id.edit_bgt_period);
         edit_cat_amount=(EditText) promptView.findViewById(R.id.budget_edit_catamount);
         lv=promptView.findViewById(R.id.budget_edit_catgoryList);
         // setup a dialog window
        GetCategoriesShows();
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(DialogInterface dialog, int idex) {
                        if(edit_cat.getText().toString().isEmpty()||edit_buddget_name.getText().toString().isEmpty()
                                ||editBgtDateText.getText().toString().isEmpty())
                        {
                            Toast.makeText(BudgetViewActivity.this, "please fill out the form!!!", Toast.LENGTH_SHORT).show();
+                           return;
                        }
+                      double amount=Double.parseDouble(edit_cat_amount.getText().toString()) ;
+                        String budgetName=edit_buddget_name.getText().toString();
+                        int period=Integer.parseInt(edit_bgt_period.getText().toString());
+                        SimpleDateFormat datetimeFormatter = new SimpleDateFormat(
+                                "yyyy-MM-dd");
+                        Date dueDate = null;
+                        try {
+                            dueDate = datetimeFormatter.parse(editBgtDateText.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        //TODO
+                        CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
+                        BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
+                        BudgetModel.GetInstance().getBudgetById(id).setmPeriod(period);
+                        BudgetModel.GetInstance().getBudgetById(id).setmName(budgetName);
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -182,7 +203,9 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         if(cat_add_dialog_Amount.getText().toString().isEmpty()||cat_add_dialog_catype.getText().toString().isEmpty())
                         {
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form !!!", Toast.LENGTH_SHORT).show();
+                            return;
                         }
+
 
                     }
                 })
@@ -205,6 +228,9 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 editBgtDateText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                editYear=year;
+                editMonth=month+1;
+                editDay=dayOfMonth;
             }
         }, editYear, editMonth, editDay);
         datePickerDialog.show();
@@ -266,6 +292,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                 edit_cat.setText(adapter.getItem(position));
                 edit_cat_amount.setText(nlist.get(position).getmAmount()+"");
                 edit_buddget_name.setText(BudgetModel.GetInstance().getBudgetById(nlist.get(position).getmBudgetID()).getmName());
+                catid=nlist.get(position).getmID();
 
             }
         });
