@@ -107,7 +107,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
         transToButton.setOnClickListener(this);
 
         list = new ArrayList<>();
-        list.add(new Transaction_card("working","2017-5-10","600$","I love you"));
+       // list.add(new Transaction_card("working","2017-5-10","600$","I love you"));
 
         adapter = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, list);
         transHistory.setAdapter(adapter);
