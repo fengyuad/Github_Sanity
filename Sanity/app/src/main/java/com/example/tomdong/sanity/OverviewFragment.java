@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,6 +40,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import Model.Budget;
@@ -210,20 +213,98 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
         alertDialogBuilder.setView(promptView);
 
-        final EditText editText = (EditText) promptView.findViewById(R.id.trans_amt);
+        final EditText transAmount = (EditText) promptView.findViewById(R.id.trans_amt);
+        final EditText transNote = (EditText) promptView.findViewById((R.id.trans_note));
         Button transDateButton = (Button) promptView.findViewById(R.id.trans_date_button);
         transDateText = (TextView) promptView.findViewById(R.id.trans_date_text);
         transDateText.setText(transYear + "-" + (transMonth + 1) + "-" + transDay);
         transDateButton.setOnClickListener(this);
-        Spinner bgtSpinner = (Spinner) promptView.findViewById(R.id.bgt_spinner);
-        Spinner catSpinner = (Spinner) promptView.findViewById(R.id.cat_spinner);
+        final Spinner bgtSpinner = (Spinner) promptView.findViewById(R.id.bgt_spinner);
+        final Spinner catSpinner = (Spinner) promptView.findViewById(R.id.cat_spinner);
+
+        Map<Long, Budget> bgtMap = BudgetModel.GetInstance().GetBudgetMap();
+        Map<Long, Category> catMap = CategoryModel.GetInstance().mIDToCategory;
+        final Map<String, Long> bgtNameIdMap = new HashMap<>();
+        final Map<String, Long> catNameIdMap = new HashMap<>();
+        final ArrayList<String> bgts = new ArrayList<>();
+        final ArrayList<String> cats = new ArrayList<>();
+
+        for (Map.Entry<Long, Budget> entry : bgtMap.entrySet()) {
+            Long bgtId = entry.getKey();
+            Budget bgt = entry.getValue();
+            bgtNameIdMap.put(bgt.getmName(), bgtId);
+            bgts.add(bgt.getmName());
+        }
+
+        for (Map.Entry<Long, Category> entry :catMap.entrySet()) {
+            Long catId = entry.getKey();
+            Category cat = entry.getValue();
+            catNameIdMap.put(cat.getmName(), catId);
+        }
+
+        ArrayAdapter<String> bgtAdapter =  new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,bgts);
+
+        final ArrayAdapter<String> catAdapter =  new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,cats);
+
+        bgtSpinner.setAdapter(bgtAdapter);
+        catSpinner.setAdapter(catAdapter);
+
+        bgtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> arg0, View arg1,int position, long arg3) {
+                cats.clear();
+                Long selectedBgtID = bgtNameIdMap.get(bgtSpinner.getSelectedItem());
+                List<Category> cList = BudgetModel.GetInstance().getCategoriesUnderBudget(selectedBgtID);
+                for(Category c: cList)
+                {
+                    cats.add(c.getmName());
+                    catAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+
+            }
+
+        });
+
+//        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+//                (this, android.R.layout.simple_spinner_item,
+//                        bgtArray); //selected item will look like a spinner set from XML
+//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+//                .simple_spinner_dropdown_item);
+//        bgtSpinner.setAdapter(spinnerArrayAdapter);
+//
+//        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
+//                (this, android.R.layout.simple_spinner_item,
+//                        bgtArray); //selected item will look like a spinner set from XML
+//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
+//                .simple_spinner_dropdown_item);
+//        bgtSpinner.setAdapter(spinnerArrayAdapter);
 
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
 
-                        Toast.makeText(getContext(), "Add Transaction!", Toast.LENGTH_SHORT).show();
+
+                        TransactionModel.GetInstance().addTransaction(
+                                new Transaction(Double.parseDouble(transAmount.getText().toString()),
+                                        catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
+                                        transNote.getText().toString(),
+                                        transYear,
+                                        transMonth,
+                                        transDay));
+
+                        String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
+                                catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
+                                transNote.getText().toString() + " " +
+                                transYear + " " +
+                                transMonth + " " +
+                                transDay;
+                        Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
 
                     }
                 })
@@ -245,6 +326,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 transDateText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
+                transYear = year;
+                transMonth = month;
+                transDay = dayOfMonth;
             }
         }, transYear, transMonth, transDay);
         datePickerDialog.show();
