@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         exists = sm.FilesExist();*/
     }
 
-    public void ResetPassword() {
+    public void ResetPassword(){
         Account.setEnabled(false);
         PassWord.setEnabled(false);
         String emailAdd = Account.getText().toString();
