@@ -14,13 +14,16 @@ public class Budget_card {
     private String date;
     private int period;
 
-    public Budget_card(String BudgetType, String date, int period, double limit, double current) {
+    private long id;
+
+    public Budget_card(String BudgetType, String date, int period, double limit, double current, long id) {
 
         this.BudgetType = BudgetType;
         this.limit = limit;
         this.current = current;
         this.date = date;
         this.period = period;
+        this.id = id;
 
     }
 
@@ -36,6 +39,7 @@ public class Budget_card {
     public double GetCurrent() { return current; }
     public String GetDate() { return date; }
     public int GetPeriod() { return period; }
+    public long GetId() { return id; }
 
 
     public void setBudgetType(String BudgetType) {

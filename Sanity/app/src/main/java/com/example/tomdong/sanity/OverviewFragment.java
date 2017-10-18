@@ -270,19 +270,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         });
 
-//        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
-//                (this, android.R.layout.simple_spinner_item,
-//                        bgtArray); //selected item will look like a spinner set from XML
-//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
-//                .simple_spinner_dropdown_item);
-//        bgtSpinner.setAdapter(spinnerArrayAdapter);
-//
-//        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>
-//                (this, android.R.layout.simple_spinner_item,
-//                        bgtArray); //selected item will look like a spinner set from XML
-//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout
-//                .simple_spinner_dropdown_item);
-//        bgtSpinner.setAdapter(spinnerArrayAdapter);
 
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
