@@ -42,6 +42,7 @@ import Model.Category;
 
 import Model.BudgetModel;
 import Model.Category;
+import Model.CategoryModel;
 
 import static android.content.ContentValues.TAG;
 
@@ -55,13 +56,16 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     private TextView BudgetPercent;
     private EditText edit_cat;
     private EditText edit_buddget_name;
-    private Long budget_id;
     Button editBgtDateButton;
     TextView editBgtDateText;
     SwipeMenuListView lv;
     private int editYear, editMonth, editDay;
     private long id;
 
+
+    EditText cat_add_dialog_Amount;
+    TextView cat_add_dialog_catype;
+    ListView cat_add_dialog_availableCat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +106,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         editDay = c.get(Calendar.DAY_OF_MONTH);
         editMonth = c.get(Calendar.MONTH);
         editYear = c.get(Calendar.YEAR);
-        budget_id=getIntent().getLongExtra("bgt_id",0);
+
         FloatingActionButton bgt_fab = (FloatingActionButton) findViewById(R.id.bgt_edit_fab);
         bgt_fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +115,13 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
             }
         });
 
+        FloatingActionButton add_cat_fab= (FloatingActionButton) findViewById(R.id.add_catTobudget_fab);
+        add_cat_fab.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                showAddCatToBudgetDialog();
+            }
+        });
 
     }
 
@@ -136,8 +147,41 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                        if(edit_cat.getText().toString().isEmpty()||edit_buddget_name.getText().toString().isEmpty()
                                ||editBgtDateText.getText().toString().isEmpty())
                        {
-                           Toast.makeText(BudgetViewActivity.this, "Email sent!!!", Toast.LENGTH_SHORT).show();
+                           Toast.makeText(BudgetViewActivity.this, "please fill out the form!!!", Toast.LENGTH_SHORT).show();
                        }
+                    }
+                })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+        // create an alert dialog
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
+    }
+
+    protected void showAddCatToBudgetDialog()
+    {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.cat_addtobudget_dialog, null);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+
+         cat_add_dialog_Amount=(EditText)promptView.findViewById(R.id.cat_addtobudget_dialog_catamount);
+         cat_add_dialog_catype=(TextView)promptView.findViewById(R.id.cat_addtobudget_dialog_cat_type);
+         cat_add_dialog_availableCat=(ListView)promptView.findViewById(R.id.cat_add_tobudget_dialog_listview);
+        GetOthercategoriesShows();
+        alertDialogBuilder.setCancelable(false)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if(cat_add_dialog_Amount.getText().toString().isEmpty()||cat_add_dialog_catype.getText().toString().isEmpty())
+                        {
+                            Toast.makeText(BudgetViewActivity.this, "please fill out the form !!!", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -163,13 +207,30 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         }, editYear, editMonth, editDay);
         datePickerDialog.show();
     }
+    public void GetOthercategoriesShows()
+    {
+        CategoryModel catmodel=CategoryModel.GetInstance();
+        ArrayList<Category>nlist= (ArrayList<Category>) catmodel.getAllNoUsedCategory();
+        ArrayList<String>catNames=new ArrayList<>();
+        for(int i=0;i<nlist.size();i++)
+        {
+            catNames.add(nlist.get(i).getmName());
+        }
+        final ArrayAdapter<String> adapter=new ArrayAdapter<String>(BudgetViewActivity.this,android.R.layout.simple_list_item_1,catNames);
+        cat_add_dialog_availableCat.setAdapter(adapter);
+        cat_add_dialog_availableCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position,
+                                    long id) {
 
+                cat_add_dialog_catype.setText(adapter.getItem(position));
+            }
+        });
+    }
     public void GetCategoriesShows()
     {
-        Long temp=1508211333309L;
-        budget_id=temp;
         BudgetModel bmodel=BudgetModel.GetInstance();
-       ArrayList<Category>nlist= (ArrayList<Category>) bmodel.getCategoriesUnderBudget(budget_id);
+       ArrayList<Category>nlist= (ArrayList<Category>) bmodel.getCategoriesUnderBudget(id);
         ArrayList<String>catNames=new ArrayList<>();
         for(int i=0;i<nlist.size();i++)
         {

@@ -8,22 +8,23 @@
 
     <TextView
         android:id="@+id/edit_bgt_date"
-        android:layout_width="213dp"
-        android:layout_height="43dp"
+        android:layout_width="203dp"
+        android:layout_height="49dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toTopOf="@+id/edit_bgt_period"
+        android:layout_marginEnd="16dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="16dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="yyyy/mm/dd"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toTopOf="@+id/edit_bgt_period"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintVertical_bias="0.875"
-        android:layout_marginLeft="8dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:textSize="25dp"
-        android:gravity="center"
-        app:layout_constraintHorizontal_bias="0.897"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp" />
+        app:layout_constraintVertical_bias="0.964" />
 
     <TextView
         android:id="@+id/textView10"
@@ -45,9 +46,9 @@
         android:layout_width="60dp"
         android:layout_height="39dp"
         android:text="Days"
-        android:layout_marginBottom="262dp"
+        android:layout_marginBottom="259dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
-        android:layout_marginRight="31dp"
+        android:layout_marginRight="36dp"
         android:textSize="25dp"
         android:gravity="center"
         app:layout_constraintRight_toRightOf="parent"
@@ -55,19 +56,22 @@
 
     <EditText
         android:id="@+id/edit_bgt_name"
-        android:layout_width="158dp"
-        android:layout_height="40dp"
-        android:hint="Budget Name"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="120dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginRight="8dp"
-
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp" />
+        android:layout_marginTop="16dp"
+        android:hint="Budget Name"
+
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/edit_bgt_period"
@@ -79,7 +83,7 @@
         app:layout_constraintLeft_toRightOf="@+id/textView10"
         android:layout_marginLeft="8dp"
         app:layout_constraintHorizontal_bias="0.571"
-        android:layout_marginBottom="260dp"
+        android:layout_marginBottom="257dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="25dp" />
@@ -106,8 +110,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/guideline7"
-        app:layout_constraintGuide_begin="440dp"
+        app:layout_constraintGuide_begin="436dp"
         android:orientation="horizontal" />
+
+    <EditText
+        android:id="@+id/edit_catgory_name"
+        android:layout_width="102dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Select a category"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.548" />
 
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:id="@+id/budget_edit_catgoryList"
@@ -118,30 +140,28 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="173dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.87"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.875"
-        tools:layout_editor_absoluteY="186dp"
-        tools:layout_editor_absoluteX="17dp" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <EditText
-        android:id="@+id/edit_catgory_name"
-        android:layout_width="172dp"
-        android:layout_height="44dp"
+        android:id="@+id/editText"
+        android:layout_width="95dp"
+        android:layout_height="39dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="180dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Category Name"
+        android:hint="Amount"
         android:inputType="textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
-        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintHorizontal_bias="0.97"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.02" />
 
 </android.support.constraint.ConstraintLayout>
