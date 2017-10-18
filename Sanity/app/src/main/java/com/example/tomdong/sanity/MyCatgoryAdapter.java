@@ -51,7 +51,7 @@ public class MyCatgoryAdapter extends ArrayAdapter<Category_card> {
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 convertView = inflater.inflate(mResource, parent, false);
                 holder = new ViewHolder();
-                holder.CategoryType = (TextView) convertView.findViewById(R.id.cat_id);
+                holder.CategoryType = (TextView) convertView.findViewById(R.id.mng_cat_name);
                 holder.CategoryType.setText(mList.get(position).GetCatoryType());
                 result = convertView;
                 convertView.setTag(holder);
