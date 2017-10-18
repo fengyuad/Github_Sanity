@@ -102,43 +102,30 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 
 
     public void sendNotification() {
-        Log.d("test", "notify");
-        int id = 1;
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.app_icon);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        String text = "";
+        for(String s: CategoryModel.GetInstance().getNotification()){
+            text += s;
+        }
+        for(String s: BudgetModel.GetInstance().getNotification()){
+            text += s;
+        }
+        if(!text.isEmpty()){
+            int id = 1;
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.app_icon);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
 
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
-        //设置小图标
-        mBuilder.setSmallIcon(R.drawable.app_icon);
-        //设置大图标
-        mBuilder.setLargeIcon(bitmap);
-        //设置标题
-        mBuilder.setContentTitle("这是标题");
-        //设置通知正文
-        mBuilder.setContentText("这是正文，当前ID是：" + id);
-        //设置摘要
-//        mBuilder.setSubText("这是摘要");
-//        //设置是否点击消息后自动clean
-//        mBuilder.setAutoCancel(true);
-//        //显示指定文本
-//        mBuilder.setContentInfo("Info");
-//        //与setContentInfo类似，但如ssen果设置了setContentInfo则无效果
-//        //用于当显示了多个相同ID的Notification时，显示消息总数
-//        mBuilder.setNumber(2);
-//        //通知在状态栏显示时的文本
-//        mBuilder.setTicker("在状态栏上显示的文本");
-//        //设置优先级
-//        mBuilder.setPriority(NotificationCompat.PRIORITY_MAX);
-//
-//        mBuilder.setOngoing(true);
-
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
-        mBuilder.setContentIntent(pIntent);
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(id++, mBuilder.build());
-
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+            //设置小图标
+            mBuilder.setSmallIcon(R.drawable.app_icon);
+            //设置大图标
+            mBuilder.setLargeIcon(bitmap);
+            //设置标题
+            mBuilder.setContentTitle("Sanity Reminding");
+            //设置通知正文
+            mBuilder.setContentText(text);
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(id++, mBuilder.build());
+        }
 
     }
 
