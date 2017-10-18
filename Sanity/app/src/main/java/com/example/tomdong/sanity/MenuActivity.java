@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import com.example.tomdong.sanity.dummy.DummyContent;
 import com.google.firebase.auth.FirebaseAuth;
 
+import Model.Variable;
+
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         BudgetFragment.OnListFragmentInteractionListener,
@@ -29,6 +31,8 @@ public class MenuActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
 
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

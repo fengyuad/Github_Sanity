@@ -11,8 +11,5 @@ public class Model {
     protected String mUserID = Variable.GetInstance().getmUserID();
     protected DatabaseReference mDatabase;
 
-    public void updateDBTime(){
-        FirebaseDatabase.getInstance().getReference(mUserID).child("update").setValue(System.currentTimeMillis());
-    }
 
 }

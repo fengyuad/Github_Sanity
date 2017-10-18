@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         //Declare and Initialization
         firebaseAuth = FirebaseAuth.getInstance();
         SanityImage = findViewById(R.id.SanityImage);
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
-        sendNotification();
+
         StorageModel.GetInstance().DeleteFiles();
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null)
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 //        mBuilder.setAutoCancel(true);
 //        //显示指定文本
 //        mBuilder.setContentInfo("Info");
-//        //与setContentInfo类似，但如果设置了setContentInfo则无效果
+//        //与setContentInfo类似，但如ssen果设置了setContentInfo则无效果
 //        //用于当显示了多个相同ID的Notification时，显示消息总数
 //        mBuilder.setNumber(2);
 //        //通知在状态栏显示时的文本
