@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import Model.BudgetModel;
 import Model.Category;
+import Model.CategoryModel;
 
 import static android.content.ContentValues.TAG;
 
@@ -91,7 +92,7 @@ public class CategoryFragment extends Fragment {
                 showAddCatDialog();
             }
         });
-
+         GetCategoriesShows();
         // Set the adapter
         return view;
     }
@@ -145,8 +146,8 @@ public class CategoryFragment extends Fragment {
     public void GetCategoriesShows()
     {
 
-        BudgetModel bmodel=BudgetModel.GetInstance();
-        ArrayList<Category>nlist= (ArrayList<Category>) bmodel.getCategoriesUnderBudget(1L);
+        final CategoryModel catModel=CategoryModel.GetInstance();
+        ArrayList<Category>nlist= (ArrayList<Category>) catModel.GetAllCategories();
         ArrayList<String>catNames=new ArrayList<>();
         for(int i=0;i<nlist.size();i++)
         {
@@ -177,7 +178,9 @@ public class CategoryFragment extends Fragment {
                 switch (index) {
                     case 0:
                         Log.e(TAG, "Delete Position: " + position);
+                      //  catModel.DeleteCategoryAndUpdateDatabase(adapter.getItem(position));
                         adapter.remove(adapter.getItem(position));
+
                         break;
                 }
                 // false : close the menu; true : not close the menu

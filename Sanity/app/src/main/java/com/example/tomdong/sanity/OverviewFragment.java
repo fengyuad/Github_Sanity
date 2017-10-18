@@ -138,7 +138,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         yvalues.add(new PieEntry(23f,"Russia"));
 */
 
-        PieDataSet dataSet = new PieDataSet(yvalues, "Counntries");
+        PieDataSet dataSet = new PieDataSet(yvalues, "countries");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);

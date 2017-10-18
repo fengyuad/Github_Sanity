@@ -16,7 +16,6 @@ public class Budget implements Serializable {
     private long mDueTime = 0;
     private int mPeriod = 0;
     private double mAmount = 0.0;
-    private double mPrevAmount = 0.0;
     private double mTotalAmount = 0.0;
     private List<Long> mCatIds = new ArrayList<>();
 
@@ -59,12 +58,18 @@ public class Budget implements Serializable {
         mTotalAmount = totalAmount;
     }
 
+    public void UpdateAmountLimit() {
+        double tempAmount = 0.0;
+        for (Long catId : mCatIds)
+            tempAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
+        mAmount = tempAmount;
+    }
+
     /**
      * Reset budget if it's time (should be triggered somewhere)
      */
     public void ResetBudget() {
         // If new period
-        UpdateTotalAmount();
         /*Calendar rightNow = Calendar.getInstance();
         if (mIsWeek)
         {
@@ -80,8 +85,12 @@ public class Budget implements Serializable {
 
         }*/
         if (mDueTime <= System.currentTimeMillis() / 1000) {
-            mPrevAmount = mTotalAmount;
             mDueTime += 86400 * mPeriod;
+            for (Long catId : mCatIds)
+                CategoryModel.GetInstance().GetCategoryById(catId).Reset();
+            UpdateTotalAmount();
+            UpdateAmountLimit();
+            BudgetModel.GetInstance().CloudSet(this);
         }
     }
     //</editor-fold>
@@ -113,7 +122,6 @@ public class Budget implements Serializable {
     //<editor-fold desc="Getters and Setters">
     /* =============== Getters and Setters =============== */
 
-
     /**
      * Getter
      *
@@ -124,13 +132,6 @@ public class Budget implements Serializable {
         return mAmount;
     }
 
-    public void UpdateAmountLimit() {
-        double tempAmount = 0.0;
-        for (Long catId : mCatIds)
-            tempAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
-        mAmount = tempAmount;
-    }
-
     /**
      * return current budget balance
      *
@@ -138,7 +139,7 @@ public class Budget implements Serializable {
      */
     public double GetCurrAmount() {
         UpdateTotalAmount();
-        return mTotalAmount - mPrevAmount;
+        return mTotalAmount;
     }
 
     /**
@@ -220,24 +221,6 @@ public class Budget implements Serializable {
      */
     public void setmCatIds(List<Long> mCatIds) {
         this.mCatIds = mCatIds;
-    }
-
-    /**
-     * Getter
-     *
-     * @return mPrevAmount
-     */
-    public double getmPrevAmount() {
-        return mPrevAmount;
-    }
-
-    /**
-     * Setter
-     *
-     * @param mPrevAmount
-     */
-    public void setmPrevAmount(double mPrevAmount) {
-        this.mPrevAmount = mPrevAmount;
     }
     //</editor-fold>
 }
