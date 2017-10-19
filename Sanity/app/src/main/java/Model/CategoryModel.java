@@ -164,7 +164,7 @@ public class CategoryModel extends Model implements Serializable {
 
         for (Long l : mIDToCategory.keySet()) {
             Category cat = mIDToCategory.get(l);
-            if (cat.getmCurrentAmount() >= cat.getmAmount() * threshold) {
+            if (cat.getmCurrentAmount() > cat.getmAmount() * threshold) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(cat.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
