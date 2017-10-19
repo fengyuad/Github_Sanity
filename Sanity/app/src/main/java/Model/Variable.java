@@ -1,8 +1,5 @@
 package Model;
 
-import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
-
 import java.io.Serializable;
 
 /**
@@ -67,7 +64,6 @@ public class Variable implements Serializable {
     public void setmUpdateTime(Long mUpdateTime) {
         this.mUpdateTime = mUpdateTime;
     }
-
 
 
 }

@@ -87,7 +87,7 @@ public class BudgetModel extends Model implements Serializable {
                 sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
                 sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)"); // time remaining
                 ret.add(sb.toString());
-            }else if(budget.GetCurrAmount() > budget.GetAmountLimit()){
+            } else if (budget.GetCurrAmount() > budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has exceeded limit. \n"); // name of the category
                 sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
@@ -131,7 +131,7 @@ public class BudgetModel extends Model implements Serializable {
     public List<Category> getCategoriesUnderBudget(Long budgetId) {
         List<Category> cats = new ArrayList<>();
         CategoryModel catModel = CategoryModel.GetInstance();
-    
+
         for (Long l : getBudgetById(budgetId).getmCatIds()) {
             cats.add(catModel.GetCategoryById(l));
         }
@@ -328,7 +328,7 @@ public class BudgetModel extends Model implements Serializable {
      * @param catId    category ID
      */
     public void CategoryAdded(long budgetId, long catId) {
-        if(budgetId == 0) return;
+        if (budgetId == 0) return;
         mBudgetMap.get(budgetId).AddCatId(catId);
         CalcTotalAmount(budgetId);
     }

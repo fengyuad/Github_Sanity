@@ -7,18 +7,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PointerIconCompat;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.swipemenulistview.SwipeMenu;
@@ -29,7 +23,6 @@ import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
 
-import Model.BudgetModel;
 import Model.Category;
 import Model.CategoryModel;
 
@@ -45,13 +38,11 @@ public class CategoryFragment extends Fragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    SwipeMenuListView mListView;
+    MyCatgoryAdapter adapter = null;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-
-    SwipeMenuListView mListView;
-
-    MyCatgoryAdapter adapter = null;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -84,7 +75,7 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_category_list, container, false);
-        mListView=view.findViewById(R.id.my_catgory_listview);
+        mListView = view.findViewById(R.id.my_catgory_listview);
 
         FloatingActionButton addBgtFab = (FloatingActionButton) view.findViewById(R.id.add_cat_fab);
         addBgtFab.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +121,7 @@ public class CategoryFragment extends Fragment {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Toast.makeText(getContext(),"Add Category!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Add Category!", Toast.LENGTH_SHORT).show();
                         Category catToAdd = new Category(addCatText.getText().toString(), 0L);
                         CategoryModel.GetInstance().WriteCategoryAndUpdateDatabase(catToAdd);
                         adapter.Add(new Category_card(addCatText.getText().toString(), 0, 0, catToAdd.getmID()));
@@ -147,17 +138,16 @@ public class CategoryFragment extends Fragment {
         AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }
-    public void GetCategoriesShows()
-    {
 
-        final CategoryModel catModel=CategoryModel.GetInstance();
-        ArrayList<Category>nlist= (ArrayList<Category>) catModel.GetAllCategories();
-        ArrayList<Category_card>catNames=new ArrayList<>();
-        for(int i=0;i<nlist.size();i++)
-        {
+    public void GetCategoriesShows() {
+
+        final CategoryModel catModel = CategoryModel.GetInstance();
+        ArrayList<Category> nlist = (ArrayList<Category>) catModel.GetAllCategories();
+        ArrayList<Category_card> catNames = new ArrayList<>();
+        for (int i = 0; i < nlist.size(); i++) {
             catNames.add(new Category_card(nlist.get(i).getmName(), 0, 0, nlist.get(i).getmID()));
         }
-        adapter=new MyCatgoryAdapter(getContext(),R.layout.fragment_category,catNames);
+        adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, catNames);
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
 
@@ -191,6 +181,7 @@ public class CategoryFragment extends Fragment {
             }
         });
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
