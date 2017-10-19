@@ -229,9 +229,8 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         //TODO
                         double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
                         String CatType=cat_add_dialog_catype.getText().toString();
-                        CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
-                        CategoryModel.GetInstance().UpdateBudgetIdAndUpdateDatabase(catid,id);
                         BudgetModel.GetInstance().AddACategory(id, catid);
+                        CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
                         GetDataAndUpdateGUI();
                     }
                 })

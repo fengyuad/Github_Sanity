@@ -164,8 +164,11 @@ public class BudgetModel extends Model implements Serializable {
             Budget curr = mBudgetMap.get(budgetId);
             // Update
             curr.AddCatId(catId);
+            // Let Category know
+            CategoryModel.GetInstance().UpdateBudgetIdAndUpdateDatabase(catId, budgetId);
+            // Update Firebase
             CloudSet(curr);
-            LocalUpdate();
+            StorageModel.GetInstance().SaveAll();
             return true;
         } else {
             return false;

@@ -285,6 +285,7 @@ public class CategoryModel extends Model implements Serializable {
             mDatabase.child(catID.toString()).removeValue();
             FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
             Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+            StorageModel.GetInstance().SaveAll();
             return;
         }
         for (Long l : mIDToCategory.get(catID).getmTransactionIDs()) {
@@ -298,6 +299,7 @@ public class CategoryModel extends Model implements Serializable {
         mDatabase.child(catID.toString()).removeValue();
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+        StorageModel.GetInstance().SaveAll();
     }
 
     /**
