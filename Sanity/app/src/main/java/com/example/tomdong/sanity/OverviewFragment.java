@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +19,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
-
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +40,10 @@ import java.util.Map;
 
 import Model.Budget;
 import Model.BudgetModel;
-
-import Model.*;
+import Model.Category;
+import Model.CategoryModel;
+import Model.Transaction;
+import Model.TransactionModel;
 
 
 /**
@@ -71,7 +68,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private OnFragmentInteractionListener mListener;
     private TextView transDateText;
     private int transYear, transMonth, transDay;
-    private Map<PieEntry,Long> pieMap = new HashMap<>();
+    private Map<PieEntry, Long> pieMap = new HashMap<>();
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -141,7 +138,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         yvalues.add(new PieEntry(23f,"Russia"));
 */
 
-        PieDataSet dataSet = new PieDataSet(yvalues, "countries");
+        PieDataSet dataSet = new PieDataSet(yvalues, "Budgets");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -210,8 +207,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         // get input_dialog.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setView(promptView);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext()).setView(promptView);
 
         final EditText transAmount = (EditText) promptView.findViewById(R.id.trans_amt);
         final EditText transNote = (EditText) promptView.findViewById((R.id.trans_note));
@@ -236,15 +232,15 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             bgts.add(bgt.getmName());
         }
 
-        for (Map.Entry<Long, Category> entry :catMap.entrySet()) {
+        for (Map.Entry<Long, Category> entry : catMap.entrySet()) {
             Long catId = entry.getKey();
             Category cat = entry.getValue();
             catNameIdMap.put(cat.getmName(), catId);
         }
 
-        ArrayAdapter<String> bgtAdapter =  new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,bgts);
+        ArrayAdapter<String> bgtAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, bgts);
 
-        final ArrayAdapter<String> catAdapter =  new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,cats);
+        final ArrayAdapter<String> catAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, cats);
 
         bgtSpinner.setAdapter(bgtAdapter);
         catSpinner.setAdapter(catAdapter);
@@ -252,12 +248,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         bgtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
-            public void onItemSelected(AdapterView<?> arg0, View arg1,int position, long arg3) {
+            public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 cats.clear();
                 Long selectedBgtID = bgtNameIdMap.get(bgtSpinner.getSelectedItem());
                 List<Category> cList = BudgetModel.GetInstance().getCategoriesUnderBudget(selectedBgtID);
-                for(Category c: cList)
-                {
+                for (Category c : cList) {
                     cats.add(c.getmName());
                     catAdapter.notifyDataSetChanged();
                 }
@@ -275,24 +270,24 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-
-                        TransactionModel.GetInstance().addTransaction(
-                                new Transaction(Double.parseDouble(transAmount.getText().toString()),
-                                        catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
-                                        transNote.getText().toString(),
-                                        transYear,
-                                        transMonth,
-                                        transDay));
-
-                        String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
-                                catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
-                                transNote.getText().toString() + " " +
-                                transYear + " " +
-                                transMonth + " " +
-                                transDay;
-                        Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
-
+                        if (transAmount.getText().toString().isEmpty()) {
+                            Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
+                        } else {
+                            TransactionModel.GetInstance().addTransaction(
+                                    new Transaction(Double.parseDouble(transAmount.getText().toString()),
+                                            catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
+                                            transNote.getText().toString(),
+                                            transYear,
+                                            transMonth,
+                                            transDay));
+                            String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
+                                    catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
+                                    transNote.getText().toString() + " " +
+                                    transYear + " " +
+                                    transMonth + " " +
+                                    transDay;
+                            Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel",
