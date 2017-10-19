@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
 //        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, new ArrayList<Long>()));
 
 
+        sendNotification();
 
     }
 
