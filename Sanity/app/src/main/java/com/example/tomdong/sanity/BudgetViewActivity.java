@@ -133,6 +133,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
 
         CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
         CateGory_ListView.setAdapter(adapter);
+        sendNotification();
     }
 
     protected void showEditDialog() {

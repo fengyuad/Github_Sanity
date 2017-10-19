@@ -141,7 +141,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         yvalues.add(new PieEntry(23f,"Russia"));
 */
 
-        PieDataSet dataSet = new PieDataSet(yvalues, "countries");
+        PieDataSet dataSet = new PieDataSet(yvalues, "Budgets");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
         dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
@@ -210,8 +210,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         // get input_dialog.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setView(promptView);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext()).setView(promptView);
 
         final EditText transAmount = (EditText) promptView.findViewById(R.id.trans_amt);
         final EditText transNote = (EditText) promptView.findViewById((R.id.trans_note));
@@ -275,21 +274,26 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        TransactionModel.GetInstance().addTransaction(
-                                new Transaction(Double.parseDouble(transAmount.getText().toString()),
-                                        catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
-                                        transNote.getText().toString(),
-                                        transYear,
-                                        transMonth,
-                                        transDay));
-                        String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
-                                catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
-                                transNote.getText().toString() + " " +
-                                transYear + " " +
-                                transMonth + " " +
-                                transDay;
-                        Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
-
+                        if (transAmount.getText().toString().isEmpty())
+                        {
+                            Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            TransactionModel.GetInstance().addTransaction(
+                                    new Transaction(Double.parseDouble(transAmount.getText().toString()),
+                                            catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
+                                            transNote.getText().toString(),
+                                            transYear,
+                                            transMonth,
+                                            transDay));
+                            String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
+                                    catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
+                                    transNote.getText().toString() + " " +
+                                    transYear + " " +
+                                    transMonth + " " +
+                                    transDay;
+                            Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 })
                 .setNegativeButton("Cancel",
