@@ -275,8 +275,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
-
                         TransactionModel.GetInstance().addTransaction(
                                 new Transaction(Double.parseDouble(transAmount.getText().toString()),
                                         catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
@@ -284,7 +282,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                                         transYear,
                                         transMonth,
                                         transDay));
-
                         String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
                                 catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
                                 transNote.getText().toString() + " " +

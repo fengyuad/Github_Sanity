@@ -199,6 +199,7 @@ public class CategoryModel extends Model implements Serializable {
             mDatabase.child(catId.toString()).child("mBudgetID").setValue(budgetId);
             FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
             Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+            StorageModel.GetInstance().SaveAll();
             return true;
         } else {
             return false;
@@ -314,6 +315,7 @@ public class CategoryModel extends Model implements Serializable {
         mDatabase.child(id.toString()).child("mName").setValue(name);
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+        StorageModel.GetInstance().SaveAll();
         return true;
     }
 
@@ -329,6 +331,7 @@ public class CategoryModel extends Model implements Serializable {
         BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+        StorageModel.GetInstance().SaveAll();
     }
 
     /**
@@ -344,6 +347,7 @@ public class CategoryModel extends Model implements Serializable {
         BudgetModel.GetInstance().CalcTotalAmount(mIDToCategory.get(catID).getmBudgetID());
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+        StorageModel.GetInstance().SaveAll();
     }
 
     /**
@@ -354,5 +358,6 @@ public class CategoryModel extends Model implements Serializable {
         mDatabase.child(cat.toString()).setValue(cat);
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+        StorageModel.GetInstance().SaveAll();
     }
 }
