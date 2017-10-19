@@ -79,12 +79,18 @@ public class BudgetModel extends Model implements Serializable {
         int frequency = Variable.GetInstance().getmFrequency();
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
-            if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold) {
+            if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold && budget.GetCurrAmount() <= budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
                 sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
-                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + "Day(s)"); // time remaining
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + " Day(s)"); // time remaining
+                ret.add(sb.toString());
+            }else if(budget.GetCurrAmount() > budget.GetAmountLimit()){
+                StringBuilder sb = new StringBuilder();
+                sb.append(budget.getmName() + " has exceeded limit "); // name of the category
+                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + " Day(s)"); // time remaining
                 ret.add(sb.toString());
             }
         }

@@ -164,10 +164,16 @@ public class CategoryModel extends Model implements Serializable {
 
         for (Long l : mIDToCategory.keySet()) {
             Category cat = mIDToCategory.get(l);
-            if (cat.getmCurrentAmount() > cat.getmAmount() * threshold) {
+            if (cat.getmCurrentAmount() > cat.getmAmount() * threshold && cat.getmCurrentAmount() <= cat.getmAmount()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(cat.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
+                sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
+                sb.append("Time remaining: "); // time remaining
+                ret.add(sb.toString());
+            }else if(cat.getmCurrentAmount() > cat.getmAmount()){
+                StringBuilder sb = new StringBuilder();
+                sb.append(cat.getmName() + " has reached limit"); // name of the category
                 sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
                 sb.append("Time remaining: "); // time remaining
                 ret.add(sb.toString());
