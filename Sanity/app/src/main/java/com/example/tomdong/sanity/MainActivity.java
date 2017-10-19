@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         }
         if (view == ForgetPassword) {
             Log.d("MyApp", "Forget");
-            StorageModel.GetInstance().DeleteFiles();
+            // StorageModel.GetInstance().DeleteFiles();
             ResetPassword();
         }
         // 下面的Code不要删！测试用
@@ -256,6 +256,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Register Succeeded", Toast.LENGTH_SHORT).show();
+                    StartActivity();
                 } else {
                     Account.setEnabled(true);
                     PassWord.setEnabled(true);
