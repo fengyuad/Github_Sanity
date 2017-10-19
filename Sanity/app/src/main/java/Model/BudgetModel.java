@@ -124,6 +124,7 @@ public class BudgetModel extends Model implements Serializable {
     public List<Category> getCategoriesUnderBudget(Long budgetId) {
         List<Category> cats = new ArrayList<>();
         CategoryModel catModel = CategoryModel.GetInstance();
+    
         for (Long l : getBudgetById(budgetId).getmCatIds()) {
             cats.add(catModel.GetCategoryById(l));
         }
