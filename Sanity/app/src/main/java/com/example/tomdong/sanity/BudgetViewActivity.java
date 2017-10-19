@@ -87,32 +87,12 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
 
         id = getIntent().getExtras().getLong("bgtID");
 
-        ArrayList<Category_card> list = new ArrayList<>();
-
-        List<Category> catList = BudgetModel.GetInstance().getCategoriesUnderBudget(id);
-        double bgtTotal = 0;
-        double bgtCurr = 0;
-
-        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()*1000));
-
-        for (Category c : catList) {
-            list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount(), c.getmID()));
-            bgtCurr += c.getmCurrentAmount();
-            bgtTotal += c.getmAmount();
-        }
-
-        int bgtProgress = (int)((bgtCurr/bgtTotal)*100);
-
-        TextView bgtPct = (TextView) findViewById(R.id.budget_percent);
-        bgtPct.setText(Integer.toString(bgtProgress) + "%");
-
-        TextView bgtDue = (TextView) findViewById(R.id.Budget_time);
-        bgtDue.setText("Due on: " + dueDate);
 
 
-        CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
-        CateGory_ListView.setAdapter(adapter);
+
+        GetDataAndUpdateGUI();
+
+
         final Calendar c = Calendar.getInstance();
         editDay = c.get(Calendar.DAY_OF_MONTH);
         editMonth = c.get(Calendar.MONTH);
@@ -137,7 +117,33 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         sendNotification();
 
     }
+    protected  void GetDataAndUpdateGUI()
+    {
+        ArrayList<Category_card> list = new ArrayList<>();
+        List<Category> catList = BudgetModel.GetInstance().getCategoriesUnderBudget(id);
+        double bgtTotal = 0;
+        double bgtCurr = 0;
 
+        DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()*1000));
+
+        for (Category c : catList) {
+            list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount(), c.getmID()));
+            bgtCurr += c.getmCurrentAmount();
+            bgtTotal += c.getmAmount();
+        }
+
+        int bgtProgress = (int)((bgtCurr/bgtTotal)*100);
+
+        TextView bgtPct = (TextView) findViewById(R.id.budget_percent);
+        bgtPct.setText(Integer.toString(bgtProgress) + "%");
+
+        TextView bgtDue = (TextView) findViewById(R.id.Budget_time);
+        bgtDue.setText("Due on: " + dueDate);
+
+        CustomCardAdapter adapter = new CustomCardAdapter(this, R.layout.card_layout, list);
+        CateGory_ListView.setAdapter(adapter);
+    }
     protected void showEditDialog() {
 
         // get input_dialog.xml view
@@ -183,6 +189,8 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
                         BudgetModel.GetInstance().UpdateBudget(id, dueDate.getTime(), period);
                         BudgetModel.GetInstance().UpdateBudget(id, budgetName);
+                        GetDataAndUpdateGUI();
+
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -218,14 +226,13 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form !!!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                         //TODO
                         double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
                         String CatType=cat_add_dialog_catype.getText().toString();
                         CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
                         CategoryModel.GetInstance().UpdateBudgetIdAndUpdateDatabase(catid,id);
                         BudgetModel.GetInstance().AddACategory(id, catid);
-                        // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
+                        GetDataAndUpdateGUI();
                     }
                 })
                 .setNegativeButton("Cancel",
@@ -271,7 +278,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                                     long idx) {
 
                 cat_add_dialog_catype.setText(adapter.getItem(position));
-                id=nlist.get(position).getmID();
+                catid=nlist.get(position).getmID();
             }
         });
     }

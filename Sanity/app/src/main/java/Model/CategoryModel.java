@@ -216,6 +216,7 @@ public class CategoryModel extends Model implements Serializable {
             FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
             Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
             BudgetModel.GetInstance().CalcTotalAmount(curr.getmBudgetID());
+            StorageModel.GetInstance().SaveAll();
             return true;
         } else {
             return false;

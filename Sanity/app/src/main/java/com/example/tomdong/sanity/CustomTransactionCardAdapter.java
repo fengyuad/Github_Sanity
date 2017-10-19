@@ -71,7 +71,6 @@ public class CustomTransactionCardAdapter extends ArrayAdapter<Transaction_card>
             holder.Note.setText(mList.get(position).GetNote());
             holder.amount.setText("Amount: "+mList.get(position).GetAmount());
             lastPosition = position;
-
              return convertView;
 
     }

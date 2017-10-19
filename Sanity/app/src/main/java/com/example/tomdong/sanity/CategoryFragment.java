@@ -90,10 +90,11 @@ public class CategoryFragment extends Fragment {
         addBgtFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 showAddCatDialog();
             }
         });
-         GetCategoriesShows();
+        GetCategoriesShows();
         // Set the adapter
         return view;
     }
