@@ -324,10 +324,16 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 // TODO: NEED UPDATE TIME FROM FIREBASE
                 //if (Variable.GetInstance().getmUpdateTime())
                 BudgetModel.GetInstance().ResetAllBudgets();
+                BudgetModel.GetInstance().InitDataBase();
+                CategoryModel.GetInstance().InitDataBase();
+                TransactionModel.GetInstance().InitDataBase();
                 StartActivity();
             }
         } else {
             // If not, load from firebase
+            BudgetModel.GetInstance().InitDataBase();
+            CategoryModel.GetInstance().InitDataBase();
+            TransactionModel.GetInstance().InitDataBase();
             ReadModelsFromFirebase();
         }
     }

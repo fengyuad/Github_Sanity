@@ -65,7 +65,7 @@ public class CategoryModel extends Model implements Serializable {
 
     public void InitDataBase() {
         mUserID = Variable.GetInstance().getmUserID();
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("category");
     }
 
     /**
