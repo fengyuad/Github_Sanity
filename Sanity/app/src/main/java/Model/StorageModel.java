@@ -6,6 +6,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
@@ -83,20 +84,31 @@ public class StorageModel {
      *
      * @return <b>boolean</b> Success or not
      */
-    public boolean DeleteFiles() {
+    public void DeleteFiles() {
         File file = mContext.getFileStreamPath("SanityVariable.dat");
-        if (!file.delete())
-            return false;
+        try {
+            file.delete();
+        } catch (Exception e) {
+            System.err.println("StorageModel: Couldn't delete SanityVariable.dat");
+        }
         file = mContext.getFileStreamPath("SanityBudgetModel.dat");
-        if (!file.delete())
-            return false;
+        try {
+            file.delete();
+        } catch (Exception e) {
+            System.err.println("StorageModel: Couldn't delete SanityBudgetModel.dat");
+        }
         file = mContext.getFileStreamPath("SanityCategoryModel.dat");
-        if (!file.delete())
-            return false;
+        try {
+            file.delete();
+        } catch (Exception e) {
+            System.err.println("StorageModel: Couldn't delete SanityCategoryModel.dat");
+        }
         file = mContext.getFileStreamPath("SanityTransactionModel.dat");
-        if (!file.delete())
-            return false;
-        return true;
+        try {
+            file.delete();
+        } catch (Exception e) {
+            System.err.println("StorageModel: Couldn't delete SanityTransactionModel.dat");
+        }
     }
     //</editor-fold>
 
