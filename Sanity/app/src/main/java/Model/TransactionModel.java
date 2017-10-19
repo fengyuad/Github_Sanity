@@ -29,7 +29,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
 
     public void InitDataBase() {
         mUserID = Variable.GetInstance().getmUserID();
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/transaction");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("transaction");
     }
 
     public static TransactionModel GetInstance() {

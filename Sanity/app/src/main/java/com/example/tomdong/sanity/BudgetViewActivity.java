@@ -210,13 +210,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                             return;
                         }
 
-                       ////TODO
+                        //TODO
                         double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
                         String CatType=cat_add_dialog_catype.getText().toString();
-                        CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
-                       // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
-
-
+                        CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
+                        // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
                     }
                 })
                 .setNegativeButton("Cancel",
