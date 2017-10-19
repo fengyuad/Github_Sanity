@@ -8,13 +8,15 @@ public class Category_card {
     private String BudgetType;
     private double curr;
     private double limit;
+    private long id;
 
 
-    public Category_card(String CatoryType, double curr, double limit) {
+    public Category_card(String CatoryType, double curr, double limit, long id) {
         //this.BudgetType = BudgetType;
         this.CatoryType = CatoryType;
         this.curr = curr;
         this.limit = limit;
+        this.id = id;
     }
 
     public String GetBudgetType() {
@@ -27,6 +29,8 @@ public class Category_card {
 
     public double GetCatCurr() { return curr; }
     public double GetCatLimit() { return limit; }
+
+    public long GetId() { return id; }
 
     public void setCatoryType(String CatoryType) {
         this.CatoryType = CatoryType;
