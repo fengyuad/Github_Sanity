@@ -196,15 +196,23 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
          cat_add_dialog_Amount=(EditText)promptView.findViewById(R.id.cat_addtobudget_dialog_catamount);
          cat_add_dialog_catype=(TextView)promptView.findViewById(R.id.cat_addtobudget_dialog_cat_type);
          cat_add_dialog_availableCat=(ListView)promptView.findViewById(R.id.cat_add_tobudget_dialog_listview);
+
+
         GetOthercategoriesShows();
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(DialogInterface dialog, int idx) {
                         if(cat_add_dialog_Amount.getText().toString().isEmpty()||cat_add_dialog_catype.getText().toString().isEmpty())
                         {
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form !!!", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
+                       ////TODO
+                        double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
+                        String CatType=cat_add_dialog_catype.getText().toString();
+                        CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
+                       // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
 
 
                     }
@@ -238,7 +246,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     public void GetOthercategoriesShows()
     {
         CategoryModel catmodel=CategoryModel.GetInstance();
-        ArrayList<Category>nlist= (ArrayList<Category>) catmodel.getAllNoUsedCategory();
+        final ArrayList<Category>nlist= (ArrayList<Category>) catmodel.getAllNoUsedCategory();
         ArrayList<String>catNames=new ArrayList<>();
         for(int i=0;i<nlist.size();i++)
         {
@@ -249,9 +257,10 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         cat_add_dialog_availableCat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
-                                    long id) {
+                                    long idx) {
 
                 cat_add_dialog_catype.setText(adapter.getItem(position));
+                id=nlist.get(position).getmID();
             }
         });
     }
