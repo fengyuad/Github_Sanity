@@ -327,11 +327,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         // 更新Budget的amount
                         BudgetModel.GetInstance().CalcTotalAmount(budgetID);
                         adapter.remove(adapter.getItem(position));
-<<<<<<< HEAD
-
-=======
                         GetDataAndUpdateGUI();
->>>>>>> db7702bfd1aff74e41c7c7df569ede1b5e2f140d
                         break;
                 }
                 // false : close the menu; true : not close the menu
