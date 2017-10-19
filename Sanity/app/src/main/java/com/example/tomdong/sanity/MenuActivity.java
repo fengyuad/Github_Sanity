@@ -1,10 +1,17 @@
 package com.example.tomdong.sanity;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +24,9 @@ import android.view.MenuItem;
 
 import com.example.tomdong.sanity.dummy.DummyContent;
 import com.google.firebase.auth.FirebaseAuth;
+
+import Model.BudgetModel;
+import Model.CategoryModel;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -50,6 +60,8 @@ public class MenuActivity extends AppCompatActivity
                 overviewFragment,
                 overviewFragment.getTag()
         ).commit();
+
+        sendNotification();
     }
 
     @Override
@@ -177,6 +189,34 @@ public class MenuActivity extends AppCompatActivity
 
     @Override
     public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    public void sendNotification() {
+        String text = "";
+        for(String s: CategoryModel.GetInstance().getNotification()){
+            text += s;
+        }
+        for(String s: BudgetModel.GetInstance().getNotification()){
+            text += s;
+        }
+        if(!text.isEmpty()){
+            int id = 1;
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.app_icon);
+            Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+            //设置小图标
+            mBuilder.setSmallIcon(R.drawable.app_icon);
+            //设置大图标
+            mBuilder.setLargeIcon(bitmap);
+            //设置标题
+            mBuilder.setContentTitle("Sanity Reminding");
+            //设置通知正文
+            mBuilder.setContentText(text);
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(id++, mBuilder.build());
+        }
 
     }
 
