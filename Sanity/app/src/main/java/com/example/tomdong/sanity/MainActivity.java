@@ -290,14 +290,14 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             Account.setEnabled(true);
             PassWord.setEnabled(true);
             Login.setEnabled(true);
-            //Toast.makeText(MainActivity.this, "Email Empty!???", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Email Empty!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (TextUtils.isEmpty(pw)) {
             Account.setEnabled(true);
             PassWord.setEnabled(true);
             Login.setEnabled(true);
-            //Toast.makeText(MainActivity.this, "Password Empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Password Empty!", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -306,13 +306,13 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             public void onComplete(@NonNull Task<AuthResult> task) {
 
                 if (task.isSuccessful()) {
-                    //Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Login Succeeded", Toast.LENGTH_SHORT).show();
                     LoadData();
                 } else {
                     Account.setEnabled(true);
                     PassWord.setEnabled(true);
                     Login.setEnabled(true);
-                    //Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -321,6 +321,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     protected void LoadData() {
         // set the current user uid to Variable object
         Variable.GetInstance().setmUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        Log.d("UID", FirebaseAuth.getInstance().getCurrentUser().getUid());
         if (StorageModel.GetInstance().AreFilesExist()) {
             // If internal storage files exist, load locally
             StorageModel.GetInstance().ReadAll();
