@@ -19,8 +19,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tomdong.sanity.dummy.DummyContent;
 import com.google.firebase.auth.FirebaseAuth;
@@ -153,6 +159,26 @@ public class MenuActivity extends AppCompatActivity
             Log.d("Manager", "Manage Transactions!!!");
 
         } else if (id == R.id.nav_change_pw) {
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View promptView = layoutInflater.inflate(R.layout.change_fandthreshhold_inpu_log, null);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setView(promptView);
+            alertDialogBuilder.setCancelable(false)
+                    .setPositiveButton("submit", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int idx) {
+
+                        }
+                    })
+                    .setNegativeButton("Cancel",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+            // create an alert dialog
+            AlertDialog alert = alertDialogBuilder.create();
+            alert.show();
 
         } else if (id == R.id.nav_log_out) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
