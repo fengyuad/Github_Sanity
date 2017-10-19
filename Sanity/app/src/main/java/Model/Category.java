@@ -10,6 +10,47 @@ import java.util.List;
 
 public class Category implements java.io.Serializable {
     /**
+     * Member Variable
+     */
+    private String mName;
+    private Long mID;
+    private Long mBudgetID;
+    private double mAmount; // the upper bound of user setting amount
+    private double mCurrentAmount; // current spending amount
+    private List<Long> mTransactionIDs; // stores all transaction ids that realted to this category
+
+    /**
+     * Constructor
+     */
+    public Category() {
+        mTransactionIDs = new ArrayList<>();
+    }
+
+    public Category(String name, Long budgetID) {
+        mName = name;
+        mAmount = 0.00;
+        mCurrentAmount = 0.00;
+        mBudgetID = budgetID;
+        mTransactionIDs = new ArrayList<>();
+    }
+
+    public Category(String name, double amount, Long budgetID) {
+        mName = name;
+        mAmount = amount;
+        mCurrentAmount = 0;
+        mBudgetID = budgetID;
+        mTransactionIDs = new ArrayList<>();
+    }
+
+    public Category(String name, double amount, double currentAmount, Long budgetID) {
+        mName = name;
+        mAmount = amount;
+        mCurrentAmount = currentAmount;
+        mBudgetID = budgetID;
+        mTransactionIDs = new ArrayList<>();
+    }
+
+    /**
      * Getter and Setter
      */
     public String getmName() {
@@ -58,48 +99,6 @@ public class Category implements java.io.Serializable {
 
     public void setmTransactionIDs(List<Long> mTransactionIDs) {
         this.mTransactionIDs = mTransactionIDs;
-    }
-
-    /**
-     * Member Variable
-     */
-    private String mName;
-    private Long mID;
-    private Long mBudgetID;
-    private double mAmount; // the upper bound of user setting amount
-    private double mCurrentAmount; // current spending amount
-    private List<Long> mTransactionIDs; // stores all transaction ids that realted to this category
-
-
-    /**
-     * Constructor
-     */
-    public Category() {
-        mTransactionIDs = new ArrayList<>();
-    }
-
-    public Category(String name, Long budgetID) {
-        mName = name;
-        mAmount = 0.00;
-        mCurrentAmount = 0.00;
-        mBudgetID = budgetID;
-        mTransactionIDs = new ArrayList<>();
-    }
-
-    public Category(String name, double amount, Long budgetID) {
-        mName = name;
-        mAmount = amount;
-        mCurrentAmount = 0;
-        mBudgetID = budgetID;
-        mTransactionIDs = new ArrayList<>();
-    }
-
-    public Category(String name, double amount, double currentAmount, Long budgetID) {
-        mName = name;
-        mAmount = amount;
-        mCurrentAmount = currentAmount;
-        mBudgetID = budgetID;
-        mTransactionIDs = new ArrayList<>();
     }
 
     /**

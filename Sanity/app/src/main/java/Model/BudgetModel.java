@@ -79,12 +79,19 @@ public class BudgetModel extends Model implements Serializable {
         int frequency = Variable.GetInstance().getmFrequency();
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
-            if (budget.GetCurrAmount() >= budget.GetAmountLimit() * threshold) {
+            Long timeRemain = (budget.getmDueTime() - budget.getmBudgetId()) / 86400000;
+            if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold && budget.GetCurrAmount() <= budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
                 sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
-                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400 + "Day(s)"); // time remaining
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)"); // time remaining
+                ret.add(sb.toString());
+            } else if (budget.GetCurrAmount() > budget.GetAmountLimit()) {
+                StringBuilder sb = new StringBuilder();
+                sb.append(budget.getmName() + " has exceeded limit. \n"); // name of the category
+                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)"); // time remaining
                 ret.add(sb.toString());
             }
         }
@@ -124,7 +131,7 @@ public class BudgetModel extends Model implements Serializable {
     public List<Category> getCategoriesUnderBudget(Long budgetId) {
         List<Category> cats = new ArrayList<>();
         CategoryModel catModel = CategoryModel.GetInstance();
-    
+
         for (Long l : getBudgetById(budgetId).getmCatIds()) {
             cats.add(catModel.GetCategoryById(l));
         }
@@ -164,8 +171,11 @@ public class BudgetModel extends Model implements Serializable {
             Budget curr = mBudgetMap.get(budgetId);
             // Update
             curr.AddCatId(catId);
+            // Let Category know
+            CategoryModel.GetInstance().UpdateBudgetIdAndUpdateDatabase(catId, budgetId);
+            // Update Firebase
             CloudSet(curr);
-            LocalUpdate();
+            StorageModel.GetInstance().SaveAll();
             return true;
         } else {
             return false;
@@ -318,7 +328,7 @@ public class BudgetModel extends Model implements Serializable {
      * @param catId    category ID
      */
     public void CategoryAdded(long budgetId, long catId) {
-        if(budgetId == 0) return;
+        if (budgetId == 0) return;
         mBudgetMap.get(budgetId).AddCatId(catId);
         CalcTotalAmount(budgetId);
     }

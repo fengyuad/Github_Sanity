@@ -86,8 +86,10 @@ public class Budget implements Serializable {
         }*/
         if (mDueTime <= System.currentTimeMillis() / 1000) {
             mDueTime += 86400 * mPeriod;
-            for (Long catId : mCatIds)
-                CategoryModel.GetInstance().GetCategoryById(catId).Reset();
+            // TODO 1018
+            for (Long catId : mCatIds) {
+                CategoryModel.GetInstance().ResetCategoryPeriodEnds(catId);
+            }
             UpdateTotalAmount();
             UpdateAmountLimit();
             BudgetModel.GetInstance().CloudSet(this);

@@ -9,52 +9,34 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-
-
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.baoyz.swipemenulistview.SwipeMenu;
 import com.baoyz.swipemenulistview.SwipeMenuCreator;
 import com.baoyz.swipemenulistview.SwipeMenuItem;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
-
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 import com.github.mikephil.charting.data.PieEntry;
 
-import java.security.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Calendar;
-
 
 import Model.Budget;
 import Model.BudgetModel;
@@ -72,18 +54,16 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
+    Button addBgtDateButton;
+    TextView addBgtDateText;
+    CustomBudgetCardAdapter adapter;
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private SwipeMenuListView mListView;
     private ImageView mImageView;
-
-    Button addBgtDateButton;
-    TextView addBgtDateText;
     private int addBgtYear, addBgtMonth, addBgtDay;
-    CustomBudgetCardAdapter adapter;
-
-    private Map<PieEntry,Long> pieMap = new HashMap<>();
+    private Map<PieEntry, Long> pieMap = new HashMap<>();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -121,8 +101,8 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget_list, container, false);
 
-        mListView=view.findViewById(R.id.my_budgets_listview);
-        mImageView=view.findViewById(R.id.my_budgets_icon);
+        mListView = view.findViewById(R.id.my_budgets_listview);
+        mImageView = view.findViewById(R.id.my_budgets_icon);
         FloatingActionButton addBgtFab = (FloatingActionButton) view.findViewById(R.id.add_budget_fab);
         addBgtFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,10 +116,9 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
 
 
-
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
-            list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime()*1000)),budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount(), budget.getmBudgetId()));
+            list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime() * 1000)), budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount(), budget.getmBudgetId()));
 /*
         list.add(new Budget_card("Parking"));
         list.add(new Budget_card("Eating"));
@@ -274,7 +253,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        Toast.makeText(getContext(),"Add Budget! Timestamp: " + dueDate.getTime(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Add Budget! Timestamp: " + dueDate.getTime(), Toast.LENGTH_SHORT).show();
                         Log.d("add bgt period", bgtPeriod.getText().toString());
 
                         Budget bgtToAdd = new Budget(bgtName.getText().toString(),
