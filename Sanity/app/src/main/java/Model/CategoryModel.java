@@ -169,13 +169,15 @@ public class CategoryModel extends Model implements Serializable {
                 sb.append(cat.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
                 sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
-                sb.append("Time remaining: "); // time remaining
+                Long dayLeft = (BudgetModel.GetInstance().getBudgetById(cat.getmBudgetID()).getmDueTime() - System.currentTimeMillis())/86400000;
+                sb.append("Time remaining: " + dayLeft); // time remaining
                 ret.add(sb.toString());
             }else if(cat.getmCurrentAmount() > cat.getmAmount()){
                 StringBuilder sb = new StringBuilder();
-                sb.append(cat.getmName() + " has reached limit"); // name of the category
-                sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
-                sb.append("Time remaining: "); // time remaining
+                sb.append(cat.getmName() + " has reached limit.\n"); // name of the category
+                sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount
+                Long dayLeft = (BudgetModel.GetInstance().getBudgetById(cat.getmBudgetID()).getmDueTime() - System.currentTimeMillis())/86400000;
+                sb.append("Time remaining: " + dayLeft); // time remaining
                 ret.add(sb.toString());
             }
         }
