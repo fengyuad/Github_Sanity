@@ -317,6 +317,7 @@ public class BudgetModel extends Model implements Serializable {
      * @param catId    category ID
      */
     public void CategoryAdded(long budgetId, long catId) {
+        if(budgetId == 0) return;
         mBudgetMap.get(budgetId).AddCatId(catId);
         CalcTotalAmount(budgetId);
     }
