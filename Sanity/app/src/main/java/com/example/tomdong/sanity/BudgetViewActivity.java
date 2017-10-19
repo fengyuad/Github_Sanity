@@ -226,7 +226,6 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                             return;
                         }
 
-<<<<<<< HEAD
                        ////TODO
                         double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString());
                         String CatType=cat_add_dialog_catype.getText().toString();
@@ -234,13 +233,6 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
                         GetDataAndUpdateGUI();
 
-=======
-                        //TODO
-                        double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
-                        String CatType=cat_add_dialog_catype.getText().toString();
-                        CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
-                        // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
->>>>>>> 9aaa76d6a00eee9b656f4bfd1c48944e95438fc6
                     }
                 })
                 .setNegativeButton("Cancel",
