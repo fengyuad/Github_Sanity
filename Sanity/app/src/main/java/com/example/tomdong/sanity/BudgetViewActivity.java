@@ -115,7 +115,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         double bgtCurr = 0;
 
         DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-        String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime() * 1000));
+        String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()));
 
         for (Category c : catList) {
             list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount(), c.getmID()));
@@ -124,7 +124,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         }
 
         int bgtProgress = (int) ((bgtCurr / bgtTotal) * 100);
-
+        BudgetProgress.setProgress(bgtProgress);
         TextView bgtPct = (TextView) findViewById(R.id.budget_percent);
         bgtPct.setText(Integer.toString(bgtProgress) + "%");
 
