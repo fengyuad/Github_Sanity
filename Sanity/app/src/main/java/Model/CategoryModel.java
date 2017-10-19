@@ -360,4 +360,13 @@ public class CategoryModel extends Model implements Serializable {
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         StorageModel.GetInstance().SaveAll();
     }
+
+    public void ResetCategoryPeriodEnds(Long catID) {
+        Category cat = mIDToCategory.get(catID);
+        cat.setmCurrentAmount(0);
+        mDatabase.child(cat.toString()).setValue(cat);
+        FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+        StorageModel.GetInstance().SaveAll();
+    }
 }
