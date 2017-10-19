@@ -331,6 +331,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                     case 0:
                         Log.e(TAG, "Delete Position: " + position);
                         adapter.remove(adapter.getItem(position));
+
                         break;
                 }
                 // false : close the menu; true : not close the menu
