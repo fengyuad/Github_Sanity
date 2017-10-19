@@ -79,7 +79,7 @@ public class BudgetModel extends Model implements Serializable {
         int frequency = Variable.GetInstance().getmFrequency();
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
-            if (budget.GetCurrAmount() >= budget.GetAmountLimit() * threshold) {
+            if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
