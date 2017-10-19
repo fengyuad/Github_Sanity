@@ -96,14 +96,35 @@ public class BudgetModel extends Model implements Serializable {
     //<editor-fold desc="Budget Related">
     /* =============== Budget Related =============== */
 
-    public Budget getBudgetById(Long id) {
-        return mBudgetMap.get(id);
+    /**
+     * Return budget map
+     *
+     * @return <b>Map</b>
+     */
+    public Map<Long, Budget> GetBudgetMap() {
+        return mBudgetMap;
     }
 
-    public List<Category> getCategoriesUnderBudget(Long id) {
+    /**
+     * Get a Budget
+     *
+     * @param budgetId budget ID
+     * @return a <b>Budget</b>
+     */
+    public Budget getBudgetById(Long budgetId) {
+        return mBudgetMap.get(budgetId);
+    }
+
+    /**
+     * Get a list of Categories belongs to this budget
+     *
+     * @param budgetId budget ID
+     * @return a <b>List</b> of Categories
+     */
+    public List<Category> getCategoriesUnderBudget(Long budgetId) {
         List<Category> cats = new ArrayList<>();
         CategoryModel catModel = CategoryModel.GetInstance();
-        for (Long l : getBudgetById(id).getmCatIds()) {
+        for (Long l : getBudgetById(budgetId).getmCatIds()) {
             cats.add(catModel.GetCategoryById(l));
         }
         return cats;
@@ -130,6 +151,48 @@ public class BudgetModel extends Model implements Serializable {
     }
 
     /**
+     * Remove a Category from a Budget
+     *
+     * @param budgetId budget ID
+     * @param catId    category ID
+     * @return success or not
+     */
+    public boolean AddACategory(long budgetId, long catId) {
+        if (mBudgetMap.containsKey(budgetId)) {
+            // Get Budget
+            Budget curr = mBudgetMap.get(budgetId);
+            // Update
+            curr.AddCatId(catId);
+            CloudSet(curr);
+            LocalUpdate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * remove a Category from a Budget
+     *
+     * @param budgetId budget ID
+     * @param catId    category ID
+     * @return success or not
+     */
+    public boolean RemoveACategory(long budgetId, long catId) {
+        if (mBudgetMap.containsKey(budgetId)) {
+            // Get Budget
+            Budget curr = mBudgetMap.get(budgetId);
+            // Update
+            curr.RemoveCatId(catId);
+            CloudSet(curr);
+            LocalUpdate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Update an existing budget
      *
      * @param budgetId ID of the budget you want to update
@@ -139,14 +202,60 @@ public class BudgetModel extends Model implements Serializable {
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
-    public boolean UpdateBudget(String name, long budgetId, long dueTime, int period, List<Long> catIds) {
+    public boolean UpdateBudget(long budgetId, String name) {
         if (mBudgetMap.containsKey(budgetId)) {
             // Get Budget
             Budget curr = mBudgetMap.get(budgetId);
             // Update
             curr.setmName(name);
+            CloudSet(curr);
+            LocalUpdate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Update an existing budget
+     *
+     * @param budgetId ID of the budget you want to update
+     * @param dueTime  due date
+     * @param period   budget period
+     * @param catIds   category Ids
+     * @return <b>true</b> if budget is successfully updated<p>
+     * <b>false</b> if budget is not in mBudgetMap
+     */
+    public boolean UpdateBudget(long budgetId, long dueTime, int period) {
+        if (mBudgetMap.containsKey(budgetId)) {
+            // Get Budget
+            Budget curr = mBudgetMap.get(budgetId);
+            // Update
             curr.setmDueTime(dueTime);
             curr.setmPeriod(period);
+            CloudSet(curr);
+            LocalUpdate();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Update an existing budget
+     *
+     * @param budgetId ID of the budget you want to update
+     * @param dueTime  due date
+     * @param period   budget period
+     * @param catIds   category Ids
+     * @return <b>true</b> if budget is successfully updated<p>
+     * <b>false</b> if budget is not in mBudgetMap
+     */
+    public boolean UpdateBudget(long budgetId, List<Long> catIds) {
+        if (mBudgetMap.containsKey(budgetId)) {
+            // Get Budget
+            Budget curr = mBudgetMap.get(budgetId);
+            // Update
             curr.setmCatIds(catIds);
             CloudSet(curr);
             LocalUpdate();
@@ -186,19 +295,14 @@ public class BudgetModel extends Model implements Serializable {
         mBudgetMap.clear();
     }
 
+    /**
+     * Try to reset budgets that need to be reset
+     * Call every time the user launch this app
+     */
     public void ResetAllBudgets() {
         for (Budget b : mBudgetMap.values())
             b.ResetBudget();
         LocalUpdate();
-    }
-
-    /**
-     * Return budget map
-     *
-     * @return <b>Map</b>
-     */
-    public Map<Long, Budget> GetBudgetMap() {
-        return mBudgetMap;
     }
     //</editor-fold>
 

@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -43,11 +42,6 @@ public class CategoryModel extends Model implements Serializable {
 
     }
 
-    public void InitDataBase() {
-        mUserID = Variable.GetInstance().getmUserID();
-        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
-    }
-
     /**
      * Get the instance of this model
      *
@@ -60,7 +54,6 @@ public class CategoryModel extends Model implements Serializable {
         return mInstance;
     }
 
-
     /**
      * When loading from local storage, a new instance should be updated
      *
@@ -70,13 +63,17 @@ public class CategoryModel extends Model implements Serializable {
         mInstance = cm;
     }
 
-    /**
-     *----------------- Public method on local -----------------
-     */
+    public void InitDataBase() {
+        mUserID = Variable.GetInstance().getmUserID();
+        mDatabase = FirebaseDatabase.getInstance().getReference(mUserID + "/category");
+    }
 
-    public List<Category> GetAllCategories(){
+    /**
+     * ----------------- Public method on local -----------------
+     */
+    public List<Category> GetAllCategories() {
         List<Category> list = new ArrayList<>();
-        for(Category cat: mIDToCategory.values()){
+        for (Category cat : mIDToCategory.values()) {
             list.add(cat);
         }
         return list;
@@ -107,7 +104,6 @@ public class CategoryModel extends Model implements Serializable {
     private boolean CheckNameUsed(String name) {
         return mNameCategoryUsed.contains(name);
     }
-
 
     /**
      * @param id
@@ -181,11 +177,10 @@ public class CategoryModel extends Model implements Serializable {
 
     }
 
-
-    public List<Category> getAllNoUsedCategory(){
+    public List<Category> getAllNoUsedCategory() {
         List<Category> list = new ArrayList<>();
-        for(Category cat: mIDToCategory.values()){
-            if(cat.getmBudgetID() == 0) list.add(cat);
+        for (Category cat : mIDToCategory.values()) {
+            if (cat.getmBudgetID() == 0) list.add(cat);
         }
         return list;
     }
@@ -193,6 +188,39 @@ public class CategoryModel extends Model implements Serializable {
     /**
      *----------------- Database Related -----------------
      */
+
+    public boolean UpdateBudgetIdAndUpdateDatabase(Long catId, Long budgetId)
+    {
+        if (mIDToCategory.containsKey(catId)) {
+            // Get Budget
+            Category curr = mIDToCategory.get(catId);
+            // Update
+            curr.setmBudgetID(budgetId);
+            mDatabase.child(catId.toString()).child("mBudgetID").setValue(budgetId);
+            FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+            Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean UpdateAmountAndUpdateDatabase(Long catId, double amount)
+    {
+        if (mIDToCategory.containsKey(catId)) {
+            // Get Budget
+            Category curr = mIDToCategory.get(catId);
+            // Update
+            curr.setmAmount(amount);
+            mDatabase.child(catId.toString()).child("mAmount").setValue(amount);
+            FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
+            Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+            BudgetModel.GetInstance().CalcTotalAmount(curr.getmBudgetID());
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     /**
      * @param cat
@@ -276,7 +304,6 @@ public class CategoryModel extends Model implements Serializable {
         return true;
     }
 
-
     /**
      * @param catID
      * @param tranID
@@ -315,5 +342,4 @@ public class CategoryModel extends Model implements Serializable {
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
-
 }

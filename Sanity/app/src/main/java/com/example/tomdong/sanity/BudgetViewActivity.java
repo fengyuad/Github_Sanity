@@ -167,11 +167,13 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        //TODO
-                        CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
-                        BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
-                        BudgetModel.GetInstance().getBudgetById(id).setmPeriod(period);
-                        BudgetModel.GetInstance().getBudgetById(id).setmName(budgetName);
+                        //CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
+                        //BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
+                        //BudgetModel.GetInstance().getBudgetById(id).setmPeriod(period);
+                        //BudgetModel.GetInstance().getBudgetById(id).setmName(budgetName);
+                        CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
+                        BudgetModel.GetInstance().UpdateBudget(id, dueDate.getTime(), period);
+                        BudgetModel.GetInstance().UpdateBudget(id, budgetName);
                     }
                 })
                 .setNegativeButton("Cancel",
