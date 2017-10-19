@@ -231,15 +231,18 @@ public class CategoryModel extends Model implements Serializable {
         if (CheckNameUsed(cat.getmName())) return false;
 
         Long key = System.currentTimeMillis();
+        // Set Cat ID
         cat.setmID(key);
-
+        // Add Cat to Map
         AddCategory(cat);
-
-        mDatabase.child(key.toString()).setValue(cat);
+        // Add Cat info to Budget (return if budgetId=0)
         BudgetModel.GetInstance().CategoryAdded(cat.getmBudgetID(), cat.getmID());
+        // Update Firebase
+        mDatabase.child(key.toString()).setValue(cat);
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
-
+        // Update Local File
+        StorageModel.GetInstance().SaveAll();
         return true;
     }
 

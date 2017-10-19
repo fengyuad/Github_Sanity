@@ -239,6 +239,8 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
                         String CatType=cat_add_dialog_catype.getText().toString();
                         CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
+                        CategoryModel.GetInstance().UpdateBudgetIdAndUpdateDatabase(catid,id);
+                        BudgetModel.GetInstance().AddACategory(id, catid);
                         // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
 >>>>>>> 9aaa76d6a00eee9b656f4bfd1c48944e95438fc6
                     }
