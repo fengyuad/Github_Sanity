@@ -57,11 +57,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
 
         WriteNewTransaction(trans);
         CategoryModel CModel = CategoryModel.GetInstance();
-
         CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
-
-
         mTransactions.put(trans.getmTransactionId(), trans);
         return trans;
     }
