@@ -189,6 +189,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
                         BudgetModel.GetInstance().UpdateBudget(id, dueDate.getTime(), period);
                         BudgetModel.GetInstance().UpdateBudget(id, budgetName);
+                        GetDataAndUpdateGUI();
 
                     }
                 })
@@ -225,26 +226,13 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form !!!", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
-                       ////TODO
-                        double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString());
-                        String CatType=cat_add_dialog_catype.getText().toString();
-                        BudgetModel.GetInstance().AddACategory(id,catid);
-                        CategoryModel.GetInstance().GetCategoryById(catid).setmAmount(amount);
-                        GetDataAndUpdateGUI();
-
-<<<<<<< HEAD
-=======
-=======
                         //TODO
                         double amount=Double.parseDouble(cat_add_dialog_Amount.getText().toString()) ;
                         String CatType=cat_add_dialog_catype.getText().toString();
                         CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(catid, amount);
                         CategoryModel.GetInstance().UpdateBudgetIdAndUpdateDatabase(catid,id);
                         BudgetModel.GetInstance().AddACategory(id, catid);
-                        // BudgetModel.GetInstance().getBudgetById(id).setmDueTime(dueDate.getTime());
->>>>>>> 9aaa76d6a00eee9b656f4bfd1c48944e95438fc6
->>>>>>> da05a57b0791588d135155a2ae1c4c47b185c1f3
+                        GetDataAndUpdateGUI();
                     }
                 })
                 .setNegativeButton("Cancel",
