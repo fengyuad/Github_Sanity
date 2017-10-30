@@ -24,3 +24,4 @@ public class ExampleInstrumentedTest {
         assertEquals("com.example.tomdong.sanity", appContext.getPackageName());
     }
 }
+
