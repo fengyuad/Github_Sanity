@@ -83,4 +83,22 @@ public class CategoryTest {
         assertEquals(0, mCategory.getmTransactionIDs().size(), 0);
     }
 
+    @Test
+    public void addTransaction() throws Exception {
+        mCategory.AddTransaction(1L, 30.0);
+        assertEquals(1, mCategory.getmTransactionIDs().size());
+        assertEquals(30.0, mCategory.getmCurrentAmount(), 0);
+    }
+
+    @Test
+    public void removeTransaction() throws Exception {
+        mCategory.AddTransaction(1L, 50.0);
+        mCategory.AddTransaction(2L, 30.0);
+        mCategory.RemoveTransaction(1L, 50.0);
+        assertEquals(1, mCategory.getmTransactionIDs().size());
+        assertEquals(30.0, mCategory.getmCurrentAmount(), 0);
+        mCategory.RemoveTransaction(2L, 30.0);
+        assertEquals(0, mCategory.getmCurrentAmount(), 0);
+    }
+
 }

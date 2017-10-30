@@ -84,7 +84,7 @@ public class CategoryModel extends Model implements Serializable {
      *
      * @param category
      */
-    private void AddCategory(Category category) {
+    public void AddCategory(Category category) {
         mIDToCategory.put(category.getmID(), category);
         mNameCategoryUsed.add(category.getmName());
     }
@@ -92,7 +92,7 @@ public class CategoryModel extends Model implements Serializable {
     /**
      * @param id
      */
-    private void DeleteCategory(Long id) {
+    public void DeleteCategory(Long id) {
         mNameCategoryUsed.remove(mIDToCategory.get(id));
         mIDToCategory.remove(id);
     }
@@ -101,7 +101,7 @@ public class CategoryModel extends Model implements Serializable {
      * @param name
      * @return true if name already used
      */
-    private boolean CheckNameUsed(String name) {
+    public boolean CheckNameUsed(String name) {
         return mNameCategoryUsed.contains(name);
     }
 
@@ -110,7 +110,7 @@ public class CategoryModel extends Model implements Serializable {
      * @param name
      * @return true if change successfully, false if contains duplicate name
      */
-    private boolean ChangeCategoryName(Long id, String name) {
+    public boolean ChangeCategoryName(Long id, String name) {
         Category cat = mIDToCategory.get(id);
         // same name as previous
         if (cat.getmName().equals(name)) return true;
@@ -138,7 +138,7 @@ public class CategoryModel extends Model implements Serializable {
      * @param tranID
      * @return
      */
-    private void AddTransactionToCategory(Long catID, Long tranID, double amount) {
+    public void AddTransactionToCategory(Long catID, Long tranID, double amount) {
         mIDToCategory.get(catID).AddTransaction(tranID, amount);
     }
 
@@ -147,7 +147,7 @@ public class CategoryModel extends Model implements Serializable {
      * @param tranID
      * @param amount
      */
-    private void RemoveTransactionInCategory(Long catID, Long tranID, double amount) {
+    public void RemoveTransactionInCategory(Long catID, Long tranID, double amount) {
         Log.d("test", "size of category map: " + mIDToCategory.size());
         for (Long l : mIDToCategory.keySet()) {
             Log.d("test", "category map: " + l);
