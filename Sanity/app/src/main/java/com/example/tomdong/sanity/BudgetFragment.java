@@ -111,11 +111,8 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
             }
         });
 
-
         final ArrayList<Budget_card> list = new ArrayList<>();
         DateFormat f = new SimpleDateFormat("yyyy-MM-dd");
-
-
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
             list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime() * 1000)), budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount(), budget.getmBudgetId()));
@@ -162,7 +159,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
         mListView.setMenuCreator(creator);
         mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-
+        mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {

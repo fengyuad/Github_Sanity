@@ -49,6 +49,7 @@ public class MainActivityTest {
     public IntentsTestRule<MainActivity> mainActivityActivityTestRule =
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
+    
     @Test
     public void test10_addTransaction() throws Exception {
         Thread.sleep(2000);
