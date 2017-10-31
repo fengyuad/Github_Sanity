@@ -116,14 +116,17 @@ public class TransactionModel extends Model implements java.io.Serializable {
         Log.d("MyTestRiqi", "" + "" + toYear + " " + toMonth + " " + toDay);
         Log.d("MapSize", "" + mTransactions.size());
         for (Long key : mTransactions.keySet()) {
-            Log.d("Mapitem", "" + mTransactions.size());
+            Log.d("Mapitem", "" + mTransactions.get(key).getmYear() + " " + mTransactions.get(key).getmMonth() + " " + mTransactions.get(key).getmDay());
             if ((mTransactions.get(key).getmYear() > fromYear && mTransactions.get(key).getmYear() < toYear)) {
                 toReturn.put(key, mTransactions.get(key));
             } else if (mTransactions.get(key).getmYear() == fromYear || mTransactions.get(key).getmYear() == toYear) {
                 if (mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth) {
                     toReturn.put(key, mTransactions.get(key));
                 } else if (mTransactions.get(key).getmMonth() == fromMonth || mTransactions.get(key).getmMonth() == toMonth) {
-                    if (mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay) {
+                    if (mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmMonth() == fromMonth) {
+                        toReturn.put(key, mTransactions.get(key));
+                    }
+                    if (mTransactions.get(key).getmDay() <= toDay && mTransactions.get(key).getmMonth() == toMonth){
                         toReturn.put(key, mTransactions.get(key));
                     }
                 }
