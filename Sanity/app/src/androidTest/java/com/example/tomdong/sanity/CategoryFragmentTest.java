@@ -39,30 +39,17 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Created by fansang on 10/28/17.
+ * Created by fansang on 10/30/17.
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class MainActivityTest {
-
+public class CategoryFragmentTest {
     @Rule
-    public IntentsTestRule<MainActivity> mainActivityActivityTestRule =
+    public IntentsTestRule<MainActivity> menuActivityIntentsTestRule =
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
-    
     @Test
-    public void test03_clickLoginButton_opensMenuActivity() throws Exception {
-        Espresso.onView(withId(R.id.UserT)).perform(typeText("test@test.com"));
-        Espresso.onView(withId(R.id.PwT)).perform(typeText("123456"), closeSoftKeyboard());
-        //Thread.sleep(1000);
-        Espresso.onView(withId(R.id.LoginButton)).perform(click());
-        Thread.sleep(5000);
-        intended(hasComponent(MenuActivity.class.getName()));
-        //Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-    }
-
-    @Test
-    public void test02_logoutButtonInMenuClick_thenLogout() throws Exception{
+    public void test06_menu_clickManageCategories() throws Exception {
         // Open menu
         Espresso.onView(withId(R.id.drawer_layout))
                 .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
@@ -70,25 +57,10 @@ public class MainActivityTest {
 
         // Open log out dialogue
         Espresso.onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_log_out));
-        Thread.sleep(1000);
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+        Thread.sleep(2000);
 
-        // Click yes
-        Espresso.onView(withText("Yes"))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
-                .perform(click());
-        Thread.sleep(1000);
-    }
-
-    @Test
-    public void test01_clickRegisterButton_thenLogin() throws Exception {
-        Espresso.onView(withId(R.id.UserT)).perform(typeText("test2@test.com"));
-        Espresso.onView(withId(R.id.PwT)).perform(typeText("123456"), closeSoftKeyboard());
-        Espresso.onView(withId(R.id.RegisterButton)).perform(click());
-        Thread.sleep(5000);
-        Espresso.onView(withId(R.id.LoginButton)).perform(click());
-        Thread.sleep(5000);
-        intended(hasComponent(MenuActivity.class.getName()));
+        //intended(hasComponent(CategoryFragment.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.my_cat_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }
