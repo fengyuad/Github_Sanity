@@ -207,9 +207,7 @@ public class BudgetModel extends Model implements Serializable {
      * Update an existing budget
      *
      * @param budgetId ID of the budget you want to update
-     * @param dueTime  due date
-     * @param period   budget period
-     * @param catIds   category Ids
+     * @param name budget name
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
@@ -233,7 +231,6 @@ public class BudgetModel extends Model implements Serializable {
      * @param budgetId ID of the budget you want to update
      * @param dueTime  due date
      * @param period   budget period
-     * @param catIds   category Ids
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
@@ -256,8 +253,6 @@ public class BudgetModel extends Model implements Serializable {
      * Update an existing budget
      *
      * @param budgetId ID of the budget you want to update
-     * @param dueTime  due date
-     * @param period   budget period
      * @param catIds   category Ids
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
