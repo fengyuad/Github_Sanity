@@ -6,7 +6,6 @@ import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
-import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -14,7 +13,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.Gravity;
 import android.support.test.espresso.contrib.DrawerMatchers;
-import android.widget.DatePicker;
 
 import org.hamcrest.Matchers;
 import org.junit.FixMethodOrder;
@@ -22,8 +20,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
-
-import Model.Transaction;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -36,7 +32,7 @@ import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
+import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -49,38 +45,45 @@ import static org.hamcrest.Matchers.is;
  */
 @RunWith(AndroidJUnit4.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ManageTransactionTest {
+public class AddCategoryToBudgetTest {
     @Rule
     public IntentsTestRule<MainActivity> menuActivityIntentsTestRule =
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
+    @Test
+    public void test01_checkAddCategoryToBudgetButton() throws Exception {
+        Thread.sleep(2000);
+        //Espresso.onData(Matchers.allOf(is(instanceOf(String.class)), is("testBgt"))).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());
+        Thread.sleep(2000);
+        Espresso.onView(withId(R.id.add_catTobudget_fab)).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.addCatToBgtText)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
 
     @Test
-    public void test01_checkTransactionAdded() throws Exception {
-        // Open menu
-        Espresso.onView(withId(R.id.drawer_layout))
-                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        // Open log out dialogue
-        Espresso.onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_trans));
+    public void test02_submitAddCategoryToBudgetForm() throws Exception {
         Thread.sleep(2000);
-
-        //intended(hasComponent(CategoryFragment.class.getName()));
-        Espresso.onView(ViewMatchers.withId(R.id.trans_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-
-        Espresso.onView(withId(R.id.trans_from_button)).perform(click());
-        Espresso.onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2017, 9, 1));
-        Espresso.onView(withText("OK")).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());
+        Thread.sleep(2000);
+        Espresso.onView(withId(R.id.add_catTobudget_fab)).perform(click());
+        Espresso.onData(instanceOf(String.class)).inAdapterView(withId(R.id.cat_add_tobudget_dialog_listview)).atPosition(1).perform(click());
+        Espresso.onView(withId(R.id.cat_addtobudget_dialog_catamount)).perform(typeText("200"), closeSoftKeyboard());
+        Espresso.onView(withText("Add"))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
         Thread.sleep(1000);
-        Espresso.onView(withId(R.id.trans_to_button)).perform(click());
-        Espresso.onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2017, 12, 1));
-        Espresso.onView(withText("OK")).perform(click());
+    }
+
+    @Test
+    public void test03_checkCategoryAddedToBudget() throws Exception {
+        Thread.sleep(2000);
+        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());
+        Thread.sleep(2000);
+        Espresso.onData(instanceOf(Budget_card.class))
+                .inAdapterView(withId(R.id.cat_add_tobudget_dialog_listview))
+                .atPosition(2)
+                .check(matches(hasDescendant(withText("testCat4"))));
         Thread.sleep(1000);
-        Espresso.onData(instanceOf(Transaction_card.class))
-                .inAdapterView(withId(R.id.trans_picker_list))
-                .atPosition(0)
-                .check(matches(hasDescendant(withText("this is a test transaction"))));
     }
 }

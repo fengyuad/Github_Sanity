@@ -16,6 +16,8 @@ import android.view.Gravity;
 import android.support.test.espresso.contrib.DrawerMatchers;
 import android.widget.DatePicker;
 
+import com.baoyz.swipemenulistview.SwipeMenuItem;
+
 import org.hamcrest.Matchers;
 import org.junit.FixMethodOrder;
 import org.junit.Rule;
@@ -64,66 +66,66 @@ public class CategoryFragmentTest {
     public IntentsTestRule<MainActivity> menuActivityIntentsTestRule =
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
+//    @Test
+//    public void test01_showAddCategoryForm() throws Exception {
+//        // Open menu
+//        Espresso.onView(withId(R.id.drawer_layout))
+//                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+//                .perform(DrawerActions.open()); // Open Drawer
+//
+//        // Open log out dialogue
+//        Espresso.onView(withId(R.id.nav_view))
+//                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+//        Thread.sleep(2000);
+//
+//        Thread.sleep(1000);
+//        Espresso.onView(withId(R.id.add_cat_fab)).perform(click());
+//        Espresso.onView(ViewMatchers.withId(R.id.add_cat_name)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+//    }
+//
+//    @Test
+//    public void test02_submitAddCategoryForm() throws Exception {
+//        // Open menu
+//        Espresso.onView(withId(R.id.drawer_layout))
+//                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+//                .perform(DrawerActions.open()); // Open Drawer
+//
+//        // Open log out dialogue
+//        Espresso.onView(withId(R.id.nav_view))
+//                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+//        Thread.sleep(2000);
+//
+//        Thread.sleep(1000);
+//        Espresso.onView(withId(R.id.add_cat_fab)).perform(click());
+//        Espresso.onView(withId(R.id.add_cat_name)).perform(typeText("testCat6"));
+//
+//        Espresso.onView(withText("Add"))
+//                .inRoot(isDialog())
+//                .check(matches(isDisplayed()))
+//                .perform(click());
+//        Thread.sleep(2000);
+//    }
+//
+//    @Test
+//    public void test03_checkCategoryAdded() throws Exception {
+//        // Open menu
+//        Espresso.onView(withId(R.id.drawer_layout))
+//                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+//                .perform(DrawerActions.open()); // Open Drawer
+//
+//        // Open manage budget
+//        Espresso.onView(withId(R.id.nav_view))
+//                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+//        Thread.sleep(2000);
+//
+//        Espresso.onData(instanceOf(Category_card.class))
+//                .inAdapterView(withId(R.id.my_budgets_listview))
+//                .atPosition(2)
+//                .check(matches(hasDescendant(withText("testCat6"))));
+//    }
+
     @Test
-    public void test01_showAddCategoryForm() throws Exception {
-        // Open menu
-        Espresso.onView(withId(R.id.drawer_layout))
-                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        // Open log out dialogue
-        Espresso.onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
-        Thread.sleep(2000);
-
-        Thread.sleep(1000);
-        Espresso.onView(withId(R.id.add_cat_fab)).perform(click());
-        Espresso.onView(ViewMatchers.withId(R.id.add_cat_name)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-    }
-
-    @Test
-    public void test02_submitAddCategoryForm() throws Exception {
-        // Open menu
-        Espresso.onView(withId(R.id.drawer_layout))
-                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        // Open log out dialogue
-        Espresso.onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
-        Thread.sleep(2000);
-
-        Thread.sleep(1000);
-        Espresso.onView(withId(R.id.add_cat_fab)).perform(click());
-        Espresso.onView(withId(R.id.add_cat_name)).perform(typeText("testCat6"));
-
-        Espresso.onView(withText("Add"))
-                .inRoot(isDialog())
-                .check(matches(isDisplayed()))
-                .perform(click());
-        Thread.sleep(2000);
-    }
-
-    @Test
-    public void test03_menu_checkCategoryAdded() throws Exception {
-        // Open menu
-        Espresso.onView(withId(R.id.drawer_layout))
-                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        // Open manage budget
-        Espresso.onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
-        Thread.sleep(2000);
-
-        Espresso.onData(instanceOf(Category_card.class))
-                .inAdapterView(withId(R.id.my_budgets_listview))
-                .atPosition(3)
-                .check(matches(hasDescendant(withText("testCat6"))));
-    }
-
-    @Test
-    public void test07_menu_DeleteCategories() throws Exception {
+    public void test04_DeleteCategories() throws Exception {
         // Open menu
         Espresso.onView(withId(R.id.drawer_layout))
                 .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
@@ -137,15 +139,14 @@ public class CategoryFragmentTest {
         //intended(hasComponent(CategoryFragment.class.getName()));
         Espresso.onView(ViewMatchers.withId(R.id.my_cat_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
         Espresso.onData(instanceOf(Category_card.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).perform(swipeLeft());
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         //Espresso.onData(Matchers.allOf(is(instanceOf(String.class)),is("Delete"))).perform(click());
-        Espresso.onData(instanceOf(Category_card.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).perform(click());
+        //Espresso.onData(instanceOf(SwipeMenuItem.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).perform(click());
        // Espresso.onData(instanceOf(Category_card.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).;
-        // Espresso.onData(hasToString("Delete")).perform(click());
-//        Espresso.onData(instanceOf(Category_card.class))
-//                .inAdapterView(withId(R.id.my_catgory_listview))
-//                .hasToString(startsWith("Delete"))
-//                .perform(click());
+        //Espresso.onData(hasToString("Delete")).perform(click());
+        Espresso.onData(instanceOf(SwipeMenuItem.class))
+                .inAdapterView(withId(R.id.my_catgory_listview))
+                .perform(click());
 
     }
 }

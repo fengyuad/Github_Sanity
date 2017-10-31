@@ -50,7 +50,7 @@ public class OverviewFragmentTest {
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
     @Test
-    public void test01_menu_clickPiechart() throws Exception {
+    public void test01_clickPiechart() throws Exception {
         Thread.sleep(2000);
         //Espresso.onData(Matchers.allOf(is(instanceOf(String.class)), is("testBgt"))).perform(click());
         Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());

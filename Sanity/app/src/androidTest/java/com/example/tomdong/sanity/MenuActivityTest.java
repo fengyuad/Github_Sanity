@@ -97,7 +97,7 @@ public class MenuActivityTest {
     }
 
     @Test
-    public void test04_menu_clickManageTransactions() throws Exception {
+    public void test04_clickManageTransactions() throws Exception {
         // Open menu
         Espresso.onView(withId(R.id.drawer_layout))
                 .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.

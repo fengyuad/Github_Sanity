@@ -105,7 +105,7 @@ public class BudgetFragmentTest {
     }
 
     @Test
-    public void test03_menu_checkBudgetAdded() throws Exception {
+    public void test03_checkBudgetAdded() throws Exception {
         // Open menu
         Espresso.onView(withId(R.id.drawer_layout))
                 .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
