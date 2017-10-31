@@ -152,6 +152,11 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
                         0x3F, 0x25)));
                 // set item width
                 deleteItem.setWidth(170);
+                deleteItem.setTitle("Delete");
+                // set item title fontsize
+                deleteItem.setTitleSize(18);
+                // set item title font color
+                deleteItem.setTitleColor(Color.WHITE);
                 menu.addMenuItem(deleteItem);
 
             }
@@ -159,7 +164,7 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
 
         mListView.setMenuCreator(creator);
         mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_LEFT);
-        mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
+       // mListView.setSwipeDirection(SwipeMenuListView.DIRECTION_RIGHT);
         mListView.setOnMenuItemClickListener(new SwipeMenuListView.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(int position, SwipeMenu menu, int index) {

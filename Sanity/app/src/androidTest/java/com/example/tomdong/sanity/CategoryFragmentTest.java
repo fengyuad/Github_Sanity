@@ -21,12 +21,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 
+import java.util.Map;
+
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.swipeLeft;
+import static android.support.test.espresso.action.ViewActions.swipeRight;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.BundleMatchers.hasEntry;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
@@ -34,9 +39,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static java.util.EnumSet.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasToString;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.StringStartsWith.startsWith;
 
 /**
  * Created by fansang on 10/30/17.
@@ -62,5 +71,32 @@ public class CategoryFragmentTest {
 
         //intended(hasComponent(CategoryFragment.class.getName()));
         Espresso.onView(ViewMatchers.withId(R.id.my_cat_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void test07_menu_DeleteCategories() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+        Thread.sleep(2000);
+
+        //intended(hasComponent(CategoryFragment.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.my_cat_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Espresso.onData(instanceOf(Category_card.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).perform(swipeLeft());
+        Thread.sleep(2000);
+        //Espresso.onData(Matchers.allOf(is(instanceOf(String.class)),is("Delete"))).perform(click());
+        Espresso.onData(instanceOf(Category_card.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).perform(click());
+       // Espresso.onData(instanceOf(Category_card.class)).inAdapterView(withId(R.id.my_catgory_listview)).atPosition(3).;
+        // Espresso.onData(hasToString("Delete")).perform(click());
+//        Espresso.onData(instanceOf(Category_card.class))
+//                .inAdapterView(withId(R.id.my_catgory_listview))
+//                .hasToString(startsWith("Delete"))
+//                .perform(click());
+
     }
 }

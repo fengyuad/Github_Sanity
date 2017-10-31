@@ -291,6 +291,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
                         0x3F, 0x25)));
                 // set item width
                 deleteItem.setWidth(170);
+                deleteItem.setTitle("Delete");
+                // set item title fontsize
+                deleteItem.setTitleSize(18);
+                // set item title font color
+                deleteItem.setTitleColor(Color.WHITE);
                 menu.addMenuItem(deleteItem);
             }
         };
