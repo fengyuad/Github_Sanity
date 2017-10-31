@@ -47,4 +47,68 @@ public class MenuActivityTest {
     @Rule
     public IntentsTestRule<MainActivity> menuActivityIntentsTestRule =
             new IntentsTestRule<MainActivity>(MainActivity.class);
+
+    @Test
+    public void test01_menu_clickOverview() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_overview));
+        Thread.sleep(2000);
+
+        //intended(hasComponent(MenuActivity.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void test02_menu_clickManageBudgets() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_bgt));
+        Thread.sleep(2000);
+
+        //intended(hasComponent(MenuActivity.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.myBudgets_textview)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void test03_menu_clickManageCategories() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+        Thread.sleep(2000);
+
+        //intended(hasComponent(CategoryFragment.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.my_cat_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void test04_menu_clickManageTransactions() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_trans));
+        Thread.sleep(2000);
+
+        //intended(hasComponent(CategoryFragment.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.trans_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
 }

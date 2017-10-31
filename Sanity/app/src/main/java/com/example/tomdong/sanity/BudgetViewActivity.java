@@ -148,7 +148,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         editBgtDateButton = (Button) promptView.findViewById(R.id.edit_bgt_date_button);
         editBgtDateButton.setOnClickListener(this);
         edit_cat = promptView.findViewById(R.id.edit_catgory_name);
-        edit_buddget_name = promptView.findViewById(R.id.edit_bgt_name);
+        edit_buddget_name = promptView.findViewById(R.id.trans_to_button);
         edit_bgt_period = promptView.findViewById(R.id.edit_bgt_period);
         edit_cat_amount = (EditText) promptView.findViewById(R.id.budget_edit_catamount);
         lv = promptView.findViewById(R.id.budget_edit_catgoryList);
