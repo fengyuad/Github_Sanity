@@ -33,11 +33,25 @@ public class CategoryModelTest {
     }
 
     @Test
-    public void addGetDeleteCategory() throws Exception {
+    public void addCategory() throws Exception {
         Category newCat = new Category("test cat 1", 1L);
         mCM.AddCategory(newCat);
         assertEquals(1, mCM.GetAllCategories().size(), 0);
+    }
+
+    @Test
+    public void getCategory() throws Exception {
+        Category newCat = new Category("test cat 1", 1L);
+        mCM.AddCategory(newCat);
         assertEquals(newCat, mCM.GetCategoryById(newCat.getmID()));
+        mCM.DeleteCategory(newCat.getmID());
+        assertEquals(0, mCM.GetAllCategories().size(), 0);
+    }
+
+    @Test
+    public void deleteCategory() throws Exception {
+        Category newCat = new Category("test cat 1", 1L);
+        mCM.AddCategory(newCat);
         mCM.DeleteCategory(newCat.getmID());
         assertEquals(0, mCM.GetAllCategories().size(), 0);
     }
@@ -52,12 +66,13 @@ public class CategoryModelTest {
     @Test
     public void changeCategoryName() throws Exception {
         Category newCat = new Category("old", 1L);
+        mCM.AddCategory(newCat);
         mCM.ChangeCategoryName(newCat.getmID(), "new");
-        assertEquals("new", mCM.GetCategoryById(newCat.getmID()));
+        assertEquals("new", mCM.GetCategoryById(newCat.getmID()).getmName());
     }
 
     @Test
-    public void addRemoveTransactionToCategory() throws Exception {
+    public void addTransactionToCategory() throws Exception {
         Category newCat = new Category("test", 1L);
         mCM.AddCategory(newCat);
         mCM.AddTransactionToCategory(newCat.getmID(), 100L, 30.0);
@@ -66,6 +81,16 @@ public class CategoryModelTest {
         mCM.RemoveTransactionInCategory(newCat.getmID(), 100L, 30.0);
         assertEquals(0, mCM.GetCategoryById(newCat.getmID()).getmCurrentAmount(), 0);
         assertEquals(0, mCM.GetCategoryById(newCat.getmID()).getmTransactionIDs().size());
+    }
+
+    @Test
+    public void singletonTest() throws Exception {
+        CategoryModel cm2 = CategoryModel.GetInstance();
+        Category newCat = new Category("test", 1L);
+        Category newCat2 = new Category("test2", 2L);
+        cm2.AddCategory(newCat);
+        mCM.AddCategory(newCat2);
+        assertEquals(cm2, mCM);
     }
 
 }
