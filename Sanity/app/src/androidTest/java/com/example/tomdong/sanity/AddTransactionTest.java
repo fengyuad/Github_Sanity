@@ -50,7 +50,7 @@ public class AddTransactionTest {
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
     @Test
-    public void test08_clickAddTransactionButton() throws Exception {
+    public void test01_clickAddTransactionButton() throws Exception {
         Thread.sleep(2000);
         Espresso.onView(withId(R.id.fab)).perform(click());
         //intended(hasComponent(CategoryFragment.class.getName()));
@@ -58,7 +58,7 @@ public class AddTransactionTest {
     }
 
     @Test
-    public void test09_selectTransactionSpinnerText() throws Exception {
+    public void test02_selectTransactionSpinnerText() throws Exception {
         Thread.sleep(2000);
         Espresso.onView(withId(R.id.fab)).perform(click());
         Espresso.onView(withId(R.id.bgt_spinner)).perform(click());
@@ -72,7 +72,7 @@ public class AddTransactionTest {
     }
 
     @Test
-    public void test10_addTransaction() throws Exception {
+    public void test03_addTransactionForm() throws Exception {
         Thread.sleep(2000);
         Espresso.onView(withId(R.id.fab)).perform(click());
         Espresso.onView(withId(R.id.bgt_spinner)).perform(click());
@@ -88,6 +88,5 @@ public class AddTransactionTest {
                 .check(matches(isDisplayed()))
                 .perform(click());
         Thread.sleep(2000);
-
     }
 }

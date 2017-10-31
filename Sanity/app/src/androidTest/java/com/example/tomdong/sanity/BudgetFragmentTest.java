@@ -6,6 +6,7 @@ import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -13,6 +14,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.Gravity;
 import android.support.test.espresso.contrib.DrawerMatchers;
+import android.widget.DatePicker;
 
 import org.hamcrest.Matchers;
 import org.junit.FixMethodOrder;
@@ -30,7 +32,9 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -48,8 +52,10 @@ public class BudgetFragmentTest {
     public IntentsTestRule<MainActivity> menuActivityIntentsTestRule =
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
+
+
     @Test
-    public void test05_menu_clickManageBudgets() throws Exception {
+    public void test01_showAddBudgetForm() throws Exception {
         // Open menu
         Espresso.onView(withId(R.id.drawer_layout))
                 .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
@@ -62,5 +68,57 @@ public class BudgetFragmentTest {
 
         //intended(hasComponent(MenuActivity.class.getName()));
         Espresso.onView(ViewMatchers.withId(R.id.myBudgets_textview)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Thread.sleep(1000);
+        Espresso.onView(withId(R.id.add_budget_fab)).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.add_bgt_name)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void test02_submitAddBudgetForm() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_bgt));
+        Thread.sleep(2000);
+
+        //intended(hasComponent(MenuActivity.class.getName()));
+        Espresso.onView(ViewMatchers.withId(R.id.myBudgets_textview)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Thread.sleep(1000);
+        Espresso.onView(withId(R.id.add_budget_fab)).perform(click());
+        Espresso.onView(withId(R.id.add_bgt_name)).perform(typeText("testBgt6"));
+
+        Espresso.onView(withId(R.id.add_bgt_date_button)).perform(click());
+        Espresso.onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2017, 11, 2));
+        Espresso.onView(withText("OK")).perform(click());
+
+        Espresso.onView(withId(R.id.add_bgt_period)).perform(typeText("15"));
+
+        Espresso.onView(withText("Add"))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void test03_menu_checkBudgetAdded() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open manage budget
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_bgt));
+        Thread.sleep(2000);
+
+        Espresso.onData(instanceOf(Budget_card.class))
+                .inAdapterView(withId(R.id.my_budgets_listview))
+                .atPosition(1)
+                .check(matches(hasDescendant(withText("testBgt6"))));
     }
 }

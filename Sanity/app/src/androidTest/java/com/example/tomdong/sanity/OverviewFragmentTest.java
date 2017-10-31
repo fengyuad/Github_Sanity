@@ -50,27 +50,11 @@ public class OverviewFragmentTest {
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
     @Test
-    public void test05_menu_clickPiechart() throws Exception {
+    public void test01_menu_clickPiechart() throws Exception {
         Thread.sleep(2000);
         //Espresso.onData(Matchers.allOf(is(instanceOf(String.class)), is("testBgt"))).perform(click());
         Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());
         Thread.sleep(2000);
         Espresso.onView(ViewMatchers.withId(R.id.budget_percent)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
-    }
-
-    @Test
-    public void test04_menu_clickOverview() throws Exception {
-        // Open menu
-        Espresso.onView(withId(R.id.drawer_layout))
-                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
-                .perform(DrawerActions.open()); // Open Drawer
-
-        // Open log out dialogue
-        Espresso.onView(withId(R.id.nav_view))
-                .perform(NavigationViewActions.navigateTo(R.id.nav_overview));
-        Thread.sleep(2000);
-
-        //intended(hasComponent(MenuActivity.class.getName()));
-        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
 }
