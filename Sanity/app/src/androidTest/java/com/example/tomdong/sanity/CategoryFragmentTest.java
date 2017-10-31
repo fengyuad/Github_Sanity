@@ -6,6 +6,7 @@ import android.support.test.espresso.ViewAssertion;
 import android.support.test.espresso.assertion.ViewAssertions;
 import android.support.test.espresso.contrib.DrawerActions;
 import android.support.test.espresso.contrib.NavigationViewActions;
+import android.support.test.espresso.contrib.PickerActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -13,6 +14,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.Gravity;
 import android.support.test.espresso.contrib.DrawerMatchers;
+import android.widget.DatePicker;
 
 import org.hamcrest.Matchers;
 import org.junit.FixMethodOrder;
@@ -20,6 +22,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+
+import Model.Category;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -30,7 +34,9 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static android.support.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -49,7 +55,7 @@ public class CategoryFragmentTest {
             new IntentsTestRule<MainActivity>(MainActivity.class);
 
     @Test
-    public void test06_menu_clickManageCategories() throws Exception {
+    public void test01_showAddCategoryForm() throws Exception {
         // Open menu
         Espresso.onView(withId(R.id.drawer_layout))
                 .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
@@ -60,7 +66,49 @@ public class CategoryFragmentTest {
                 .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
         Thread.sleep(2000);
 
-        //intended(hasComponent(CategoryFragment.class.getName()));
-        Espresso.onView(ViewMatchers.withId(R.id.my_cat_text)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+        Thread.sleep(1000);
+        Espresso.onView(withId(R.id.add_cat_fab)).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.add_cat_name)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
+    }
+
+    @Test
+    public void test02_submitAddCategoryForm() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open log out dialogue
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+        Thread.sleep(2000);
+
+        Thread.sleep(1000);
+        Espresso.onView(withId(R.id.add_cat_fab)).perform(click());
+        Espresso.onView(withId(R.id.add_cat_name)).perform(typeText("testCat6"));
+
+        Espresso.onView(withText("Add"))
+                .inRoot(isDialog())
+                .check(matches(isDisplayed()))
+                .perform(click());
+        Thread.sleep(2000);
+    }
+
+    @Test
+    public void test03_menu_checkCategoryAdded() throws Exception {
+        // Open menu
+        Espresso.onView(withId(R.id.drawer_layout))
+                .check(matches(DrawerMatchers.isClosed(Gravity.LEFT))) // Left Drawer should be closed.
+                .perform(DrawerActions.open()); // Open Drawer
+
+        // Open manage budget
+        Espresso.onView(withId(R.id.nav_view))
+                .perform(NavigationViewActions.navigateTo(R.id.nav_mng_cat));
+        Thread.sleep(2000);
+
+        Espresso.onData(instanceOf(Category_card.class))
+                .inAdapterView(withId(R.id.my_budgets_listview))
+                .atPosition(3)
+                .check(matches(hasDescendant(withText("testCat6"))));
     }
 }
