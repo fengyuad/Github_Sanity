@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +35,6 @@ import com.google.firebase.database.DatabaseError;
 import com.jesusm.kfingerprintmanager.KFingerprintManager;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.Semaphore;
 
@@ -486,7 +486,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                         @Override
                         public void run() {
                             //Toast.makeText(context, "Fingerprint not recognized", Toast.LENGTH_SHORT).show();
-                            Snackbar.make(((Activity)context).findViewById(R.id.mainLayout),
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
                                     "Not recognized!", Snackbar.LENGTH_LONG).show();
                         }
                     });
@@ -503,7 +503,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                         @Override
                         public void run() {
                             //Toast.makeText(context, "help", Toast.LENGTH_SHORT).show();
-                            Snackbar.make(((Activity)context).findViewById(R.id.mainLayout),
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
                                     "Finger moved too fast. Please try again!", Snackbar.LENGTH_LONG).show();
                         }
                     });
@@ -519,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                         @Override
                         public void run() {
                             //Toast.makeText(context, "Fingerprint not available", Toast.LENGTH_SHORT).show();
-                            Snackbar.make(((Activity)context).findViewById(R.id.mainLayout),
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
                                     "No available fingerprint!", Snackbar.LENGTH_LONG).show();
                             enableAll();
                         }
@@ -534,7 +534,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                         @Override
                         public void run() {
                             //Toast.makeText(context, "Operation cancelled by user", Toast.LENGTH_SHORT).show();
-                            Snackbar.make(((Activity)context).findViewById(R.id.mainLayout),
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
                                     "Login with password!", Snackbar.LENGTH_LONG).show();
                             enableAll();
                         }
