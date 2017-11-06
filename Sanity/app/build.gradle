@@ -5,7 +5,7 @@ android {
     buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "com.example.tomdong.sanity"
-        minSdkVersion 19
+        minSdkVersion 23
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -38,6 +38,8 @@ dependencies {
     compile 'com.android.support:cardview-v7:26.1.0'
     compile 'com.baoyz.swipemenulistview:library:1.3.0'
     testCompile 'junit:junit:4.12'
+
+    compile 'com.github.JesusM:FingerprintManager:v2.0.2'
 
     // Android Testing Support Library's runner and rules
     androidTestCompile "com.android.support.test:runner:0.5"
