@@ -75,15 +75,15 @@ public class AddCategoryToBudgetTest {
         Thread.sleep(1000);
     }
 
-    @Test
-    public void test03_checkCategoryAddedToBudget() throws Exception {
-        Thread.sleep(2000);
-        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());
-        Thread.sleep(2000);
-        Espresso.onData(instanceOf(Budget_card.class))
-                .inAdapterView(withId(R.id.cat_add_tobudget_dialog_listview))
-                .atPosition(2)
-                .check(matches(hasDescendant(withText("testCat4"))));
-        Thread.sleep(1000);
-    }
+//    @Test
+//    public void test03_checkCategoryAddedToBudget() throws Exception {
+//        Thread.sleep(2000);
+//        Espresso.onView(ViewMatchers.withId(R.id.overview_pie)).perform(click());
+//        Thread.sleep(2000);
+//        Espresso.onData(instanceOf(Budget_card.class))
+//                .inAdapterView(withId(R.id.cat_add_tobudget_dialog_listview))
+//                .atPosition(2)
+//                .check(matches(hasDescendant(withText("testCat4"))));
+//        Thread.sleep(1000);
+//    }
 }

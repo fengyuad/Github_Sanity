@@ -22,6 +22,8 @@ import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.tomdong.sanity.dummy.DummyContent.DummyItem;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import Model.Category;
 import Model.CategoryModel;
@@ -143,9 +145,15 @@ public class CategoryFragment extends Fragment {
 
         final CategoryModel catModel = CategoryModel.GetInstance();
         ArrayList<Category> nlist = (ArrayList<Category>) catModel.GetAllCategories();
+        Set<Category>nSet=new HashSet<>();
         ArrayList<Category_card> catNames = new ArrayList<>();
         for (int i = 0; i < nlist.size(); i++) {
-            catNames.add(new Category_card(nlist.get(i).getmName(), 0, 0, nlist.get(i).getmID()));
+            nSet.add(nlist.get(i));
+            //nSet.add(new Category_card(nlist.get(i).getmName(), 0, 0, nlist.get(i).getmID()));
+        }
+        for(Category c: nSet)
+        {
+            catNames.add(new Category_card(c.getmName(), 0, 0, c.getmID()));
         }
         adapter = new MyCatgoryAdapter(getContext(), R.layout.fragment_category, catNames);
         mListView.setAdapter(adapter);

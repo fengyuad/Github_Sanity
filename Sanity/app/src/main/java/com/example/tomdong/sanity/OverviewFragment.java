@@ -69,7 +69,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private TextView transDateText;
     private int transYear, transMonth, transDay;
     private Map<PieEntry, Long> pieMap = new HashMap<>();
-
+    private FloatingActionButton scan;
     public OverviewFragment() {
         // Required empty public constructor
     }
@@ -174,7 +174,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 showInputDialog();
             }
         });
+        scan=(FloatingActionButton)myFragmentView.findViewById(R.id.fab_scan);
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
         return myFragmentView;
     }
 
