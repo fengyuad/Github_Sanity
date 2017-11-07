@@ -1,9 +1,8 @@
 package com.example.tomdong.sanity;
 
 
-import android.app.Notification;
+import android.app.Activity;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,8 +10,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -32,6 +32,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.jesusm.kfingerprintmanager.KFingerprintManager;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.concurrent.Semaphore;
 
 import Controller.OnGetDataListener;
 import Model.BudgetModel;
@@ -42,6 +47,8 @@ import Model.Variable;
 
 public class MainActivity extends AppCompatActivity implements Animation.AnimationListener, View.OnClickListener {
 
+    private final Semaphore lock = new Semaphore(1, true);
+    private final Object lockObject = new Object();
     private ImageView SanityImage;
     private EditText Account;
     private EditText PassWord;
@@ -49,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     private Button Register;
     private TextView ForgetPassword;
     private FirebaseAuth firebaseAuth;
-
+    private boolean secondTime = false;
+    private Integer failCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         Login.setVisibility(View.GONE);
         Register.setVisibility(View.GONE);
         ForgetPassword.setVisibility(View.GONE);
+        Account.setEnabled(false);
+        PassWord.setEnabled(false);
+        Login.setEnabled(false);
+        Register.setEnabled(false);
+        ForgetPassword.setEnabled(false);
         Animation animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.sanityicon_move);
         animation.setFillAfter(true);
         animation.setAnimationListener(this);
@@ -85,31 +98,60 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         StorageModel.GetInstance();
         StorageModel.SetContext(getApplicationContext());
 
+        // Fingerprint Auth
+        //final Condition needAuth = lock.newCondition();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            auth();
+        } else {
+            enableAll();
+        }
+
+        sendNotification();
+
         /**
          * ------------------ Test Database Model Functionality -------------------
          */
         //StorageModel.GetInstance().DeleteFiles();
 
-        if (FirebaseAuth.getInstance().getCurrentUser() != null)
-            LoadData();
+
 //        BudgetModel.GetInstance().AddBudget(new Budget("Budget1", 1508457600L, 30, new ArrayList<Long>()));
 //        BudgetModel.GetInstance().AddBudget(new Budget("Budget2", 1508457600L, 30, new ArrayList<Long>()));
 //        BudgetModel.GetInstance().AddBudget(new Budget("Budget3", 1508457600L, 30, new ArrayList<Long>()));
 
 
-        sendNotification();
     }
 
+    void auth() {
+        if (failCounter < 5) {
+            Runnable r = new MyThread(this);
+            Thread t = new Thread(r);
+            t.setName("AuthThread");
+            t.start();
+        } else {
+            Snackbar.make(this.findViewById(R.id.mainLayout),
+                    "Too many attempts. Login with password!", Snackbar.LENGTH_LONG).show();
+            FirebaseAuth.getInstance().signOut();
+            enableAll();
+        }
+    }
+
+    void enableAll() {
+        Account.setEnabled(true);
+        PassWord.setEnabled(true);
+        Login.setEnabled(true);
+        Register.setEnabled(true);
+        ForgetPassword.setEnabled(true);
+    }
 
     public void sendNotification() {
         String text = "";
-        for(String s: CategoryModel.GetInstance().getNotification()){
+        for (String s : CategoryModel.GetInstance().getNotification()) {
             text += s;
         }
-        for(String s: BudgetModel.GetInstance().getNotification()){
+        for (String s : BudgetModel.GetInstance().getNotification()) {
             text += s;
         }
-        if(!text.isEmpty()){
+        if (!text.isEmpty()) {
             int id = 1;
             Drawable drawable = ContextCompat.getDrawable(this, R.drawable.app_icon);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -128,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         }
 
     }
-
 
     @Override
     public void onAnimationStart(Animation animation) {
@@ -394,5 +435,116 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
         Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    public class MyThread implements Runnable {
+        Context context;
+
+        public MyThread(Context context) {
+            // store parameter for later user
+            this.context = context;
+        }
+
+        public void run() {
+            try {
+                lock.acquire();
+                //Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            KFingerprintManager fingerprintManager = new KFingerprintManager(context, "key0");
+            fingerprintManager.setAuthenticationDialogStyle(R.style.DialogThemeLight);
+            fingerprintManager.authenticate(new KFingerprintManager.AuthenticationCallback() {
+                @Override
+                public void onAuthenticationSuccess() {
+                    //messageText.setText("Successfully authenticated");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Successfully authenticated", Toast.LENGTH_SHORT).show();
+                            LoadData();
+                        }
+                    });
+                    //needAuth = false;
+                    lock.release();
+                }
+
+                @Override
+                public void onSuccessWithManualPassword(@NotNull String password) {
+                    //messageText.setText("Manual password: " + password);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(context, "Manual password", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                    lock.release();
+                }
+
+                @Override
+                public void onFingerprintNotRecognized() {
+                    //messageText.setText("Fingerprint not recognized");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(context, "Fingerprint not recognized", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
+                                    "Not recognized!", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                    failCounter++;
+                    secondTime = true;
+                    auth();
+                    lock.release();
+                }
+
+                @Override
+                public void onAuthenticationFailedWithHelp(@Nullable String help) {
+                    //messageText.setText(help);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(context, "help", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
+                                    "Finger moved too fast. Please try again!", Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+                    secondTime = true;
+                    auth();
+                    lock.release();
+                }
+
+                @Override
+                public void onFingerprintNotAvailable() {
+                    //messageText.setText("Fingerprint not available");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(context, "Fingerprint not available", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
+                                    "No available fingerprint!", Snackbar.LENGTH_LONG).show();
+                            enableAll();
+                        }
+                    });
+                    lock.release();
+                }
+
+                @Override
+                public void onCancelled() {
+                    //messageText.setText("Operation cancelled by user");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(context, "Operation cancelled by user", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
+                                    "Login with password!", Snackbar.LENGTH_LONG).show();
+                            enableAll();
+                        }
+                    });
+                    //needAuth = false;
+                    lock.release();
+                }
+            }, getSupportFragmentManager());
+        }
     }
 }
