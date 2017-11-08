@@ -158,7 +158,20 @@ public class MenuActivity extends AppCompatActivity
 
             Log.d("Manager", "Manage Transactions!!!");
 
-        } else if (id == R.id.nav_change_pw) {
+        } else if (id == R.id.nav_ana_cat) {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("Analysis");
+
+            AnalysisFragment analysisFragment = new AnalysisFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.relativelayout_for_fragment,
+                    analysisFragment,
+                    analysisFragment.getTag()
+            ).commit();
+
+            Log.d("Manager", "Analysis!!!");
+
+        }else if (id == R.id.nav_change_pw) {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             View promptView = layoutInflater.inflate(R.layout.change_fandthreshhold_inpu_log, null);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
