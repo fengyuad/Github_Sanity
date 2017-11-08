@@ -446,7 +446,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... strings){
 
             try{
-
                 SSLContext sslContext = SSLContexts.createSystemDefault();
                 SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                         sslContext,
@@ -494,83 +493,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                    String result= sb.toString();
                     Log.d("The content is: ", result);
                 }
-               // assertThat(response.getStatusLine().getStatusCode(), equalTo(200));
                 httpclient.close();
-//                CloseableHttpClient httpClient = HttpClients.createDefault();
-//                HttpPost uploadFile = new HttpPost("https://api.taggun.io/api/receipt/v1/simple/file");
-//                MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-//                FileBody bin = new FileBody(photoFile);
-//                StringBody apikey = new StringBody("c0080e90c34611e7a0ebfdc7a5da208a", ContentType.TEXT_PLAIN);
-//                builder.addPart("apikey",apikey);
-//                builder.addPart("file",bin);
-//
-//                // builder.addTextBody("apikey", "c0080e90c34611e7a0ebfdc7a5da208a", ContentType.DEFAULT_TEXT);
-////                builder.addBinaryBody(
-////                        "file",
-////                        new FileInputStream(photoFile),
-////                        ContentType.APPLICATION_OCTET_STREAM,
-////                        photoFile.getName()
-////                );
-//                HttpEntity multipart = builder.build();
-//                uploadFile.setEntity(multipart);
-//                CloseableHttpResponse response = httpClient.execute(uploadFile);
-//                HttpEntity responseEntity = response.getEntity();
-//                URL TagGunendPoint = new URL("https://api.taggun.io/api/receipt/v1/simple/file");
-//                 urlConnection
-//                        = (HttpsURLConnection) TagGunendPoint.openConnection();
-//               //  mCurrentPhotoPath="com.example.tomdong.sanity/drawable/receipt.jpg";
-//                urlConnection.setRequestProperty("apikey","c0080e90c34611e7a0ebfdc7a5da208a");
-//                String boundaryString = "----SomeRandomText";
-//                String fileUrl = mCurrentPhotoPath;
-//                File logFileToUpload = new File(mCurrentPhotoPath);
-//
-//// Indicate that we want to write to the HTTP request body
-//                urlConnection.setDoOutput(true);
-//                urlConnection.setRequestMethod("POST");
-//                urlConnection.addRequestProperty("Content-Type", "image/jpeg");
-//                urlConnection.addRequestProperty("refresh","false");
-//                urlConnection.addRequestProperty("incognito","false");
-//
-//                OutputStream outputStreamToRequestBody = urlConnection.getOutputStream();
-////                BufferedWriter httpRequestBodyWriter =
-////                        new BufferedWriter(new OutputStreamWriter(outputStreamToRequestBody));
-//
-////// Include value from the myFileDescription text area in the post data
-////                httpRequestBodyWriter.write("\n\n--" + boundaryString + "\n");
-////                httpRequestBodyWriter.write("Content-Disposition: form-data; name=\"myFileDescription\"");
-////                httpRequestBodyWriter.write("\n\n");
-////                httpRequestBodyWriter.write("Log file for 20150208");
-//
-////// Include the section to describe the file
-////                httpRequestBodyWriter.write("\n--" + boundaryString + "\n");
-////                httpRequestBodyWriter.write("Content-Disposition: form-data;"
-////                        + "name=\"myFile\";"
-////                        + "filename=\""+ logFileToUpload.getName() +"\""
-////                        + "\nContent-Type: text/plain\n\n");
-////                httpRequestBodyWriter.flush();
-//
-//// Write the actual file contents
-//                FileInputStream inputStreamToLogFile = new FileInputStream(logFileToUpload);
-//               // File file = new File("/temp/abc.txt");
-////init array with file lengt
-//
-//                int bytesRead;
-//                byte[] dataBuffer = new byte[1024];
-//                while((bytesRead = inputStreamToLogFile.read(dataBuffer)) != -1) {
-//                    outputStreamToRequestBody.write(dataBuffer, 0, bytesRead);
-//                }
-//                outputStreamToRequestBody.flush();
-//
-//// Mark the end of the multipart http request
-////                httpRequestBodyWriter.write("\n--" + boundaryString + "--\n");
-////                httpRequestBodyWriter.flush();
-//
-//// Close the streams
-//                outputStreamToRequestBody.close();
-//               // httpRequestBodyWriter.close();
-//
-//                httpResponseReader =
-//                        new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -582,10 +505,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             try {
 
-//                String lineRead;
-//                while ((lineRead = httpResponseReader.readLine()) != null) {
-//                    //System.out.println(lineRead);
-//                }
+
             }catch (Exception e) {
                 e.printStackTrace();
             }
