@@ -140,7 +140,7 @@ public class AnalysisFragment extends Fragment {
 //            yvalues.add(e);
 //            pieMap.put(e, budget.getmBudgetId());
 //        }
-
+        
         ArrayList<PieEntry> yvalues= new ArrayList<>();
         yvalues.add(new PieEntry(100f,"PartyA"));
         yvalues.add(new PieEntry(100f,"USA"));
