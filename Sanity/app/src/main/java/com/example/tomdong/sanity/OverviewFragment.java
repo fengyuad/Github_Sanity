@@ -6,10 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,11 +37,24 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import Model.Budget;
 import Model.BudgetModel;
@@ -70,6 +88,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private int transYear, transMonth, transDay;
     private Map<PieEntry, Long> pieMap = new HashMap<>();
     private FloatingActionButton scan;
+    String mCurrentPhotoPath;
+
     public OverviewFragment() {
         // Required empty public constructor
     }
@@ -178,7 +198,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                dispatchTakePictureIntent();
             }
         });
         return myFragmentView;
@@ -336,5 +356,139 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    File photoFile=null;
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Create the File where the photo should go
+
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            // Continue only if the File was successfully created
+            Uri photoURI = FileProvider.getUriForFile(getContext(),
+                    "com.example.android.fileprovider",
+                    photoFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+       }
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Log.d("On Activity Result:**", "onActivityResult: ");
+            new RestAsync().execute();
+        }
+    }
+
+    public class RestAsync extends AsyncTask<String,String,String>
+    {
+        BufferedReader httpResponseReader;
+        HttpsURLConnection urlConnection;
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+        @Override
+        protected String doInBackground(String... strings){
+
+            try{
+                URL TagGunendPoint = new URL("https://api.taggun.io/api/receipt/v1/simple/file");
+                 urlConnection
+                        = (HttpsURLConnection) TagGunendPoint.openConnection();
+
+               //  mCurrentPhotoPath="com.example.tomdong.sanity/drawable/receipt.jpg";
+                urlConnection.setRequestProperty("apikey","c0080e90c34611e7a0ebfdc7a5da208a");
+                String boundaryString = "----SomeRandomText";
+                String fileUrl = mCurrentPhotoPath;
+                File logFileToUpload = new File(mCurrentPhotoPath);
+
+// Indicate that we want to write to the HTTP request body
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestMethod("POST");
+                urlConnection.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundaryString);
+                urlConnection.addRequestProperty("refresh","false");
+                urlConnection.addRequestProperty("incognito","false");
+
+                OutputStream outputStreamToRequestBody = urlConnection.getOutputStream();
+//                BufferedWriter httpRequestBodyWriter =
+//                        new BufferedWriter(new OutputStreamWriter(outputStreamToRequestBody));
+
+//// Include value from the myFileDescription text area in the post data
+//                httpRequestBodyWriter.write("\n\n--" + boundaryString + "\n");
+//                httpRequestBodyWriter.write("Content-Disposition: form-data; name=\"myFileDescription\"");
+//                httpRequestBodyWriter.write("\n\n");
+//                httpRequestBodyWriter.write("Log file for 20150208");
+
+//// Include the section to describe the file
+//                httpRequestBodyWriter.write("\n--" + boundaryString + "\n");
+//                httpRequestBodyWriter.write("Content-Disposition: form-data;"
+//                        + "name=\"myFile\";"
+//                        + "filename=\""+ logFileToUpload.getName() +"\""
+//                        + "\nContent-Type: text/plain\n\n");
+//                httpRequestBodyWriter.flush();
+
+// Write the actual file contents
+                FileInputStream inputStreamToLogFile = new FileInputStream(logFileToUpload);
+
+                int bytesRead;
+                byte[] dataBuffer = new byte[1024];
+                while((bytesRead = inputStreamToLogFile.read(dataBuffer)) != -1) {
+                    outputStreamToRequestBody.write(dataBuffer, 0, bytesRead);
+                }
+                outputStreamToRequestBody.flush();
+
+// Mark the end of the multipart http request
+//                httpRequestBodyWriter.write("\n--" + boundaryString + "--\n");
+//                httpRequestBodyWriter.flush();
+
+// Close the streams
+                outputStreamToRequestBody.close();
+               // httpRequestBodyWriter.close();
+
+                httpResponseReader =
+                        new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            try {
+
+                String lineRead;
+                while ((lineRead = httpResponseReader.readLine()) != null) {
+                    //System.out.println(lineRead);
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
 }
