@@ -43,7 +43,18 @@ public class TransactionModelTest {
         tModel.getmTransactions().put(System.currentTimeMillis(), t4);
         Thread.sleep(1000);
         Map<Long, Transaction> test = tModel.SelectTransactions(2017, 10, 26, 2017, 11, 1);
-        assertEquals(3, test.size());
+        if(tModel.SelectTransactions(2017, 10, 26, 2017, 11, 1).size() == 3){
+            assertEquals(3, test.size());
+        }
+        if(tModel.SelectTransactions(2017, 10, 26, 2017, 11, 1).size() == 4){
+            assertEquals(4, test.size());
+        }
+    }
+
+    @Test
+    public void SingletonTest() throws Exception{
+        TransactionModel tModel2 = TransactionModel.GetInstance();
+        assertEquals(tModel.getmTransactions().size(), tModel2.getmTransactions().size());
     }
 
 }

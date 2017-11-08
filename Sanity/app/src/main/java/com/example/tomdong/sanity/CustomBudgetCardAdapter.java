@@ -17,23 +17,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
-
-
-import android.widget.ArrayAdapter;
-import android.content.Context;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-
-import java.util.ArrayList;
-
-import static android.content.ContentValues.TAG;
-
 /**
  * Created by User on 4/4/2017.
  */
@@ -82,7 +65,7 @@ public class CustomBudgetCardAdapter extends ArrayAdapter<Budget_card> {
                 LayoutInflater inflater = LayoutInflater.from(mContext);
                 convertView = inflater.inflate(mResource, parent, false);
                 holder = new ViewHolder();
-                holder.BudgetType = (TextView) convertView.findViewById(R.id.Budget_type);
+                holder.BudgetType = (TextView) convertView.findViewById(R.id.bgt_type);
                 holder.PBar = (ProgressBar) convertView.findViewById(R.id.budget_progress_bar2);
                 holder.CateGoryAmount=(TextView) convertView.findViewById(R.id.budget_amount);
 
