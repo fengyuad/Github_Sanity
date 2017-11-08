@@ -83,11 +83,11 @@ public class MainActivityTest {
 
     @Test
     public void test01_clickRegisterButton_thenLogin() throws Exception {
-        Espresso.onView(withId(R.id.UserT)).perform(typeText("test2@test.com"));
+        Espresso.onView(withId(R.id.UserT)).perform(typeText("test11@test.com"));
         Espresso.onView(withId(R.id.PwT)).perform(typeText("123456"), closeSoftKeyboard());
         Espresso.onView(withId(R.id.RegisterButton)).perform(click());
         Thread.sleep(5000);
-        Espresso.onView(withId(R.id.LoginButton)).perform(click());
+       // Espresso.onView(withId(R.id.LoginButton)).perform(click());
         Thread.sleep(5000);
         intended(hasComponent(MenuActivity.class.getName()));
     }

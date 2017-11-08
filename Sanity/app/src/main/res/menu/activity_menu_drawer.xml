@@ -18,6 +18,14 @@
             android:id="@+id/nav_mng_trans"
             android:icon="@drawable/ic_menu_gallery"
             android:title="Manage Transactions" />
+        <item
+            android:id="@+id/nav_ana_cat"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="My Behavior" />
+        <item
+            android:id="@+id/nav_ana_trans"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Spending Trend" />
     </group>
 
     <item android:title="System">
