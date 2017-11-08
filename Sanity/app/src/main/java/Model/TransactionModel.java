@@ -152,4 +152,12 @@ public class TransactionModel extends Model implements java.io.Serializable {
 
         return list;
     }
+
+    public double totalSpending(){
+        double ret = 0;
+        for(Transaction t: mTransactions.values()){
+            ret += t.getmAmount();
+        }
+        return ret;
+    }
 }
