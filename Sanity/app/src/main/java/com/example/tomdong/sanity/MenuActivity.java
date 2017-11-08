@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import Model.BudgetModel;
 import Model.CategoryModel;
+import Model.Variable;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -163,9 +164,14 @@ public class MenuActivity extends AppCompatActivity
             View promptView = layoutInflater.inflate(R.layout.change_fandthreshhold_inpu_log, null);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setView(promptView);
+            final EditText edit_thresh=promptView.findViewById(R.id.edit_thresh_hold);
+            final EditText edit_freq=promptView.findViewById(R.id.edit_frequency);
             alertDialogBuilder.setCancelable(false)
                     .setPositiveButton("submit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int idx) {
+                            if(edit_freq.getText().toString().isEmpty() || edit_thresh.getText().toString().isEmpty()) return;
+                            Variable.GetInstance().setmFrequency(Integer.parseInt(edit_freq.getText().toString()));
+                            Variable.GetInstance().setmThreshold(Double.parseDouble(edit_thresh.getText().toString()));
 
                         }
                     })
