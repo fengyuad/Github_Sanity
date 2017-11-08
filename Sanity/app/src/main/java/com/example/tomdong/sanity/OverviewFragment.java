@@ -46,6 +46,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.nio.file.Files;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -414,6 +415,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         protected String doInBackground(String... strings){
 
             try{
+
                 URL TagGunendPoint = new URL("https://api.taggun.io/api/receipt/v1/simple/file");
                  urlConnection
                         = (HttpsURLConnection) TagGunendPoint.openConnection();
@@ -427,7 +429,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 // Indicate that we want to write to the HTTP request body
                 urlConnection.setDoOutput(true);
                 urlConnection.setRequestMethod("POST");
-                urlConnection.addRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundaryString);
+                urlConnection.addRequestProperty("Content-Type", "image/jpeg");
                 urlConnection.addRequestProperty("refresh","false");
                 urlConnection.addRequestProperty("incognito","false");
 
@@ -451,6 +453,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
 // Write the actual file contents
                 FileInputStream inputStreamToLogFile = new FileInputStream(logFileToUpload);
+               // File file = new File("/temp/abc.txt");
+//init array with file lengt
 
                 int bytesRead;
                 byte[] dataBuffer = new byte[1024];
