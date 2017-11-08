@@ -184,7 +184,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
             int y= myTrasactions.get(key).getmYear();
             int m= myTrasactions.get(key).getmMonth();
             int d= myTrasactions.get(key).getmDay();
-            String timeStamp=y + "-" + (m + 1) + "-" + d;
+            String timeStamp=y + "-" + m + "-" + d;
             double amount=myTrasactions.get(key).getmAmount();
             String moneyAMount=""+amount+"$";
             String notes=myTrasactions.get(key).getmNotes();

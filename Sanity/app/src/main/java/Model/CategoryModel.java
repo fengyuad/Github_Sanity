@@ -193,6 +193,22 @@ public class CategoryModel extends Model implements Serializable {
         return list;
     }
 
+    public Map<String, Double> allCatsToTransSum(){
+        Map<String, Double> map = new HashMap<>();
+        for(Category c: mIDToCategory.values()){
+
+            double sum = 0;
+            for(Long l: c.getmTransactionIDs()){
+                Transaction tran = TransactionModel.GetInstance().getmTransactions().get(l);
+                if(tran != null){
+                    sum += tran.getmAmount();
+                }
+            }
+            map.put(c.getmName(), sum);
+        }
+        return map;
+    }
+
     /**
      *----------------- Database Related -----------------
      */
