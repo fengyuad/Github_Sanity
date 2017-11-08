@@ -5,8 +5,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import android.util.Log;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import Controller.OnGetDataListener;
 
@@ -133,5 +136,20 @@ public class TransactionModel extends Model implements java.io.Serializable {
         }
         Log.d("returnsize", "" + toReturn.size());
         return toReturn;
+    }
+
+    public List<Double> analyzeMonthlySpend(){
+        List<Double> list = new ArrayList<>();
+
+        for(int i = 1; i <= 12; i++) {
+            Map<Long, Transaction> map = SelectTransactions(2017, i, 1, 2017, i, 30);
+            double monthSum = 0;
+            for (Transaction t : map.values()) {
+                monthSum += t.getmAmount();
+            }
+            list.add(monthSum);
+        }
+
+        return list;
     }
 }
