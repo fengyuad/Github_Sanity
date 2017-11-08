@@ -130,10 +130,15 @@ public class TransactionModel extends Model implements java.io.Serializable {
                 if (mTransactions.get(key).getmMonth() > fromMonth && mTransactions.get(key).getmMonth() < toMonth) {
                     toReturn.put(key, mTransactions.get(key));
                 } else if (mTransactions.get(key).getmMonth() == fromMonth || mTransactions.get(key).getmMonth() == toMonth) {
-                    if (mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmMonth() == fromMonth) {
+                    if (mTransactions.get(key).getmMonth() == fromMonth && mTransactions.get(key).getmMonth() == toMonth){
+                        if(mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmDay() <= toDay){
+                            toReturn.put(key, mTransactions.get(key));
+                        }
+                    }
+                    else if (mTransactions.get(key).getmDay() >= fromDay && mTransactions.get(key).getmMonth() == fromMonth) {
                         toReturn.put(key, mTransactions.get(key));
                     }
-                    if (mTransactions.get(key).getmDay() <= toDay && mTransactions.get(key).getmMonth() == toMonth){
+                    else if (mTransactions.get(key).getmDay() <= toDay && mTransactions.get(key).getmMonth() == toMonth){
                         toReturn.put(key, mTransactions.get(key));
                     }
                 }
