@@ -160,7 +160,7 @@ public class MenuActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_ana_cat) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            toolbar.setTitle("Analysis");
+            toolbar.setTitle("Spending Behavior");
 
             AnalysisFragment analysisFragment = new AnalysisFragment();
             android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
@@ -169,9 +169,22 @@ public class MenuActivity extends AppCompatActivity
                     analysisFragment.getTag()
             ).commit();
 
-            Log.d("Manager", "Analysis!!!");
+            Log.d("Manager", "Spending Behavior!!!");
 
-        }else if (id == R.id.nav_change_pw) {
+        } else if (id == R.id.nav_ana_trans) {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("Spending Trend");
+
+            TrendFragment trendFragment = new TrendFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.relativelayout_for_fragment,
+                    trendFragment,
+                    trendFragment.getTag()
+            ).commit();
+
+            Log.d("Manager", "Spending Trend");
+
+        } else if (id == R.id.nav_change_pw) {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             View promptView = layoutInflater.inflate(R.layout.change_fandthreshhold_inpu_log, null);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
