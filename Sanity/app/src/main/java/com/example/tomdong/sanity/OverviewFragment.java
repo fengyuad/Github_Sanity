@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -226,13 +227,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 showInputDialog();
             }
         });
-        scan=(FloatingActionButton)myFragmentView.findViewById(R.id.fab_scan);
-        scan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-            }
-        });
+
         return myFragmentView;
     }
 
@@ -259,7 +254,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         super.onDetach();
         mListener = null;
     }
-
+    EditText transAmount;
+    EditText transNote;
+    ProgressBar progressBar;
     protected void showInputDialog() {
 
         // get input_dialog.xml view
@@ -267,15 +264,23 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext()).setView(promptView);
 
-        final EditText transAmount = (EditText) promptView.findViewById(R.id.trans_amt);
-        final EditText transNote = (EditText) promptView.findViewById((R.id.trans_note));
+        transAmount = (EditText) promptView.findViewById(R.id.trans_amt);
+        transNote = (EditText) promptView.findViewById((R.id.trans_note));
         Button transDateButton = (Button) promptView.findViewById(R.id.trans_date_button);
         transDateText = (TextView) promptView.findViewById(R.id.trans_date_text);
         transDateText.setText(transYear + "-" + (transMonth + 1) + "-" + transDay);
         transDateButton.setOnClickListener(this);
         final Spinner bgtSpinner = (Spinner) promptView.findViewById(R.id.bgt_spinner);
         final Spinner catSpinner = (Spinner) promptView.findViewById(R.id.cat_spinner);
-
+        scan=(FloatingActionButton)promptView.findViewById(R.id.fab_scan);
+        progressBar=(ProgressBar)promptView.findViewById(R.id.progressbar_recept_scanning);
+        progressBar.setVisibility(View.GONE);
+        scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dispatchTakePictureIntent();
+            }
+        });
         Map<Long, Budget> bgtMap = BudgetModel.GetInstance().GetBudgetMap();
         Map<Long, Category> catMap = CategoryModel.GetInstance().mIDToCategory;
         final Map<String, Long> bgtNameIdMap = new HashMap<>();
@@ -429,6 +434,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
             Bundle extras = data.getExtras();
             Log.d("On Activity Result:**", "onActivityResult: ");
+
             new RestAsync().execute();
         }
     }
@@ -437,9 +443,12 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     {
         BufferedReader httpResponseReader;
         HttpsURLConnection urlConnection;
+        double amount=0.0;
+        String date="Today";
+        Double taxAmount=0.0;
         @Override
         protected void onPreExecute() {
-
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -492,6 +501,30 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                     ips.close();
                    String result= sb.toString();
                     Log.d("The content is: ", result);
+                    JSONObject js=new JSONObject(result);
+                    try {
+                        amount=js.getJSONObject("totalAmount").getDouble("data");
+
+                    }catch (Exception e)
+                    {
+
+                    }
+                    try {
+                        date=js.getJSONObject("date").getString("data");
+                    }catch (Exception e)
+                    {
+
+                    }
+                    try {
+                        taxAmount=js.getJSONObject("taxAmount").getDouble("data");
+                    }catch (Exception e)
+                    {
+
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getContext(),"Bad Receipt, please try again",Toast.LENGTH_SHORT).show();
                 }
                 httpclient.close();
             } catch (Exception e) {
@@ -504,11 +537,14 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         @Override
         protected void onPostExecute(String s) {
             try {
-
+                progressBar.setVisibility(View.GONE);
+                transAmount.setText(amount+"");
+                transNote.setText("date: "+date+'\n'+"TaxAmount:"+taxAmount);
 
             }catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
     }
     private String encodeFileToBase64Binary(File file)
