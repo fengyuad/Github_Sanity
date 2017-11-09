@@ -53,6 +53,10 @@ class EncryptionManager(val encoder: Encoder, fingerprintAssetsManager: Fingerpr
 
                             }
 
+                            override fun onAuthenticationError(errMsgId: Int, errString: String?) {
+                                encryptionCallback.onAuthenticationError(errMsgId, errString)
+                            }
+
                             override fun onFingerprintNotRecognized() {
                                 encryptionCallback.onFingerprintNotRecognized()
                             }
@@ -117,6 +121,10 @@ class EncryptionManager(val encoder: Encoder, fingerprintAssetsManager: Fingerpr
                         } catch (e: BadPaddingException) {
                             callback.onDecryptionFailed()
                         }
+                    }
+
+                    override fun onAuthenticationError(errMsgId: Int, errString: String?) {
+                        callback.onAuthenticationError(errMsgId, errString)
                     }
 
                     override fun onFingerprintNotRecognized() {
