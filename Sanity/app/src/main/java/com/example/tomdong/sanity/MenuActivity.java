@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import Model.BudgetModel;
 import Model.CategoryModel;
+import Model.Variable;
 
 public class MenuActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -158,14 +159,45 @@ public class MenuActivity extends AppCompatActivity
 
             Log.d("Manager", "Manage Transactions!!!");
 
+        } else if (id == R.id.nav_ana_cat) {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("Spending Behavior");
+
+            AnalysisFragment analysisFragment = new AnalysisFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.relativelayout_for_fragment,
+                    analysisFragment,
+                    analysisFragment.getTag()
+            ).commit();
+
+            Log.d("Manager", "Spending Behavior!!!");
+
+        } else if (id == R.id.nav_ana_trans) {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            toolbar.setTitle("Spending Trend");
+
+            TrendFragment trendFragment = new TrendFragment();
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.relativelayout_for_fragment,
+                    trendFragment,
+                    trendFragment.getTag()
+            ).commit();
+
+            Log.d("Manager", "Spending Trend");
+
         } else if (id == R.id.nav_change_pw) {
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             View promptView = layoutInflater.inflate(R.layout.change_fandthreshhold_inpu_log, null);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setView(promptView);
+            final EditText edit_thresh=promptView.findViewById(R.id.edit_thresh_hold);
+            final EditText edit_freq=promptView.findViewById(R.id.edit_frequency);
             alertDialogBuilder.setCancelable(false)
                     .setPositiveButton("submit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int idx) {
+                            if(edit_freq.getText().toString().isEmpty() || edit_thresh.getText().toString().isEmpty()) return;
+                            Variable.GetInstance().setmFrequency(Integer.parseInt(edit_freq.getText().toString()));
+                            Variable.GetInstance().setmThreshold(Double.parseDouble(edit_thresh.getText().toString()));
 
                         }
                     })

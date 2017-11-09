@@ -216,6 +216,8 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             RegisterUser();
         }
         if (view == Login) {
+//            Intent intent = new Intent(this);
+//            startActivityForResult(intent, REQ_CAMERA_IMAGE);
             Log.d("MyApp", "Login");
             LoginUser();
         }
