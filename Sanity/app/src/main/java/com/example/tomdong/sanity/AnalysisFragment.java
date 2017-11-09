@@ -52,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -77,6 +78,7 @@ public class AnalysisFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    TextView pieText;
     PieChart pieChart;
     View myFragmentView;
     // TODO: Rename and change types of parameters
@@ -123,6 +125,11 @@ public class AnalysisFragment extends Fragment {
         // Inflate the layout for this fragment
         myFragmentView = inflater.inflate(R.layout.fragment_analysis, container, false);
         // Budget_ListView = myFragmentView.findViewById(R.id.Budget_listview);
+        pieText = (TextView) myFragmentView.findViewById(R.id.ana_pie_text);
+        double totalSpending = TransactionModel.GetInstance().totalSpending();
+        String text = String.format(Locale.US, "$%.2f Sanitied", totalSpending);
+        pieText.setText(text);
+
         pieChart = (PieChart) myFragmentView.findViewById(R.id.ana_cat_pie);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
@@ -141,12 +148,19 @@ public class AnalysisFragment extends Fragment {
 //            pieMap.put(e, budget.getmBudgetId());
 //        }
 
-        ArrayList<PieEntry> yvalues= new ArrayList<>();
-        yvalues.add(new PieEntry(100f,"PartyA"));
-        yvalues.add(new PieEntry(100f,"USA"));
-        yvalues.add(new PieEntry(100f,"China"));
-        yvalues.add(new PieEntry(100f,"Japan"));
-        yvalues.add(new PieEntry(23f,"Russia"));
+        Map<String, Double> catTransSum = CategoryModel.GetInstance().allCatsToTransSum();
+        ArrayList<PieEntry> yvalues = new ArrayList<>();
+        for (Map.Entry<String, Double> e: catTransSum.entrySet()) {
+            PieEntry pe = new PieEntry(Double.valueOf(e.getValue()).floatValue(), e.getKey());
+            yvalues.add(pe);
+        }
+
+//        ArrayList<PieEntry> yvalues= new ArrayList<>();
+//        yvalues.add(new PieEntry(100f,"PartyA"));
+//        yvalues.add(new PieEntry(100f,"USA"));
+//        yvalues.add(new PieEntry(100f,"China"));
+//        yvalues.add(new PieEntry(100f,"Japan"));
+//        yvalues.add(new PieEntry(23f,"Russia"));
 
         PieDataSet dataSet = new PieDataSet(yvalues, "Budgets");
         dataSet.setSliceSpace(3f);
