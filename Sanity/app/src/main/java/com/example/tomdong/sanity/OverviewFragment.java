@@ -446,6 +446,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         double amount=0.0;
         String date="Today";
         Double taxAmount=0.0;
+        String address="3135 Mclintock Avenue, Los Angeles,CA, 90007";
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
@@ -519,6 +520,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                     {
 
                     }
+                    try{
+                        address=js.getJSONObject("merchantAddress").getString("data");
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 }
                 else
                 {
@@ -537,8 +545,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             try {
                 progressBar.setVisibility(View.GONE);
                 transAmount.setText(amount+"");
-                transNote.setText("date: "+date+'\n'+"TaxAmount:"+taxAmount);
-
+                transNote.setText("date: "+date+'\n'+"TaxAmount:"+taxAmount+"Address: "+address);
             }catch (Exception e) {
                 e.printStackTrace();
             }
