@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_overview"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="?android:attr/actionModeWebSearchDrawable"
             android:title="Overview" />
         <item
             android:id="@+id/nav_mng_bgt"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/edit"
             android:title="Manage Budgets" />
         <item
             android:id="@+id/nav_mng_cat"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/edit"
             android:title="Manage Categories" />
         <item
             android:id="@+id/nav_mng_trans"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="@drawable/edit"
             android:title="Manage Transactions" />
         <item
             android:id="@+id/nav_ana_cat"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="?android:attr/actionModeFindDrawable"
             android:title="My Behavior" />
         <item
             android:id="@+id/nav_ana_trans"
-            android:icon="@drawable/ic_menu_gallery"
+            android:icon="?android:attr/actionModeFindDrawable"
             android:title="Spending Trend" />
     </group>
 
@@ -32,11 +33,11 @@
         <menu>
             <item
                 android:id="@+id/nav_change_pw"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_menu_manage"
                 android:title="Frequency/Threshhold" />
             <item
                 android:id="@+id/nav_log_out"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@android:drawable/ic_lock_power_off"
                 android:title="Log out" />
         </menu>
     </item>
