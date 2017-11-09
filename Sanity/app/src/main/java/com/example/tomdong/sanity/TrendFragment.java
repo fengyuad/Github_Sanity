@@ -102,7 +102,7 @@ public class TrendFragment extends Fragment {
         mSpinner = myTrendView.findViewById(R.id.trend_spinner);
 
         lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
+        lineChart.setScaleEnabled(false);
 
         monthly();
 
@@ -151,9 +151,6 @@ public class TrendFragment extends Fragment {
         List<Date> monthVals = TransactionModel.GetInstance().generateMonthLabel();
         data = TransactionModel.GetInstance().analyzeMonthlySpend();
 
-        Log.d("monthly data size", String.valueOf(data.size()));
-        Log.d("monthly label size", String.valueOf(monthVals.size()));
-
         ArrayList<Entry> yValues = new ArrayList<>();
         String[] months = new String[monthVals.size()];
         for(int i = 0; i < data.size(); i++)
@@ -170,6 +167,10 @@ public class TrendFragment extends Fragment {
 
             yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
         }
+
+        Log.d("monthly data size", String.valueOf(data.size()));
+        Log.d("monthly label size", String.valueOf(monthVals.size()));
+        Log.d("monthly x axis size", String.valueOf(months.length));
 
 
         double maxVal = Collections.max(data);
@@ -191,7 +192,7 @@ public class TrendFragment extends Fragment {
 
         lineChart.setData(lineData);
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setValueFormatter((new MyXAxisValueFormatter(months)));
+        //xAxis.setValueFormatter((new MyXAxisValueFormatter(months)));
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
 
@@ -201,7 +202,7 @@ public class TrendFragment extends Fragment {
 
     void weekly() {
         lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
+        lineChart.setScaleEnabled(false);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
@@ -212,8 +213,6 @@ public class TrendFragment extends Fragment {
 
         List<Date> weekVals = TransactionModel.GetInstance().generateWeekLabel();
         data = TransactionModel.GetInstance().analyzeWeeklySpend();
-        Log.d("weekly data size", String.valueOf(data.size()));
-        Log.d("weekly label size", String.valueOf(weekVals.size()));
 
         ArrayList<Entry> yValues = new ArrayList<>();
         String[] weeks = new String[weekVals.size()];
@@ -232,6 +231,9 @@ public class TrendFragment extends Fragment {
             yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
         }
 
+        Log.d("weekly data size", String.valueOf(data.size()));
+        Log.d("weekly label size", String.valueOf(weekVals.size()));
+        Log.d("weekly x axis size", String.valueOf(weeks.length));
 
         double maxVal = Collections.max(data);
         maxVal *= 1.05;
@@ -253,7 +255,7 @@ public class TrendFragment extends Fragment {
         lineChart.setData(lineData);
 
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setValueFormatter((new MyXAxisValueFormatter(weeks)));
+        //xAxis.setValueFormatter((new MyXAxisValueFormatter(weeks)));
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
 
@@ -263,7 +265,7 @@ public class TrendFragment extends Fragment {
 
     void daily() throws ParseException {
         lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(true);
+        lineChart.setScaleEnabled(false);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
@@ -274,8 +276,6 @@ public class TrendFragment extends Fragment {
 
         List<Date> dateVals = TransactionModel.GetInstance().generateDayLabel();
         data = TransactionModel.GetInstance().analyzeDaylySpend();
-        Log.d("daily data size", String.valueOf(data.size()));
-        Log.d("daily label size", String.valueOf(dateVals.size()));
 
         ArrayList<Entry> yValues = new ArrayList<>();
         String[] days = new String[dateVals.size()];
@@ -294,6 +294,9 @@ public class TrendFragment extends Fragment {
             yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
         }
 
+        Log.d("daily data size", String.valueOf(data.size()));
+        Log.d("daily label size", String.valueOf(dateVals.size()));
+        Log.d("daily x axis size", String.valueOf(days.length));
 
         double maxVal = Collections.max(data);
         maxVal *= 1.05;
@@ -315,7 +318,7 @@ public class TrendFragment extends Fragment {
         lineChart.setData(lineData);
 
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setValueFormatter((new MyXAxisValueFormatter(days)));
+        //xAxis.setValueFormatter((new MyXAxisValueFormatter(days)));
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
 
