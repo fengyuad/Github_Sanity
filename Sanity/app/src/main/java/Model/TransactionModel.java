@@ -161,6 +161,13 @@ public class TransactionModel extends Model implements java.io.Serializable {
             list.add(monthSum);
         }
 
+        // get rid of leading zeros
+        int index = 0;
+        for(; index < list.size(); index++){
+            if(list.get(index) != 0) break;
+        }
+        list = list.subList(index, list.size());
+
         return list;
     }
 
@@ -193,11 +200,19 @@ public class TransactionModel extends Model implements java.io.Serializable {
             list.add(sum);
         }
 
+        // get rid of leading zeros
+        int index = 0;
+        for(; index < list.size(); index++){
+            if(list.get(index) != 0) break;
+        }
+        list = list.subList(index, list.size());
+
         return list;
     }
 
     public List<Date> generateDayLabel() throws ParseException{
         List<Date> list = new ArrayList<>();
+
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -214,12 +229,17 @@ public class TransactionModel extends Model implements java.io.Serializable {
             // Do your job here with `date`.
             list.add(date);
         }
+
+        List<Double> spendList = analyzeDaylySpend();
+        list = list.subList(list.size() - spendList.size(), list.size());
+
         return list;
     }
 
 
 
     public List<Date> generateMonthLabel(){
+
         List<Date> list = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -230,8 +250,6 @@ public class TransactionModel extends Model implements java.io.Serializable {
             date = formatter.parse("2017-03-01");
             list.add(date);
             date = formatter.parse("2017-04-01");
-            list.add(date);
-            date = formatter.parse("2017-05-01");
             list.add(date);
             date = formatter.parse("2017-05-01");
             list.add(date);
@@ -252,6 +270,10 @@ public class TransactionModel extends Model implements java.io.Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        List<Double> spendList = analyzeMonthlySpend();
+        list = list.subList(list.size() - spendList.size(), list.size());
+
         return list;
 
     }
@@ -268,7 +290,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
             Calendar endCal = Calendar.getInstance();
             endCal.setTime(end);
 
-            for (Date date = startCal.getTime(); start.before(end); startCal.add(Calendar.DATE, 7), date = startCal.getTime()) {
+            for (Date date = startCal.getTime(); startCal.before(endCal); startCal.add(Calendar.DATE, 7), date = startCal.getTime()) {
                 // Do your job here with `date`.
                 list.add(date);
             }
@@ -276,6 +298,10 @@ public class TransactionModel extends Model implements java.io.Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        List<Double> spendList = analyzeWeeklySpend();
+        list = list.subList(list.size() - spendList.size(), list.size());
+
         return list;
     }
 
@@ -306,7 +332,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
 
             startCountingCal = Calendar.getInstance();
             startCountingCal.setTime(startDate);
-            for (int i = 0; i < diff; i++) {
+            for (int i = 0; i <= diff; i++) {
                 int startYear = startCountingCal.get(Calendar.YEAR);
                 int startMonth = startCountingCal.get(Calendar.MONTH);
                 int startDay = startCountingCal.get(Calendar.DAY_OF_MONTH);
@@ -324,6 +350,15 @@ public class TransactionModel extends Model implements java.io.Serializable {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
+        // get rid of leading zeros
+        int index = 0;
+        for(; index < list.size(); index++){
+            if(list.get(index) != 0) break;
+        }
+        list = list.subList(index, list.size());
+
 
         return list;
     }
