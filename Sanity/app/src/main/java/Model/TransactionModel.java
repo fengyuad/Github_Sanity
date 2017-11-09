@@ -196,6 +196,89 @@ public class TransactionModel extends Model implements java.io.Serializable {
         return list;
     }
 
+    public List<Date> generateDayLabel() throws ParseException{
+        List<Date> list = new ArrayList<>();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date startDate = formatter.parse("2017-01-01");
+        Date endDate = new Date();
+        System.out.println(formatter.format(endDate)); // test
+
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+
+        for (Date date = start.getTime(); start.before(end); start.add(Calendar.DATE, 1), date = start.getTime()) {
+            // Do your job here with `date`.
+            list.add(date);
+        }
+        return list;
+    }
+
+
+
+    public List<Date> generateMonthLabel(){
+        List<Date> list = new ArrayList<>();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = formatter.parse("2017-01-01");
+            list.add(date);
+            date = formatter.parse("2017-02-01");
+            list.add(date);
+            date = formatter.parse("2017-03-01");
+            list.add(date);
+            date = formatter.parse("2017-04-01");
+            list.add(date);
+            date = formatter.parse("2017-05-01");
+            list.add(date);
+            date = formatter.parse("2017-05-01");
+            list.add(date);
+            date = formatter.parse("2017-06-01");
+            list.add(date);
+            date = formatter.parse("2017-07-01");
+            list.add(date);
+            date = formatter.parse("2017-08-01");
+            list.add(date);
+            date = formatter.parse("2017-09-01");
+            list.add(date);
+            date = formatter.parse("2017-10-01");
+            list.add(date);
+            date = formatter.parse("2017-11-01");
+            list.add(date);
+            date = formatter.parse("2017-12-01");
+            list.add(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return list;
+
+    }
+
+    public List<Date> generateWeekLabel(){
+        List<Date> list = new ArrayList<>();
+        String startDate = "2017-01-01";
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date start = formatter.parse(startDate);
+            Date end = new Date();
+            Calendar startCal = Calendar.getInstance();
+            startCal.setTime(start);
+            Calendar endCal = Calendar.getInstance();
+            endCal.setTime(end);
+
+            for (Date date = startCal.getTime(); start.before(end); startCal.add(Calendar.DATE, 7), date = startCal.getTime()) {
+                // Do your job here with `date`.
+                list.add(date);
+            }
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public List<Double> analyzeWeeklySpend(){
         List<Double> list = new ArrayList<>();
 
