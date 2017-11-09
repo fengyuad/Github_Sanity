@@ -40,6 +40,8 @@ class KFingerprintManager @JvmOverloads constructor(context: Context,
     interface FingerprintBaseCallback {
         fun onFingerprintNotRecognized()
 
+        fun onAuthenticationError(errMsgId: Int, errString: String?)
+
         fun onAuthenticationFailedWithHelp(help: String?)
 
         fun onFingerprintNotAvailable()
