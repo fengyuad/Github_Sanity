@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -22,6 +25,11 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import Model.TransactionModel;
 
 
 /**
@@ -46,6 +54,10 @@ public class TrendFragment extends Fragment {
 
     LineChart lineChart;
     View myTrendView;
+    List<Double> data;
+    Spinner mSpinner;
+    String[] mMonths = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+            "Sep", "Oct", "Nov", "Dec"};
 
     public TrendFragment() {
         // Required empty public constructor
@@ -85,41 +97,49 @@ public class TrendFragment extends Fragment {
 
         myTrendView = inflater.inflate(R.layout.fragment_trend, container, false);
         lineChart = myTrendView.findViewById(R.id.line_chart);
+        mSpinner = myTrendView.findViewById(R.id.trend_spinner);
 
         lineChart.setDragEnabled(true);
-        lineChart.setScaleEnabled(false);
+        lineChart.setScaleEnabled(true);
 
-        LimitLine upper_limit = new LimitLine(65f, "Danger");
-        upper_limit.setLineWidth(4f);
-        upper_limit.enableDashedLine(10f, 10f, 0f);
-        upper_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        upper_limit.setTextSize(15f);
-
-        LimitLine lower_limit = new LimitLine(35f, "Too Low");
-        lower_limit.setLineWidth(2f);
-        lower_limit.enableDashedLine(10f, 10f, 10f);
-        lower_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        lower_limit.setTextSize(15f);
+//        LimitLine upper_limit = new LimitLine(65f, "Danger");
+//        upper_limit.setLineWidth(4f);
+//        upper_limit.enableDashedLine(10f, 10f, 0f);
+//        upper_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
+//        upper_limit.setTextSize(15f);
+//
+//        LimitLine lower_limit = new LimitLine(35f, "Too Low");
+//        lower_limit.setLineWidth(2f);
+//        lower_limit.enableDashedLine(10f, 10f, 10f);
+//        lower_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
+//        lower_limit.setTextSize(15f);
 
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
-        leftAxis.addLimitLine(upper_limit);
-        leftAxis.addLimitLine(lower_limit);
+        //leftAxis.addLimitLine(upper_limit);
+        //leftAxis.addLimitLine(lower_limit);
         leftAxis.setAxisMaximum(100f);
         leftAxis.setAxisMinimum(25f);
         leftAxis.enableGridDashedLine(10f,10f,0);
         leftAxis.setDrawLimitLinesBehindData(true);
 
-        lineChart.getAxisRight().setEnabled(false);
+        //lineChart.getAxisRight().setEnabled(false);
 
         ArrayList<Entry> yValues = new ArrayList<>();
 
-        yValues.add(new Entry(0,50f));
-        yValues.add(new Entry(1,70f));
-        yValues.add(new Entry(2,30f));
-        yValues.add(new Entry(3,50f));
-        yValues.add(new Entry(4,60f));
-        yValues.add(new Entry(5,65f));
+        data = TransactionModel.GetInstance().analyzeMonthlySpend();
+        String[] month = new String[data.size()];
+        for(int i = 0; i < data.size(); i++)
+        {
+            yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
+            month[i] = mMonths[i/12];
+        }
+
+
+        double maxVal = Collections.max(data);
+        maxVal *= 1.05;
+        leftAxis.setAxisMaximum(Float.parseFloat(String.valueOf(maxVal)));
+        leftAxis.setAxisMinimum(0f);
 
         LineDataSet set1 = new LineDataSet(yValues, "Spending");
         set1.setFillAlpha(110);
@@ -135,45 +155,50 @@ public class TrendFragment extends Fragment {
 
         lineChart.setData(lineData);
 
-        String[] values = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
-
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setValueFormatter((new MyXAxisValueFormatter(values)));
+        xAxis.setValueFormatter((new MyXAxisValueFormatter(month)));
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
 
-//        ArrayList<String> xAXES = new ArrayList<>();
-//        ArrayList<Entry> yAXESsin = new ArrayList<>();
-//        ArrayList<Entry> yAXEScos = new ArrayList<>();
-//        float x = 0;
-//        int numDataPoints = 1000;
-//        for(int i = 0; i < numDataPoints; i++)
-//        {
-//            float sinFunction = Float.parseFloat(String.valueOf(Math.sin(x)));
-//            float cosFunction = Float.parseFloat(String.valueOf(Math.cos(x)));
-//            x = x + 0.1f;
-//            yAXESsin.add(new Entry(x, sinFunction));
-//            yAXEScos.add(new Entry(x, cosFunction));
-//            xAXES.add(i, String.valueOf(x));
-//        }
-//
-//        ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
-//
-//        LineDataSet lineDataSet1 = new LineDataSet(yAXEScos, "cos");
-//        lineDataSet1.setDrawCircles(false);
-//        lineDataSet1.setColor(Color.BLUE);
-//
-//        LineDataSet lineDataSet2 = new LineDataSet(yAXESsin, "sin");
-//        lineDataSet2.setDrawCircles(false);
-//        lineDataSet2.setColor(Color.RED);
-//
-//        lineDataSets.add(lineDataSet1);
-//        lineDataSets.add(lineDataSet2);
-//
-//        lineChart.setData(new LineData(lineDataSets));
-//        lineChart.setVisibleXRangeMaximum(6.5f);
+        lineChart.setVisibleXRangeMaximum(4f);
+
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        Log.d("Trend Spinner", "Monthly");
+                        break;
+                    case 1:
+                        Log.d("Trend Spinner", "Weekly");
+                        break;
+                    case 2:
+                        Log.d("Trend Spinner", "Daily");
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         return myTrendView;
+    }
+
+    void monthly() {
+
+    }
+
+    void weekly() {
+
+    }
+
+    void daily() {
+
     }
 
     public class MyXAxisValueFormatter implements IAxisValueFormatter {

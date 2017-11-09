@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/ana_pie_text"
-        android:layout_width="301dp"
+        android:layout_width="400dp"
         android:layout_height="50dp"
         android:gravity="center"
         android:text="Spend With Us"
