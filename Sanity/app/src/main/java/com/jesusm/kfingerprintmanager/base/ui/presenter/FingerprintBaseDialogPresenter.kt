@@ -60,7 +60,8 @@ abstract class FingerprintBaseDialogPresenter(val view: View, var stage: Stage =
 
     override fun onAuthenticationError(errMsgId: Int, errString: CharSequence?) {
         if (cancellationSignal.isCancelled.not()) {
-            onAuthenticationFailed()
+            //onAuthenticationFailed()
+            view.onAuthenticationError(errMsgId, errString.toString())
         }
     }
 

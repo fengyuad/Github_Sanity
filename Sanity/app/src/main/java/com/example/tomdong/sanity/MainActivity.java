@@ -461,7 +461,9 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(context, "Successfully authenticated", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
+                                    "Successfully authenticated!", Snackbar.LENGTH_LONG).show();
+//                            Toast.makeText(context, "Successfully authenticated", Toast.LENGTH_SHORT).show();
                             LoadData();
                         }
                     });
@@ -495,6 +497,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                     failCounter++;
                     secondTime = true;
                     auth();
+                    lock.release();
+                }
+
+                @Override
+                public void onAuthenticationError(@Nullable int errMsgId, @Nullable String errString) {
+                    runOnUiThread(new SnackbarThread(context, errString));
                     lock.release();
                 }
 
@@ -545,6 +553,22 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                     lock.release();
                 }
             }, getSupportFragmentManager());
+        }
+    }
+
+    public class SnackbarThread implements Runnable {
+        Context context;
+        String errorMsg;
+
+        public SnackbarThread(Context context, String errString) {
+            this.context = context;
+            this.errorMsg = errString;
+        }
+
+        public void run() {
+            Snackbar.make(((Activity) context).findViewById(R.id.mainLayout),
+                    errorMsg, Snackbar.LENGTH_LONG).show();
+            enableAll();
         }
     }
 }

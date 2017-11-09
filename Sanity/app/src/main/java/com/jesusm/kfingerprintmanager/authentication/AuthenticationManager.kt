@@ -35,6 +35,10 @@ class AuthenticationManager(fingerprintAssetsManager: FingerprintAssetsManager,
                         fingerprintAssetsManager.createKey(invalidatedByBiometricEnrollment)
                     }
 
+                    override fun onAuthenticationError(errMsgId: Int, errString: String?) {
+                        authenticationCallback.onAuthenticationError(errMsgId, errString)
+                    }
+
                     override fun onFingerprintNotRecognized() {
                         authenticationCallback.onFingerprintNotRecognized()
                     }

@@ -98,6 +98,10 @@ abstract class FingerprintBaseDialogFragment<T : FingerprintBaseDialogPresenter>
         presenter?.onDialogCancelled()
     }
 
+    override fun onAuthenticationError(errMsgId: Int, errString: String?) {
+        callback?.onAuthenticationError(errMsgId, errString)
+    }
+
     override fun onFingerprintNotRecognized() {
         callback?.onFingerprintNotRecognized()
     }
