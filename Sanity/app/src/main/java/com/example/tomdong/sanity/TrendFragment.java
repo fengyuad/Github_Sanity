@@ -5,9 +5,12 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Spinner;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -21,7 +24,14 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+
+import Model.TransactionModel;
 
 
 /**
@@ -46,6 +56,10 @@ public class TrendFragment extends Fragment {
 
     LineChart lineChart;
     View myTrendView;
+    List<Double> data;
+    Spinner mSpinner;
+    String[] mMonths = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug",
+            "Sep", "Oct", "Nov", "Dec"};
 
     public TrendFragment() {
         // Required empty public constructor
@@ -85,41 +99,146 @@ public class TrendFragment extends Fragment {
 
         myTrendView = inflater.inflate(R.layout.fragment_trend, container, false);
         lineChart = myTrendView.findViewById(R.id.line_chart);
+        mSpinner = myTrendView.findViewById(R.id.trend_spinner);
 
         lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(false);
 
-        LimitLine upper_limit = new LimitLine(65f, "Danger");
-        upper_limit.setLineWidth(4f);
-        upper_limit.enableDashedLine(10f, 10f, 0f);
-        upper_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_TOP);
-        upper_limit.setTextSize(15f);
+        monthly();
 
-        LimitLine lower_limit = new LimitLine(35f, "Too Low");
-        lower_limit.setLineWidth(2f);
-        lower_limit.enableDashedLine(10f, 10f, 10f);
-        lower_limit.setLabelPosition(LimitLine.LimitLabelPosition.RIGHT_BOTTOM);
-        lower_limit.setTextSize(15f);
+        mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        monthly();
+                        Log.d("Trend Spinner", "Monthly");
+                        break;
+                    case 1:
+                        weekly();
+                        Log.d("Trend Spinner", "Weekly");
+                        break;
+                    case 2:
+                        try {
+                            daily();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("Trend Spinner", "Daily");
+                        break;
+                    default:
+                        break;
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        return myTrendView;
+    }
+
+    void monthly() {
         YAxis leftAxis = lineChart.getAxisLeft();
         leftAxis.removeAllLimitLines();
-        leftAxis.addLimitLine(upper_limit);
-        leftAxis.addLimitLine(lower_limit);
         leftAxis.setAxisMaximum(100f);
         leftAxis.setAxisMinimum(25f);
         leftAxis.enableGridDashedLine(10f,10f,0);
         leftAxis.setDrawLimitLinesBehindData(true);
 
-        lineChart.getAxisRight().setEnabled(false);
+        List<Date> monthVals = TransactionModel.GetInstance().generateMonthLabel();
+        data = TransactionModel.GetInstance().analyzeMonthlySpend();
 
         ArrayList<Entry> yValues = new ArrayList<>();
+        String[] months = new String[monthVals.size()];
+        for(int i = 0; i < data.size(); i++)
+        {
+            Date date = monthVals.get(i); // your date
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            month++;
+            String xVal = month + "/" + year;
+            months[i] = xVal;
 
-        yValues.add(new Entry(0,50f));
-        yValues.add(new Entry(1,70f));
-        yValues.add(new Entry(2,30f));
-        yValues.add(new Entry(3,50f));
-        yValues.add(new Entry(4,60f));
-        yValues.add(new Entry(5,65f));
+            yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
+        }
+
+        Log.d("monthly data size", String.valueOf(data.size()));
+        Log.d("monthly label size", String.valueOf(monthVals.size()));
+        Log.d("monthly x axis size", String.valueOf(months.length));
+
+
+        double maxVal = Collections.max(data);
+        maxVal *= 1.05;
+        leftAxis.setAxisMaximum(Float.parseFloat(String.valueOf(maxVal)));
+        leftAxis.setAxisMinimum(0f);
+
+        LineDataSet set1 = new LineDataSet(yValues, "Spending");
+        set1.setFillAlpha(110);
+
+        set1.setColor(Color.argb(200,255,99, 71));
+        set1.setLineWidth(3f);
+        set1.setValueTextSize(10f);
+        set1.setValueTextColor(Color.GRAY);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+        LineData lineData = new LineData(dataSets);
+
+        lineChart.setData(lineData);
+        XAxis xAxis = lineChart.getXAxis();
+        //xAxis.setValueFormatter((new MyXAxisValueFormatter(months)));
+        xAxis.setGranularity(1f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
+
+        lineChart.setVisibleXRangeMaximum(4f);
+        lineChart.invalidate();
+    }
+
+    void weekly() {
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.setAxisMaximum(100f);
+        leftAxis.setAxisMinimum(25f);
+        leftAxis.enableGridDashedLine(10f,10f,0);
+        leftAxis.setDrawLimitLinesBehindData(true);
+
+        List<Date> weekVals = TransactionModel.GetInstance().generateWeekLabel();
+        data = TransactionModel.GetInstance().analyzeWeeklySpend();
+
+        ArrayList<Entry> yValues = new ArrayList<>();
+        String[] weeks = new String[weekVals.size()];
+        for(int i = 0; i < data.size(); i++)
+        {
+            Date date = weekVals.get(i); // your date
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            month++;
+            String xVal = month + "/" + day + "/" + year;
+            weeks[i] = xVal;
+
+            yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
+        }
+
+        Log.d("weekly data size", String.valueOf(data.size()));
+        Log.d("weekly label size", String.valueOf(weekVals.size()));
+        Log.d("weekly x axis size", String.valueOf(weeks.length));
+
+        double maxVal = Collections.max(data);
+        maxVal *= 1.05;
+        leftAxis.setAxisMaximum(Float.parseFloat(String.valueOf(maxVal)));
+        leftAxis.setAxisMinimum(0f);
 
         LineDataSet set1 = new LineDataSet(yValues, "Spending");
         set1.setFillAlpha(110);
@@ -135,45 +254,76 @@ public class TrendFragment extends Fragment {
 
         lineChart.setData(lineData);
 
-        String[] values = new String[] {"Jan", "Feb", "Mar", "Apr", "May", "Jun"};
-
         XAxis xAxis = lineChart.getXAxis();
-        xAxis.setValueFormatter((new MyXAxisValueFormatter(values)));
+        //xAxis.setValueFormatter((new MyXAxisValueFormatter(weeks)));
         xAxis.setGranularity(1f);
         xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
 
-//        ArrayList<String> xAXES = new ArrayList<>();
-//        ArrayList<Entry> yAXESsin = new ArrayList<>();
-//        ArrayList<Entry> yAXEScos = new ArrayList<>();
-//        float x = 0;
-//        int numDataPoints = 1000;
-//        for(int i = 0; i < numDataPoints; i++)
-//        {
-//            float sinFunction = Float.parseFloat(String.valueOf(Math.sin(x)));
-//            float cosFunction = Float.parseFloat(String.valueOf(Math.cos(x)));
-//            x = x + 0.1f;
-//            yAXESsin.add(new Entry(x, sinFunction));
-//            yAXEScos.add(new Entry(x, cosFunction));
-//            xAXES.add(i, String.valueOf(x));
-//        }
-//
-//        ArrayList<ILineDataSet> lineDataSets = new ArrayList<>();
-//
-//        LineDataSet lineDataSet1 = new LineDataSet(yAXEScos, "cos");
-//        lineDataSet1.setDrawCircles(false);
-//        lineDataSet1.setColor(Color.BLUE);
-//
-//        LineDataSet lineDataSet2 = new LineDataSet(yAXESsin, "sin");
-//        lineDataSet2.setDrawCircles(false);
-//        lineDataSet2.setColor(Color.RED);
-//
-//        lineDataSets.add(lineDataSet1);
-//        lineDataSets.add(lineDataSet2);
-//
-//        lineChart.setData(new LineData(lineDataSets));
-//        lineChart.setVisibleXRangeMaximum(6.5f);
+        lineChart.setVisibleXRangeMaximum(4f);
+        lineChart.invalidate();
+    }
 
-        return myTrendView;
+    void daily() throws ParseException {
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(false);
+
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.removeAllLimitLines();
+        leftAxis.setAxisMaximum(100f);
+        leftAxis.setAxisMinimum(25f);
+        leftAxis.enableGridDashedLine(10f,10f,0);
+        leftAxis.setDrawLimitLinesBehindData(true);
+
+        List<Date> dateVals = TransactionModel.GetInstance().generateDayLabel();
+        data = TransactionModel.GetInstance().analyzeDaylySpend();
+
+        ArrayList<Entry> yValues = new ArrayList<>();
+        String[] days = new String[dateVals.size()];
+        for(int i = 0; i < data.size(); i++)
+        {
+            Date date = dateVals.get(i); // your date
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            month++;
+            String xVal = month + "/" + day + "/" + year;
+            days[i] = xVal;
+
+            yValues.add(new Entry(i,Float.parseFloat(String.valueOf(data.get(i)))));
+        }
+
+        Log.d("daily data size", String.valueOf(data.size()));
+        Log.d("daily label size", String.valueOf(dateVals.size()));
+        Log.d("daily x axis size", String.valueOf(days.length));
+
+        double maxVal = Collections.max(data);
+        maxVal *= 1.05;
+        leftAxis.setAxisMaximum(Float.parseFloat(String.valueOf(maxVal)));
+        leftAxis.setAxisMinimum(0f);
+
+        LineDataSet set1 = new LineDataSet(yValues, "Spending");
+        set1.setFillAlpha(110);
+
+        set1.setColor(Color.argb(200,255,99, 71));
+        set1.setLineWidth(3f);
+        set1.setValueTextSize(10f);
+        set1.setValueTextColor(Color.GRAY);
+
+        ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+        dataSets.add(set1);
+        LineData lineData = new LineData(dataSets);
+
+        lineChart.setData(lineData);
+
+        XAxis xAxis = lineChart.getXAxis();
+        //xAxis.setValueFormatter((new MyXAxisValueFormatter(days)));
+        xAxis.setGranularity(1f);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTH_SIDED);
+
+        lineChart.setVisibleXRangeMaximum(4f);
+        lineChart.invalidate();
     }
 
     public class MyXAxisValueFormatter implements IAxisValueFormatter {

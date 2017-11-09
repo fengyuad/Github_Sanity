@@ -41,8 +41,15 @@
         <item>Games</item>
     </string-array>
 
+    <string-array name="trend_array">
+        <item>Monthly</item>
+        <item>Weekly</item>
+        <item>Daily</item>
+    </string-array>
+
     <string name="bgt_prompt">Choose a budget</string>
     <string name="cat_prompt">Choose a category</string>
+    <string name="trend_prompt">Choose a frequency</string>
 
 
     <string name="cancel">Login with password</string>
