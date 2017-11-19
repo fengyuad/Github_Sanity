@@ -75,6 +75,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.Inet4Address;
 import java.net.URL;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -228,6 +229,14 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
         });
 
+        FloatingActionButton fab2=(FloatingActionButton) myFragmentView.findViewById(R.id.fab_multi_trans);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(getContext(),AddMultiTrasactionActivity.class);
+                startActivity(i);
+            }
+        });
         return myFragmentView;
     }
 

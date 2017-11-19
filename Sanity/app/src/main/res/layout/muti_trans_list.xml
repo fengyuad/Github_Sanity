@@ -7,7 +7,7 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/add_trans_text"
+        android:id="@+id/multi_add_trans_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Transaction"
@@ -18,37 +18,39 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/trans_date_button"
+            android:id="@+id/multi_trans_date_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Date" />
 
         <TextView
-            android:id="@+id/trans_date_text"
+            android:id="@+id/multi_trans_date_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="48dp"
-            android:layout_toEndOf="@+id/trans_date_button"
+            android:layout_height="30dp"
+            android:layout_alignBaseline="@+id/multi_trans_date_button"
+            android:layout_alignBottom="@+id/multi_trans_date_button"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="55dp"
+            android:gravity="center"
             android:text="2017-10-10" />
     </RelativeLayout>
 
     <Spinner
-        android:id="@+id/bgt_spinner"
+        android:id="@+id/multi_bgt_spinner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:entries="@array/bgt_array"
         android:prompt="@string/bgt_prompt" />
 
     <Spinner
-        android:id="@+id/cat_spinner"
+        android:id="@+id/multi_cat_spinner"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:entries="@array/cat_array"
         android:prompt="@string/cat_prompt" />
 
     <EditText
-        android:id="@+id/trans_amt"
+        android:id="@+id/multi_trans_amt"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Enter amount here"
@@ -56,26 +58,18 @@
         android:padding="10dp" />
 
     <EditText
-        android:id="@+id/trans_note"
+        android:id="@+id/multi_trans_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
         android:hint="Note" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_scan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        app:srcCompat="@drawable/ic_menu_camera" />
-
-    <ProgressBar
-        android:id="@+id/progressbar_recept_scanning"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+    <Button
+        android:id="@+id/button_mutiTrans_Add"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="ADD" />
 
 </LinearLayout>
 
