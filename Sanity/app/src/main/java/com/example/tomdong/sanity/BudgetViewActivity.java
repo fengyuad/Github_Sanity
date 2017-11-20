@@ -154,9 +154,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         lv = promptView.findViewById(R.id.budget_edit_catgoryList);
         // setup a dialog window
         GetCategoriesShows();
+
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int idex) {
+
                         if (edit_cat.getText().toString().isEmpty() || edit_buddget_name.getText().toString().isEmpty()
                                 || editBgtDateText.getText().toString().isEmpty()) {
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form!!!", Toast.LENGTH_SHORT).show();
