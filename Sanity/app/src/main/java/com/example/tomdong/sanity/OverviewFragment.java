@@ -164,7 +164,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         int currYear = cal.get(Calendar.YEAR);
         for(Transaction t: autoTrans)
         {
-            if(t.getmDay() == currDay && t.getmMonth() == currMonth && t.getmYear() == currYear)
+            if(t.getmYear() < currYear || (t.getmYear() == currYear && t.getmMonth() < currMonth) ||
+                    (t.getmYear() == currYear && t.getmMonth() == currMonth && t.getmDay() <= currDay))
             {
                 TransactionModel.GetInstance().addTransaction(
                         new Transaction(t.getmAmount(),
