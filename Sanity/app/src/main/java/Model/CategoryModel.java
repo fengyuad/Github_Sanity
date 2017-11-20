@@ -170,6 +170,7 @@ public class CategoryModel extends Model implements Serializable {
                 sb.append(cat.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
                 sb.append("Amount left: " + (cat.getmAmount() - cat.getmCurrentAmount()) + "; "); // amount left
+                if(BudgetModel.GetInstance().getBudgetById(cat.getmBudgetID()) == null) continue;
                 Long dayLeft = (BudgetModel.GetInstance().getBudgetById(cat.getmBudgetID()).getmDueTime() - System.currentTimeMillis())/86400000;
                 sb.append("Time remaining: " + dayLeft); // time remaining
                 ret.add(sb.toString());
