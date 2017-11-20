@@ -29,21 +29,7 @@ public class BudgetModel extends Model implements Serializable {
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
         InitDataBase();
-        // check if database has the saving budget, if not add a new one to the local and cloud set then
-        boolean hasSaving = false;
-        for(Budget b: mBudgetMap.values()){
-            if(b.getmName().equalsIgnoreCase("Saving")){
-                hasSaving = true;
-                break;
-            }
-        }
-        // don't have saving
-        if(!hasSaving){
-            Budget saving = new Budget();
-            saving.setmName("Saving");
-            mBudgetMap.put(saving.getmBudgetId(), saving);
-            CloudSet(saving);
-        }
+        
     }
 
 
@@ -416,6 +402,22 @@ public class BudgetModel extends Model implements Serializable {
         });
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+
+        // check if database has the saving budget, if not add a new one to the local and cloud set then
+        boolean hasSaving = false;
+        for(Budget b: mBudgetMap.values()){
+            if(b.getmName().equalsIgnoreCase("Saving")){
+                hasSaving = true;
+                break;
+            }
+        }
+        // don't have saving
+        if(!hasSaving){
+            Budget saving = new Budget();
+            saving.setmName("Saving");
+            mBudgetMap.put(saving.getmBudgetId(), saving);
+            CloudSet(saving);
+        }
     }
 
     /**
