@@ -13,8 +13,9 @@ public class Transaction implements java.io.Serializable {
     private int mYear;
     private int mMonth;
     private int mDay;
+    private boolean mAuto;
 
-    public Transaction(double amount, long categoryId, String notes, int year, int month, int day) {
+    public Transaction(double amount, long categoryId, String notes, int year, int month, int day, boolean auto) {
         mYear = year;
         mMonth = month;
         mDay = day;
@@ -22,11 +23,15 @@ public class Transaction implements java.io.Serializable {
         mCategoryId = categoryId;
         mTransactionId = System.currentTimeMillis();
         mNotes = notes;
+        mAuto = auto;
     }
 
     public Transaction() {
 
     }
+    public boolean getmisAuto() { return mAuto; }
+
+    public void setmAuto(boolean mAuto) { this.mAuto = mAuto; }
 
     public double getmAmount() {
         return mAmount;

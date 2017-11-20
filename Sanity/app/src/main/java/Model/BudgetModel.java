@@ -29,6 +29,21 @@ public class BudgetModel extends Model implements Serializable {
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
         InitDataBase();
+        // check if database has the saving budget, if not add a new one to the local and cloud set then
+        boolean hasSaving = false;
+        for(Budget b: mBudgetMap.values()){
+            if(b.getmName().equalsIgnoreCase("Saving")){
+                hasSaving = true;
+                break;
+            }
+        }
+        // don't have saving
+        if(!hasSaving){
+            Budget saving = new Budget();
+            saving.setmName("Saving");
+            mBudgetMap.put(saving.getmBudgetId(), saving);
+            CloudSet(saving);
+        }
     }
 
 
@@ -80,18 +95,19 @@ public class BudgetModel extends Model implements Serializable {
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
             Long timeRemain = (budget.getmDueTime() - budget.getmBudgetId()) / 86400000;
+            if(budget == null) continue;
             if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold && budget.GetCurrAmount() <= budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
-                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
-                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)"); // time remaining
+                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; \n"); // amount left
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)\n"); // time remaining
                 ret.add(sb.toString());
             } else if (budget.GetCurrAmount() > budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has exceeded limit. \n"); // name of the category
-                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; "); // amount left
-                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)"); // time remaining
+                sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; \n"); // amount left
+                sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)\n"); // time remaining
                 ret.add(sb.toString());
             }
         }
@@ -156,6 +172,14 @@ public class BudgetModel extends Model implements Serializable {
             LocalUpdate();
             return true;
         }
+    }
+
+    public Budget GetBudgetByName(String name){
+        for(Budget b: mBudgetMap.values()){
+            if(b.getmName().equalsIgnoreCase(name))
+                return b;
+        }
+        return null;
     }
 
     /**
@@ -414,4 +438,6 @@ public class BudgetModel extends Model implements Serializable {
         StorageModel.GetInstance().SaveObject(this);
     }
     //</editor-fold>
+
+
 }

@@ -64,6 +64,7 @@ public class CategoryModel extends Model implements Serializable {
     }
 
     public void InitDataBase() {
+
         mUserID = Variable.GetInstance().getmUserID();
         mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("category");
     }
@@ -379,7 +380,7 @@ public class CategoryModel extends Model implements Serializable {
      */
     public void ResetCategoryAndUpdateDatabase(Long catID) {
         Category cat = mIDToCategory.get(catID).Reset();
-        mDatabase.child(cat.toString()).setValue(cat);
+        mDatabase.child(catID.toString()).setValue(cat);
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         StorageModel.GetInstance().SaveAll();
@@ -388,7 +389,7 @@ public class CategoryModel extends Model implements Serializable {
     public void ResetCategoryPeriodEnds(Long catID) {
         Category cat = mIDToCategory.get(catID);
         cat.setmCurrentAmount(0);
-        mDatabase.child(cat.toString()).setValue(cat);
+        mDatabase.child(catID.toString()).setValue(cat);
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         StorageModel.GetInstance().SaveAll();

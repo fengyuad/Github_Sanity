@@ -118,12 +118,17 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()));
 
         for (Category c : catList) {
+            if(c == null) continue;
             list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount(), c.getmID()));
             bgtCurr += c.getmCurrentAmount();
             bgtTotal += c.getmAmount();
         }
 
         int bgtProgress = (int) ((bgtCurr / bgtTotal) * 100);
+        if(bgtProgress > 100){
+            bgtProgress -= 100;
+            bgtProgress = -bgtProgress;
+        }
         BudgetProgress.setProgress(bgtProgress);
         TextView bgtPct = (TextView) findViewById(R.id.budget_percent);
         bgtPct.setText(Integer.toString(bgtProgress) + "%");
@@ -154,9 +159,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         lv = promptView.findViewById(R.id.budget_edit_catgoryList);
         // setup a dialog window
         GetCategoriesShows();
+
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int idex) {
+
                         if (edit_cat.getText().toString().isEmpty() || edit_buddget_name.getText().toString().isEmpty()
                                 || editBgtDateText.getText().toString().isEmpty()) {
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form!!!", Toast.LENGTH_SHORT).show();
@@ -206,12 +213,11 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         cat_add_dialog_catype = (TextView) promptView.findViewById(R.id.cat_addtobudget_dialog_cat_type);
         cat_add_dialog_availableCat = (ListView) promptView.findViewById(R.id.cat_add_tobudget_dialog_listview);
 
-
         GetOthercategoriesShows();
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int idx) {
-                        if (cat_add_dialog_Amount.getText().toString().isEmpty() || cat_add_dialog_catype.getText().toString().isEmpty()) {
+                        if (cat_add_dialog_Amount.getText().toString().isEmpty() || cat_add_dialog_catype.getText().toString().equals("catgoryType")) {
                             Toast.makeText(BudgetViewActivity.this, "please fill out the form !!!", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -275,6 +281,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         final ArrayList<Category> nlist = (ArrayList<Category>) bmodel.getCategoriesUnderBudget(id);
         ArrayList<String> catNames = new ArrayList<>();
         for (int i = 0; i < nlist.size(); i++) {
+            if(nlist.get(i) == null) continue;
             catNames.add(nlist.get(i).getmName());
         }
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(BudgetViewActivity.this, android.R.layout.simple_list_item_1, catNames);

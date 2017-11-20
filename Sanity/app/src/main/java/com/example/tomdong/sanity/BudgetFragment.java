@@ -116,27 +116,8 @@ public class BudgetFragment extends Fragment implements Button.OnClickListener {
         Map<Long, Budget> budgetMap = BudgetModel.GetInstance().GetBudgetMap();
         for (Budget budget : budgetMap.values())
             list.add(new Budget_card(budget.getmName(), f.format(new Date(budget.getmDueTime() * 1000)), budget.getmPeriod(), budget.GetAmountLimit(), budget.GetCurrAmount(), budget.getmBudgetId()));
-/*
-        list.add(new Budget_card("Parking"));
-        list.add(new Budget_card("Eating"));
-        list.add(new Budget_card("Studying"));
-        list.add(new Budget_card("Working"));
-        list.add(new Budget_card("Skiing"));
-        list.add(new Budget_card("Gaming"));
-        list.add(new Budget_card("Travelling"));
-        list.add(new Budget_card("pooping"));*/
+
         adapter = new CustomBudgetCardAdapter(getContext(), R.layout.fragment_budget, list);
-/*
-        list.add(new Budget_card("Parking", "Parking", 2, 1));
-        list.add(new Budget_card("Parking", "Eating", 20, 15));
-        list.add(new Budget_card("Parking", "Studying", 5, 2));
-        list.add(new Budget_card("Parking", "Working", 10, 2));
-        list.add(new Budget_card("Parking", "Skiing", 14, 6));
-        list.add(new Budget_card("Parking", "Gaming", 109,78));
-        list.add(new Budget_card("Parking", "Travelling", 77, 60));
-        list.add(new Budget_card("shit", "pooping", 30, 17));
-        final CustomBudgetCardAdapter adapter = new CustomBudgetCardAdapter(getContext(),R.layout.fragment_budget, list);
-*/
 
         mListView.setAdapter(adapter);
         SwipeMenuCreator creator = new SwipeMenuCreator() {
