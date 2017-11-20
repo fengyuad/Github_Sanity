@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -86,6 +87,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Vector;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -153,6 +155,28 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+
+        Vector<Transaction> autoTrans = TransactionModel.GetInstance().getmAutoOnly();
+        Calendar cal = Calendar.getInstance();
+        int currDay = cal.get(Calendar.DAY_OF_MONTH);
+        int currMonth = cal.get(Calendar.MONTH);
+        int currYear = cal.get(Calendar.YEAR);
+        for(Transaction t: autoTrans)
+        {
+            if(t.getmYear() < currYear || (t.getmYear() == currYear && t.getmMonth() < currMonth) ||
+                    (t.getmYear() == currYear && t.getmMonth() == currMonth && t.getmDay() <= currDay))
+            {
+                TransactionModel.GetInstance().addTransaction(
+                        new Transaction(t.getmAmount(),
+                                t.getmCategoryId(),
+                                "Auto transaction",
+                                t.getmYear(),
+                                t.getmMonth(),
+                                t.getmDay(),
+                                false));
+                TransactionModel.GetInstance().updateMonth(t);
+            }
         }
     }
 
@@ -338,7 +362,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         });
 
-
+        final Switch autoSwitch = promptView.findViewById(R.id.auto_switch);
         // setup a dialog window
         alertDialogBuilder.setCancelable(false)
                 .setPositiveButton("Add", new DialogInterface.OnClickListener() {
@@ -353,7 +377,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                                             transYear,
                                             transMonth,
                                             transDay,
-                                            false));
+                                            autoSwitch.isChecked()));
                             String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
                                     catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
                                     transNote.getText().toString() + " " +

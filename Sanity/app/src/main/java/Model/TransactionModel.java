@@ -139,7 +139,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
-    void updateMonth(Transaction trans){
+    public void updateMonth(Transaction trans){
         if(trans.getmMonth() == 12) {
             trans.setmMonth(1);
             trans.setmYear(trans.getmYear() + 1);
