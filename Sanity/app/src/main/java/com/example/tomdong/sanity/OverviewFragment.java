@@ -352,7 +352,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                                             transNote.getText().toString(),
                                             transYear,
                                             transMonth,
-                                            transDay));
+                                            transDay,
+                                            false));
                             String trans = Double.parseDouble(transAmount.getText().toString()) + " " +
                                     catNameIdMap.get(catSpinner.getSelectedItem()).longValue() + " " +
                                     transNote.getText().toString() + " " +

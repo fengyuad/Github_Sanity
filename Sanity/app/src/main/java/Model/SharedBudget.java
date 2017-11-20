@@ -90,4 +90,10 @@ public class SharedBudget {
         this.mSharedUserIDs.add(userId);
     }
 
+    public void RemoveSharedUser(long userId){
+        if(mSharedUserIDs.contains(userId)){
+            this.mSharedUserIDs.remove(userId);
+        }
+    }
+
 }

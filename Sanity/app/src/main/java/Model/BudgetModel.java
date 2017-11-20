@@ -102,6 +102,14 @@ public class BudgetModel extends Model implements Serializable {
                 sb.append(threshold * 100 + "% of limit.\n"); // threshold of the category
                 sb.append("Amount left: " + (budget.GetAmountLimit() - budget.GetCurrAmount()) + "; \n"); // amount left
                 sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)\n"); // time remaining
+                String record = "";
+                CategoryModel cModel = CategoryModel.GetInstance();
+                for(int i=0; i<budget.getmCatIds().size(); ++i){
+                    if(cModel.GetCategoryById(budget.getmCatIds().get(i)).getmCurrentAmount() >= cModel.GetCategoryById(budget.getmCatIds().get(i)).getmAmount()){
+                        record = cModel.GetCategoryById(budget.getmCatIds().get(i)).getmName();
+                    }
+                }
+                sb.append("Category " + record + " has exceed its limit.");
                 ret.add(sb.toString());
             } else if (budget.GetCurrAmount() > budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
