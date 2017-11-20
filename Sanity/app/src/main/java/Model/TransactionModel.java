@@ -72,13 +72,16 @@ public class TransactionModel extends Model implements java.io.Serializable {
     }
 
     public Transaction addTransaction(Transaction trans) {
-        WriteNewTransaction(trans);
-        CategoryModel CModel = CategoryModel.GetInstance();
-        CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
-        Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
-        mTransactions.put(trans.getmTransactionId(), trans);
         if(trans.getmisAuto() == true){
+            WriteNewTransaction(trans);
             mAutoOnly.put(trans.getmTransactionId(), trans);
+        }
+        else{
+            WriteNewTransaction(trans);
+            CategoryModel CModel = CategoryModel.GetInstance();
+            CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
+            Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+            mTransactions.put(trans.getmTransactionId(), trans);
         }
         return trans;
     }
@@ -116,11 +119,14 @@ public class TransactionModel extends Model implements java.io.Serializable {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mTransactions.clear();
+                mAutoOnly.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Transaction trans = ds.getValue(Transaction.class);
-                    mTransactions.put(trans.getmTransactionId(), trans);
                     if(trans.getmisAuto() == true){
                         mAutoOnly.put(trans.getmTransactionId(), trans);
+                    }
+                    else{
+                        mTransactions.put(trans.getmTransactionId(), trans);
                     }
                 }
                 listener.onSuccess(dataSnapshot);
@@ -133,28 +139,26 @@ public class TransactionModel extends Model implements java.io.Serializable {
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
-    void updateMonth(){
-        for(Long key : mTransactions.keySet()){
-            if(mTransactions.get(key).getmisAuto() == true){
-                if(mTransactions.get(key).getmMonth() == 12) {
-                    mTransactions.get(key).setmMonth(1);
-                    mTransactions.get(key).setmYear(mTransactions.get(key).getmYear() + 1);
+    public void updateMonth(Transaction trans){
+        if(trans.getmMonth() == 12) {
+            trans.setmMonth(1);
+            trans.setmYear(trans.getmYear() + 1);
+        }
+        else{
+            trans.setmMonth(trans.getmMonth() + 1);
+        }
+        for(Transaction t : mAutoOnly.values()) {
+            if(trans.equals(t)) {
+                if(t.getmMonth() == 12) {
+                    t.setmMonth(1);
+                    t.setmYear(t.getmYear() + 1);
                 }
                 else{
-                    mTransactions.get(key).setmMonth(mTransactions.get(key).getmMonth() + 1);
+                    t.setmMonth(t.getmMonth() + 1);
                 }
-                WriteNewTransaction(mTransactions.get(key));
             }
         }
-        for(Long key: mAutoOnly.keySet()){
-            if(mAutoOnly.get(key).getmMonth() == 12) {
-                mAutoOnly.get(key).setmMonth(1);
-                mAutoOnly.get(key).setmYear(mAutoOnly.get(key).getmYear() + 1);
-            }
-            else{
-                mAutoOnly.get(key).setmMonth(mAutoOnly.get(key).getmMonth() + 1);
-            }
-        }
+        WriteNewTransaction(trans);
     }
 
     public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay) {
