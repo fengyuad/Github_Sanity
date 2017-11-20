@@ -325,6 +325,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 Long selectedBgtID = bgtNameIdMap.get(bgtSpinner.getSelectedItem());
                 List<Category> cList = BudgetModel.GetInstance().getCategoriesUnderBudget(selectedBgtID);
                 for (Category c : cList) {
+                    if(c == null) continue;
                     cats.add(c.getmName());
                     catAdapter.notifyDataSetChanged();
                 }

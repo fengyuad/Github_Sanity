@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Vector;
 
 import Controller.OnGetDataListener;
 
@@ -25,18 +26,20 @@ import Controller.OnGetDataListener;
 public class TransactionModel extends Model implements java.io.Serializable {
     private static TransactionModel instance = null;
     private Map<Long, Transaction> mTransactions;
+    private Map<Long, Transaction> mAutoOnly;
     private String mUserID;
 
     private TransactionModel() {
         super();
         mTransactions = new HashMap<>();
+        mAutoOnly = new HashMap<>();
         InitDataBase();
-
     }
 
     public void InitDataBase() {
         mUserID = Variable.GetInstance().getmUserID();
         mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("transaction");
+        //mDatabase = FirebaseDatabase.getInstance().getReference().child(mUserID).child("transaction");
     }
 
     public static TransactionModel GetInstance() {
@@ -60,13 +63,23 @@ public class TransactionModel extends Model implements java.io.Serializable {
         return mTransactions;
     }
 
-    public Transaction addTransaction(Transaction trans) {
+    public Vector<Transaction> getmAutoOnly() {
+        Vector<Transaction> toReturn = new Vector<>();
+        for(Long l : mAutoOnly.keySet()){
+            toReturn.add(mAutoOnly.get(l));
+        }
+        return toReturn;
+    }
 
+    public Transaction addTransaction(Transaction trans) {
         WriteNewTransaction(trans);
         CategoryModel CModel = CategoryModel.GetInstance();
         CModel.AddTransactionIDToCategoryAndUpdateDatabase(trans.getmCategoryId(), trans.getmTransactionId(), trans.getmAmount());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
         mTransactions.put(trans.getmTransactionId(), trans);
+        if(trans.getmisAuto() == true){
+            mAutoOnly.put(trans.getmTransactionId(), trans);
+        }
         return trans;
     }
 
@@ -106,6 +119,9 @@ public class TransactionModel extends Model implements java.io.Serializable {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Transaction trans = ds.getValue(Transaction.class);
                     mTransactions.put(trans.getmTransactionId(), trans);
+                    if(trans.getmisAuto() == true){
+                        mAutoOnly.put(trans.getmTransactionId(), trans);
+                    }
                 }
                 listener.onSuccess(dataSnapshot);
             }
@@ -115,6 +131,30 @@ public class TransactionModel extends Model implements java.io.Serializable {
         });
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
+    }
+
+    void updateMonth(){
+        for(Long key : mTransactions.keySet()){
+            if(mTransactions.get(key).getmisAuto() == true){
+                if(mTransactions.get(key).getmMonth() == 12) {
+                    mTransactions.get(key).setmMonth(1);
+                    mTransactions.get(key).setmYear(mTransactions.get(key).getmYear() + 1);
+                }
+                else{
+                    mTransactions.get(key).setmMonth(mTransactions.get(key).getmMonth() + 1);
+                }
+                WriteNewTransaction(mTransactions.get(key));
+            }
+        }
+        for(Long key: mAutoOnly.keySet()){
+            if(mAutoOnly.get(key).getmMonth() == 12) {
+                mAutoOnly.get(key).setmMonth(1);
+                mAutoOnly.get(key).setmYear(mAutoOnly.get(key).getmYear() + 1);
+            }
+            else{
+                mAutoOnly.get(key).setmMonth(mAutoOnly.get(key).getmMonth() + 1);
+            }
+        }
     }
 
     public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay) {
