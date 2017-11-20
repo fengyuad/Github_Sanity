@@ -130,7 +130,8 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
                                             holder.transNote.getText().toString(),
                                             transYear,
                                             transMonth,
-                                            transDay));
+                                            transDay,
+                                            false));
                             String trans = Double.parseDouble(holder.transAmount.getText().toString()) + " " +
                                     catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue() + " " +
                                     holder.transNote.getText().toString() + " " +
