@@ -18,7 +18,6 @@ public class Category implements java.io.Serializable {
     private double mAmount; // the upper bound of user setting amount
     private double mCurrentAmount; // current spending amount
     private List<Long> mTransactionIDs; // stores all transaction ids that realted to this category
-
     /**
      * Constructor
      */
