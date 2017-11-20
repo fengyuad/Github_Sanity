@@ -133,28 +133,37 @@ public class TransactionModel extends Model implements java.io.Serializable {
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
     }
 
-    void updateMonth(){
-        for(Long key : mTransactions.keySet()){
-            if(mTransactions.get(key).getmisAuto() == true){
-                if(mTransactions.get(key).getmMonth() == 12) {
-                    mTransactions.get(key).setmMonth(1);
-                    mTransactions.get(key).setmYear(mTransactions.get(key).getmYear() + 1);
+    void updateMonth(Transaction trans){
+        if(trans.getmMonth() == 12) {
+            trans.setmMonth(1);
+            trans.setmYear(trans.getmYear() + 1);
+        }
+        else{
+            trans.setmMonth(trans.getmMonth() + 1);
+        }
+        for(Transaction t : mTransactions.values()) {
+            if(trans.equals(t)) {
+                if(t.getmMonth() == 12) {
+                    t.setmMonth(1);
+                    t.setmYear(t.getmYear() + 1);
                 }
                 else{
-                    mTransactions.get(key).setmMonth(mTransactions.get(key).getmMonth() + 1);
+                    t.setmMonth(t.getmMonth() + 1);
                 }
-                WriteNewTransaction(mTransactions.get(key));
             }
         }
-        for(Long key: mAutoOnly.keySet()){
-            if(mAutoOnly.get(key).getmMonth() == 12) {
-                mAutoOnly.get(key).setmMonth(1);
-                mAutoOnly.get(key).setmYear(mAutoOnly.get(key).getmYear() + 1);
-            }
-            else{
-                mAutoOnly.get(key).setmMonth(mAutoOnly.get(key).getmMonth() + 1);
+        for(Transaction t : mAutoOnly.values()) {
+            if(trans.equals(t)) {
+                if(t.getmMonth() == 12) {
+                    t.setmMonth(1);
+                    t.setmYear(t.getmYear() + 1);
+                }
+                else{
+                    t.setmMonth(t.getmMonth() + 1);
+                }
             }
         }
+        WriteNewTransaction(trans);
     }
 
     public Map<Long, Transaction> SelectTransactions(int fromYear, int fromMonth, int fromDay, int toYear, int toMonth, int toDay) {
