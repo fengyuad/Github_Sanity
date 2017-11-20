@@ -56,6 +56,8 @@ public class Budget implements Serializable {
      * Should be triggered whenever a transaction/category change happends
      */
     public void UpdateTotalAmount() {
+        if (getmBudgetId() == -1L)
+            return;
         double totalAmount = 0.0;
         for (long catId : mCatIds) {
             Category cat = CategoryModel.GetInstance().GetCategoryById(catId);
@@ -66,6 +68,8 @@ public class Budget implements Serializable {
     }
 
     public void UpdateAmountLimit() {
+        if (getmBudgetId() == -1L)
+            return;
         double tempAmount = 0.0;
         for (Long catId : mCatIds) {
             if (CategoryModel.GetInstance().GetCategoryById(catId) == null) continue;
@@ -84,7 +88,7 @@ public class Budget implements Serializable {
         if (mDueTime <= System.currentTimeMillis()) {
             mDueTime += 86400000 * mPeriod;
             // TODO 1018
-            //PutToSaving();
+            PutToSaving();
             for (Long catId : mCatIds) {
                 CategoryModel.GetInstance().ResetCategoryPeriodEnds(catId);
             }
