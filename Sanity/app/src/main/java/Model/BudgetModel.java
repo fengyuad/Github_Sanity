@@ -29,7 +29,7 @@ public class BudgetModel extends Model implements Serializable {
     private BudgetModel() {
         mBudgetMap = new HashMap<>();
         InitDataBase();
-        
+
     }
 
 
@@ -81,7 +81,7 @@ public class BudgetModel extends Model implements Serializable {
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
             Long timeRemain = (budget.getmDueTime() - budget.getmBudgetId()) / 86400000;
-            if(budget == null) continue;
+            if (budget == null) continue;
             if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold && budget.GetCurrAmount() <= budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category
@@ -90,8 +90,8 @@ public class BudgetModel extends Model implements Serializable {
                 sb.append("Time remaining: " + (budget.getmDueTime() - budget.getmBudgetId()) / 86400000 + " Day(s)\n"); // time remaining
                 String record = "";
                 CategoryModel cModel = CategoryModel.GetInstance();
-                for(int i=0; i<budget.getmCatIds().size(); ++i){
-                    if(cModel.GetCategoryById(budget.getmCatIds().get(i)).getmCurrentAmount() >= cModel.GetCategoryById(budget.getmCatIds().get(i)).getmAmount()){
+                for (int i = 0; i < budget.getmCatIds().size(); ++i) {
+                    if (cModel.GetCategoryById(budget.getmCatIds().get(i)).getmCurrentAmount() >= cModel.GetCategoryById(budget.getmCatIds().get(i)).getmAmount()) {
                         record = cModel.GetCategoryById(budget.getmCatIds().get(i)).getmName();
                     }
                 }
@@ -168,9 +168,9 @@ public class BudgetModel extends Model implements Serializable {
         }
     }
 
-    public Budget GetBudgetByName(String name){
-        for(Budget b: mBudgetMap.values()){
-            if(b.getmName().equalsIgnoreCase(name))
+    public Budget GetBudgetByName(String name) {
+        for (Budget b : mBudgetMap.values()) {
+            if (b.getmName().equalsIgnoreCase(name))
                 return b;
         }
         return null;
@@ -225,7 +225,7 @@ public class BudgetModel extends Model implements Serializable {
      * Update an existing budget
      *
      * @param budgetId ID of the budget you want to update
-     * @param name budget name
+     * @param name     budget name
      * @return <b>true</b> if budget is successfully updated<p>
      * <b>false</b> if budget is not in mBudgetMap
      */
@@ -328,6 +328,16 @@ public class BudgetModel extends Model implements Serializable {
             b.ResetBudget();
         LocalUpdate();
     }
+
+    public void TestSavings() {
+        // check if database has the saving budget, if not add a new one to the local and cloud set then
+        if (getBudgetById(-1L) == null) {
+            // don't have saving
+            Budget saving = new Budget(-1L);
+            saving.setmName("Saving");
+            AddBudget(saving);
+        }
+    }
     //</editor-fold>
 
 
@@ -410,22 +420,6 @@ public class BudgetModel extends Model implements Serializable {
         });
         FirebaseDatabase.getInstance().getReference().child(mUserID).child("update").setValue(System.currentTimeMillis());
         Variable.GetInstance().setmUpdateTime(System.currentTimeMillis());
-
-        // check if database has the saving budget, if not add a new one to the local and cloud set then
-        boolean hasSaving = false;
-        for(Budget b: mBudgetMap.values()){
-            if(b.getmName().equalsIgnoreCase("Saving")){
-                hasSaving = true;
-                break;
-            }
-        }
-        // don't have saving
-        if(!hasSaving){
-            Budget saving = new Budget();
-            saving.setmName("Saving");
-            mBudgetMap.put(saving.getmBudgetId(), saving);
-            CloudSet(saving);
-        }
     }
 
     /**
