@@ -80,6 +80,7 @@ public class BudgetModel extends Model implements Serializable {
         List<String> ret = new ArrayList<>();
         for (Budget budget : mBudgetMap.values()) {
             Long timeRemain = (budget.getmDueTime() - budget.getmBudgetId()) / 86400000;
+            if(budget == null) continue;
             if (budget.GetCurrAmount() > budget.GetAmountLimit() * threshold && budget.GetCurrAmount() <= budget.GetAmountLimit()) {
                 StringBuilder sb = new StringBuilder();
                 sb.append(budget.getmName() + " has reached "); // name of the category

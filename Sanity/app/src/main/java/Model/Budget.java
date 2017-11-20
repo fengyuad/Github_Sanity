@@ -53,15 +53,20 @@ public class Budget implements Serializable {
      */
     public void UpdateTotalAmount() {
         double totalAmount = 0.0;
-        for (long catId : mCatIds)
+        for (long catId : mCatIds){
+            Category cat = CategoryModel.GetInstance().GetCategoryById(catId);
+            if(cat == null) continue;
             totalAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmCurrentAmount();
+        }
         mTotalAmount = totalAmount;
     }
 
     public void UpdateAmountLimit() {
         double tempAmount = 0.0;
-        for (Long catId : mCatIds)
+        for (Long catId : mCatIds){
+            if(CategoryModel.GetInstance().GetCategoryById(catId) == null) continue;
             tempAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
+        }
         mAmount = tempAmount;
     }
 
