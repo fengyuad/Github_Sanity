@@ -23,7 +23,11 @@ public class Budget implements Serializable {
      * Default Constructor
      */
     public Budget() {
+        mBudgetId = System.currentTimeMillis();
+    }
 
+    public Budget(long specialID) {
+        mBudgetId = specialID;
     }
 
     /**
@@ -53,9 +57,9 @@ public class Budget implements Serializable {
      */
     public void UpdateTotalAmount() {
         double totalAmount = 0.0;
-        for (long catId : mCatIds){
+        for (long catId : mCatIds) {
             Category cat = CategoryModel.GetInstance().GetCategoryById(catId);
-            if(cat == null) continue;
+            if (cat == null) continue;
             totalAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmCurrentAmount();
         }
         mTotalAmount = totalAmount;
@@ -63,8 +67,8 @@ public class Budget implements Serializable {
 
     public void UpdateAmountLimit() {
         double tempAmount = 0.0;
-        for (Long catId : mCatIds){
-            if(CategoryModel.GetInstance().GetCategoryById(catId) == null) continue;
+        for (Long catId : mCatIds) {
+            if (CategoryModel.GetInstance().GetCategoryById(catId) == null) continue;
             tempAmount += CategoryModel.GetInstance().GetCategoryById(catId).getmAmount();
         }
         mAmount = tempAmount;
@@ -74,24 +78,13 @@ public class Budget implements Serializable {
      * Reset budget if it's time (should be triggered somewhere)
      */
     public void ResetBudget() {
+        if (getmBudgetId() == -1L)
+            return;
         // If new period
-        /*Calendar rightNow = Calendar.getInstance();
-        if (mIsWeek)
-        {
-            if (mDueDate < rightNow.get(Calendar.DAY_OF_MONTH)) {
-                mPrevAmount = mTotalAmount;
-            }
-            else
-            {
-
-            }
-        }
-        else{
-
-        }*/
         if (mDueTime <= System.currentTimeMillis()) {
             mDueTime += 86400000 * mPeriod;
             // TODO 1018
+            //PutToSaving();
             for (Long catId : mCatIds) {
                 CategoryModel.GetInstance().ResetCategoryPeriodEnds(catId);
             }
@@ -101,26 +94,27 @@ public class Budget implements Serializable {
         }
     }
 
-    public void PutToSaving(){
-        if(getmName().equalsIgnoreCase("Saving")) return;
-        if(mAmount > mTotalAmount){
+    public void PutToSaving() {
+        if (getmBudgetId() == -1L)
+            return;
+        if (mAmount > mTotalAmount) {
+            BudgetModel.GetInstance().TestSavings();
             double leftAmount = mAmount - mTotalAmount;
-            if(BudgetModel.GetInstance().GetBudgetByName("Saving") == null) return;
-            double limit = BudgetModel.GetInstance().GetBudgetByName("Saving").getmAmount() + leftAmount;
-            BudgetModel.GetInstance().GetBudgetByName("Saving").setmAmount(limit);
-            BudgetModel.GetInstance().CloudSet(BudgetModel.GetInstance().GetBudgetByName("Saving"));
+            double limit = BudgetModel.GetInstance().getBudgetById(-1L).getmAmount() + leftAmount;
+            BudgetModel.GetInstance().getBudgetById(-1L).setmAmount(limit);
+            BudgetModel.GetInstance().CloudSet(BudgetModel.GetInstance().getBudgetById(-1L));
         }
     }
 
 
-    public void Rollover(){
-        if(getmName().equalsIgnoreCase("Saving")) return;
-
-        for(Long l: mCatIds){
+    public void Rollover() {
+        if (getmBudgetId() == -1L)
+            return;
+        for (Long l : mCatIds) {
             Category cat = CategoryModel.GetInstance().GetCategoryById(l);
-            if(cat == null) continue;;
-
-            if(cat.getmAmount() > cat.getmCurrentAmount()){
+            if (cat == null)
+                continue;
+            if (cat.getmAmount() > cat.getmCurrentAmount()) {
                 double left = cat.getmAmount() - cat.getmCurrentAmount();
                 cat.setmAmount(cat.getmAmount() + left);
                 CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(cat.getmID(), cat.getmAmount());
