@@ -108,6 +108,7 @@ public class Budget implements Serializable {
             if(BudgetModel.GetInstance().GetBudgetByName("Saving") == null) return;
             double limit = BudgetModel.GetInstance().GetBudgetByName("Saving").getmAmount() + leftAmount;
             BudgetModel.GetInstance().GetBudgetByName("Saving").setmAmount(limit);
+            BudgetModel.GetInstance().CloudSet(BudgetModel.GetInstance().GetBudgetByName("Saving"));
         }
     }
 
@@ -122,6 +123,7 @@ public class Budget implements Serializable {
             if(cat.getmAmount() > cat.getmCurrentAmount()){
                 double left = cat.getmAmount() - cat.getmCurrentAmount();
                 cat.setmAmount(cat.getmAmount() + left);
+                CategoryModel.GetInstance().UpdateAmountAndUpdateDatabase(cat.getmID(), cat.getmAmount());
             }
         }
     }
