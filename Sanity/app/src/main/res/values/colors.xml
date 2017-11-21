@@ -17,4 +17,6 @@
     <color name="dialog_dark_theme_background_selected">#302e2e</color>
     <color name="dialog_dark_theme_text_color_primary">#ffffff</color>
     <color name="dialog_dark_theme_text_color_secondary">#a6a6a6</color>
+
+    <color name="list_view_white_bg">#10ffffff</color>
 </resources>
