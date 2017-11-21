@@ -44,7 +44,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
     private static final String TAG = "MutiTransAdapter";
     private Context mContext;
     private int mResource;
-    private int lastPosition = -1;
+    private int mPosition = -1;
     private int transYear, transMonth, transDay;
     ArrayList<AddTransactionCard>mlist;
     Map<String, Long> bgtNameIdMap;
@@ -84,6 +84,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
     public View getView(final int position, View convertView, ViewGroup parent) {
        final MutiTransAdapter.ViewHolder holder;
         holder= new MutiTransAdapter.ViewHolder();
+        mPosition=position;
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
         //AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext()).setView(convertView);
@@ -133,11 +134,11 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
 
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                mlist.get(position).Categories.clear();
+                mlist.get(mPosition).Categories.clear();
                 Long selectedBgtID = bgtNameIdMap.get(holder.bgtSpinner.getSelectedItem());
                 List<Category> cList = BudgetModel.GetInstance().getCategoriesUnderBudget(selectedBgtID);
                 for (Category c : cList) {
-                    mlist.get(position).Categories.add(c.getmName());
+                    mlist.get(mPosition).Categories.add(c.getmName());
                     catAdapter.notifyDataSetChanged();
                 }
                 catAdapter.notifyDataSetChanged();
