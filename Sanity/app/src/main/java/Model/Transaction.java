@@ -13,7 +13,7 @@ public class Transaction implements java.io.Serializable {
     private int mYear;
     private int mMonth;
     private int mDay;
-    private boolean mAuto;
+    private boolean misAuto;
 
     public Transaction(double amount, long categoryId, String notes, int year, int month, int day, boolean auto) {
         mYear = year;
@@ -23,15 +23,15 @@ public class Transaction implements java.io.Serializable {
         mCategoryId = categoryId;
         mTransactionId = System.currentTimeMillis();
         mNotes = notes;
-        mAuto = auto;
+        misAuto = auto;
     }
 
     public Transaction() {
 
     }
-    public boolean getmisAuto() { return mAuto; }
+    public boolean getmisAuto() { return misAuto; }
 
-    public void setmAuto(boolean mAuto) { this.mAuto = mAuto; }
+    public void setmAuto(boolean mAuto) { this.misAuto = mAuto; }
 
     public double getmAmount() {
         return mAmount;
