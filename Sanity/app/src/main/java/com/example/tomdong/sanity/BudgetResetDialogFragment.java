@@ -28,11 +28,13 @@ public class BudgetResetDialogFragment extends DialogFragment {
                 .setPositiveButton("Rollover", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
+                        ((MenuActivity) getActivity()).rightClick();
                     }
                 })
                 .setNegativeButton("Save Budget", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
+                        ((MenuActivity) getActivity()).leftClick();
                     }
                 });
         // Create the AlertDialog object and return it

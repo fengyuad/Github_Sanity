@@ -1,5 +1,7 @@
 package Model;
 
+import android.support.v4.app.FragmentActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -323,9 +325,9 @@ public class BudgetModel extends Model implements Serializable {
      * Try to reset budgets that need to be reset
      * Call every time the user launch this app
      */
-    public void ResetAllBudgets() {
+    public void ResetAllBudgets(FragmentActivity fa) {
         for (Budget b : mBudgetMap.values())
-            b.ResetBudget();
+            b.ResetBudget(fa);
         LocalUpdate();
     }
 

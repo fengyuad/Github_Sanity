@@ -1,5 +1,9 @@
 package Model;
 
+import android.support.v4.app.FragmentActivity;
+
+import com.example.tomdong.sanity.MenuActivity;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,14 +85,21 @@ public class Budget implements Serializable {
     /**
      * Reset budget if it's time (should be triggered somewhere)
      */
-    public void ResetBudget() {
+    public void ResetBudget(FragmentActivity fa) {
         if (getmBudgetId() == -1L)
             return;
         // If new period
         if (mDueTime <= System.currentTimeMillis()) {
             mDueTime += 86400000 * mPeriod;
             // TODO 1018
-            PutToSaving();
+            if (((MenuActivity) fa).selectResetOption())
+            {
+                Rollover();
+            }
+            else
+            {
+                PutToSaving();
+            }
             for (Long catId : mCatIds) {
                 CategoryModel.GetInstance().ResetCategoryPeriodEnds(catId);
             }
