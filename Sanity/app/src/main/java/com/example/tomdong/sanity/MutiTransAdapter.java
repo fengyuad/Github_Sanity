@@ -79,7 +79,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
        final MutiTransAdapter.ViewHolder holder;
         holder= new MutiTransAdapter.ViewHolder();
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -118,33 +118,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
 //                //dispatchTakePictureIntent();
 //            }
 //        });
-        holder.Add.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if (holder.transAmount.getText().toString().isEmpty()) {
-                            Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
-                        } else {
-                            TransactionModel.GetInstance().addTransaction(
-                                    new Transaction(Double.parseDouble(holder.transAmount.getText().toString()),
-                                            catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue(),
-                                            holder.transNote.getText().toString(),
-                                            transYear,
-                                            transMonth,
-                                            transDay,
-                                            false));
-                            String trans = Double.parseDouble(holder.transAmount.getText().toString()) + " " +
-                                    catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue() + " " +
-                                    holder.transNote.getText().toString() + " " +
-                                    transYear + " " +
-                                    transMonth + " " +
-                                    transDay;
-                            Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
-                    holder.Add.setEnabled(false);
 
-                }
-
-            }
-        });
         ArrayAdapter<String> bgtAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,mlist.get(position).Budgets);
 
         final ArrayAdapter<String> catAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, mlist.get(position).Categories);
@@ -172,7 +146,37 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
             }
 
         });
+        holder.Add.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if (holder.transAmount.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
+                }
+                else if(mlist.get(position).Categories.size()==0)
+                {
+                    Toast.makeText(getContext(), "Please add a category to Budget first", Toast.LENGTH_SHORT).show();
+                }else {
+                    TransactionModel.GetInstance().addTransaction(
+                            new Transaction(Double.parseDouble(holder.transAmount.getText().toString()),
+                                    catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue(),
+                                    holder.transNote.getText().toString(),
+                                    transYear,
+                                    transMonth,
+                                    transDay,
+                                    false));
+                    String trans = Double.parseDouble(holder.transAmount.getText().toString()) + " " +
+                            catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue() + " " +
+                            holder.transNote.getText().toString() + " " +
+                            transYear + " " +
+                            transMonth + " " +
+                            transDay;
+                    Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
+                    holder.Add.setEnabled(false);
 
+                }
+
+            }
+        });
 
 
         return convertView;
