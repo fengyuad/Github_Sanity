@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -104,6 +105,13 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
             }
         });
 
+
+        if (id==-1L)
+        {
+            bgt_fab.setVisibility(ImageView.INVISIBLE);
+            add_cat_fab.setVisibility(ImageView.INVISIBLE);
+        }
+
         sendNotification();
 
     }
@@ -118,14 +126,14 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         String dueDate = f.format(new Date(BudgetModel.GetInstance().getBudgetById(id).getmDueTime()));
 
         for (Category c : catList) {
-            if(c == null) continue;
+            if (c == null) continue;
             list.add(new Category_card(c.getmName(), c.getmCurrentAmount(), c.getmAmount(), c.getmID()));
             bgtCurr += c.getmCurrentAmount();
             bgtTotal += c.getmAmount();
         }
 
         int bgtProgress = (int) ((bgtCurr / bgtTotal) * 100);
-        if(bgtProgress > 100){
+        if (bgtProgress > 100) {
             bgtProgress -= 100;
             bgtProgress = -bgtProgress;
         }
@@ -142,7 +150,8 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     }
 
     protected void showEditDialog() {
-
+        if (id == -1L)
+            return;
         // get input_dialog.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View promptView = layoutInflater.inflate(R.layout.budget_edit_dialog, null);
@@ -204,6 +213,8 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
     }
 
     protected void showAddCatToBudgetDialog() {
+        if (id == -1L)
+            return;
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View promptView = layoutInflater.inflate(R.layout.cat_addtobudget_dialog, null);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -281,7 +292,7 @@ public class BudgetViewActivity extends AppCompatActivity implements Button.OnCl
         final ArrayList<Category> nlist = (ArrayList<Category>) bmodel.getCategoriesUnderBudget(id);
         ArrayList<String> catNames = new ArrayList<>();
         for (int i = 0; i < nlist.size(); i++) {
-            if(nlist.get(i) == null) continue;
+            if (nlist.get(i) == null) continue;
             catNames.add(nlist.get(i).getmName());
         }
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(BudgetViewActivity.this, android.R.layout.simple_list_item_1, catNames);
