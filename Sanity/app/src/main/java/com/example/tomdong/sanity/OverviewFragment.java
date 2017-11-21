@@ -323,6 +323,10 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         for (Map.Entry<Long, Budget> entry : bgtMap.entrySet()) {
             Long bgtId = entry.getKey();
+            if(bgtId==-1)
+            {
+                continue;
+            }
             Budget bgt = entry.getValue();
             bgtNameIdMap.put(bgt.getmName(), bgtId);
             bgts.add(bgt.getmName());
@@ -369,7 +373,12 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int id) {
                         if (transAmount.getText().toString().isEmpty()) {
                             Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }
+                        else if(cats.size()==0)
+                        {
+                            Toast.makeText(getContext(), "Please add a category to Budget first", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
                             TransactionModel.GetInstance().addTransaction(
                                     new Transaction(Double.parseDouble(transAmount.getText().toString()),
                                             catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),

@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,10 +77,11 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
         private Button transDateButton;
         private ProgressBar progressBar;
         private Button Add;
+        private Switch AutoSwich;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
        final MutiTransAdapter.ViewHolder holder;
         holder= new MutiTransAdapter.ViewHolder();
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -111,6 +113,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
         //holder. scan=(FloatingActionButton)convertView.findViewById(R.id.multi_fab_scan);
         //holder.progressBar=(ProgressBar)convertView.findViewById(R.id.multi_progressbar_recept_scanning);
         holder.Add=(Button)convertView.findViewById(R.id.button_mutiTrans_Add);
+        holder.AutoSwich=(Switch)convertView.findViewById(R.id.multi_auto_switch);
       //  holder. progressBar.setVisibility(View.GONE);
 //        holder.scan.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -118,33 +121,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
 //                //dispatchTakePictureIntent();
 //            }
 //        });
-        holder.Add.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                if (holder.transAmount.getText().toString().isEmpty()) {
-                            Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
-                        } else {
-                            TransactionModel.GetInstance().addTransaction(
-                                    new Transaction(Double.parseDouble(holder.transAmount.getText().toString()),
-                                            catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue(),
-                                            holder.transNote.getText().toString(),
-                                            transYear,
-                                            transMonth,
-                                            transDay,
-                                            false));
-                            String trans = Double.parseDouble(holder.transAmount.getText().toString()) + " " +
-                                    catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue() + " " +
-                                    holder.transNote.getText().toString() + " " +
-                                    transYear + " " +
-                                    transMonth + " " +
-                                    transDay;
-                            Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
-                    holder.Add.setEnabled(false);
 
-                }
-
-            }
-        });
         ArrayAdapter<String> bgtAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1,mlist.get(position).Budgets);
 
         final ArrayAdapter<String> catAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, mlist.get(position).Categories);
@@ -172,7 +149,36 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
             }
 
         });
+        holder.Add.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if (holder.transAmount.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
+                }
+                else if(mlist.get(position).Categories.size()==0)
+                {
+                    Toast.makeText(getContext(), "Please add a category to Budget first", Toast.LENGTH_SHORT).show();
+                }else {
+                    TransactionModel.GetInstance().addTransaction(
+                            new Transaction(Double.parseDouble(holder.transAmount.getText().toString()),
+                                    catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue(),
+                                    holder.transNote.getText().toString(),
+                                    transYear,
+                                    transMonth,
+                                    transDay,
+                                    holder.AutoSwich.isChecked()));
+                    String trans = Double.parseDouble(holder.transAmount.getText().toString()) + " " +
+                            catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue() + " " +
+                            holder.transNote.getText().toString() + " " +
+                            transYear + " " +
+                            transMonth + " " +
+                            transDay;
+                    Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
+                    holder.Add.setEnabled(false);
+                }
 
+            }
+        });
 
 
         return convertView;
