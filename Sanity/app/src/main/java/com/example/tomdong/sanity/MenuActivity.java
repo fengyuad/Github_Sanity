@@ -40,11 +40,14 @@ public class MenuActivity extends AppCompatActivity
         TransactionPickerFragment.OnFragmentInteractionListener,
         OverviewFragment.OnFragmentInteractionListener {
 
-    boolean mDialogResult = true;
+    //    int mDialogResult = -1;
+    boolean mWaiting = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        BudgetModel.GetInstance().ResetAllBudgets(this);
 
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,9 +69,10 @@ public class MenuActivity extends AppCompatActivity
                 overviewFragment.getTag()
         ).commit();
 
-        BudgetModel.GetInstance().ResetAllBudgets(this);
-
         sendNotification();
+
+        if (BudgetModel.GetInstance().CheckResetAllBudgets())
+            selectResetOption();
     }
 
     @Override
@@ -104,18 +108,49 @@ public class MenuActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean selectResetOption() {
-        BudgetResetDialogFragment brdf = new BudgetResetDialogFragment();
-        brdf.show(getSupportFragmentManager(), "This is a tag");
-        return mDialogResult;
-    }
-
-    public void leftClick() {
-        mDialogResult = false;
-    }
-
-    public void rightClick() {
-        mDialogResult = true;
+    public void selectResetOption() {
+//        BudgetResetDialogFragment brdf = new BudgetResetDialogFragment();
+//        brdf.show(getSupportFragmentManager(), "This is a tag");
+        mWaiting = true;
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("You have budget period due(s). \nPlease choose a budget reset option: ")
+                .setPositiveButton("Rollover", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+//                        ((MenuActivity) getActivity()).rightClick();
+                        BudgetModel.GetInstance().ResetAllBudgets(1);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+//                        mDialogResult = 1;
+//                        mWaiting = false;
+                    }
+                })
+                .setNegativeButton("Save Budget", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+//                        ((MenuActivity) getActivity()).leftClick();
+                        BudgetModel.GetInstance().ResetAllBudgets(0);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+//                        mDialogResult = 0;
+//                        mWaiting = false;
+                    }
+                })
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //123
+                        BudgetModel.GetInstance().ResetAllBudgets(-1);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+//                        mDialogResult = -1;
+//                        mWaiting = false;
+                    }
+                });
+        // Create the AlertDialog object and return it
+        builder.create().show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
