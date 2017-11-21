@@ -140,8 +140,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
     }
 
     public void updateMonth(Transaction trans){
-        if(trans.getmMonth() == 12) {
-            trans.setmMonth(1);
+        if(trans.getmMonth() == 11) {
+            trans.setmMonth(0);
             trans.setmYear(trans.getmYear() + 1);
         }
         else{
@@ -149,8 +149,8 @@ public class TransactionModel extends Model implements java.io.Serializable {
         }
         for(Transaction t : mAutoOnly.values()) {
             if(trans.equals(t)) {
-                if(t.getmMonth() == 12) {
-                    t.setmMonth(1);
+                if(t.getmMonth() == 11) {
+                    t.setmMonth(0);
                     t.setmYear(t.getmYear() + 1);
                 }
                 else{

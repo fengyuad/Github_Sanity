@@ -51,6 +51,10 @@ public class AddMultiTrasactionActivity extends AppCompatActivity {
 
         for (Map.Entry<Long, Budget> entry : bgtMap.entrySet()) {
             Long bgtId = entry.getKey();
+            if(bgtId==-1)
+            {
+                continue;
+            }
             Budget bgt = entry.getValue();
             bgtNameIdMap.put(bgt.getmName(), bgtId);
             bgts.add(bgt.getmName());

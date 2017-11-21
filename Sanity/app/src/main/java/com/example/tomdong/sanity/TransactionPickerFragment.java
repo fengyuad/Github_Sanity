@@ -162,7 +162,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     transToText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
                     toYear=year;
-                    toMonth=month+1;
+                    toMonth=month;
                     toDay=dayOfMonth;
                     showTransactions();
                 }
@@ -182,7 +182,7 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
         for (Long key : myTrasactions.keySet()){
             String catName = CategoryModel.GetInstance().GetCategoryById(myTrasactions.get(key).getmCategoryId()).getmName();
             int y= myTrasactions.get(key).getmYear();
-            int m= myTrasactions.get(key).getmMonth();
+            int m= myTrasactions.get(key).getmMonth() + 1;
             int d= myTrasactions.get(key).getmDay();
             String timeStamp=y + "-" + m + "-" + d;
             double amount=myTrasactions.get(key).getmAmount();
