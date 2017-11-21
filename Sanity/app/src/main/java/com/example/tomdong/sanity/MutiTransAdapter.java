@@ -18,6 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -76,6 +77,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
         private Button transDateButton;
         private ProgressBar progressBar;
         private Button Add;
+        private Switch AutoSwich;
     }
 
     @Override
@@ -111,6 +113,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
         //holder. scan=(FloatingActionButton)convertView.findViewById(R.id.multi_fab_scan);
         //holder.progressBar=(ProgressBar)convertView.findViewById(R.id.multi_progressbar_recept_scanning);
         holder.Add=(Button)convertView.findViewById(R.id.button_mutiTrans_Add);
+        holder.AutoSwich=(Switch)convertView.findViewById(R.id.multi_auto_switch);
       //  holder. progressBar.setVisibility(View.GONE);
 //        holder.scan.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -163,7 +166,7 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
                                     transYear,
                                     transMonth,
                                     transDay,
-                                    false));
+                                    holder.AutoSwich.isChecked()));
                     String trans = Double.parseDouble(holder.transAmount.getText().toString()) + " " +
                             catNameIdMap.get(holder.catSpinner.getSelectedItem()).longValue() + " " +
                             holder.transNote.getText().toString() + " " +
@@ -172,7 +175,6 @@ public class MutiTransAdapter extends ArrayAdapter<AddTransactionCard> {
                             transDay;
                     Toast.makeText(getContext(), "Add Transaction: " + trans, Toast.LENGTH_SHORT).show();
                     holder.Add.setEnabled(false);
-
                 }
 
             }
