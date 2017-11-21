@@ -65,6 +65,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
 
     public Vector<Transaction> getmAutoOnly() {
         Vector<Transaction> toReturn = new Vector<>();
+        Log.e("auto only", "auto length " + mAutoOnly.size());
         for(Long l : mAutoOnly.keySet()){
             toReturn.add(mAutoOnly.get(l));
         }
@@ -122,13 +123,16 @@ public class TransactionModel extends Model implements java.io.Serializable {
                 mAutoOnly.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Transaction trans = ds.getValue(Transaction.class);
-                    if(trans.getmisAuto() == true){
+                    if(trans.getmisAuto()){
+                        Log.e("auto bool true", "auto bool is " + trans.getmisAuto());
                         mAutoOnly.put(trans.getmTransactionId(), trans);
                     }
                     else{
+                        Log.e("auto bool false", "auto bool is " + trans.getmisAuto());
                         mTransactions.put(trans.getmTransactionId(), trans);
                     }
                 }
+                Log.e("auto only", "auto length " + mAutoOnly.size() + "trans size " + mTransactions.size());
                 listener.onSuccess(dataSnapshot);
             }
             public void onCancelled(DatabaseError databaseError) {
@@ -140,13 +144,6 @@ public class TransactionModel extends Model implements java.io.Serializable {
     }
 
     public void updateMonth(Transaction trans){
-        if(trans.getmMonth() == 11) {
-            trans.setmMonth(0);
-            trans.setmYear(trans.getmYear() + 1);
-        }
-        else{
-            trans.setmMonth(trans.getmMonth() + 1);
-        }
         for(Transaction t : mAutoOnly.values()) {
             if(trans.equals(t)) {
                 if(t.getmMonth() == 11) {
