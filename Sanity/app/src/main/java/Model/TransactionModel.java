@@ -207,6 +207,7 @@ public class TransactionModel extends Model implements java.io.Serializable {
         for(; index < list.size(); index++){
             if(list.get(index) != 0) break;
         }
+        if(list.size() == 0) return list;
         list = list.subList(index, list.size());
 
         return list;

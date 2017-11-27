@@ -27,6 +27,10 @@
             android:id="@+id/nav_ana_trans"
             android:icon="?android:attr/actionModeFindDrawable"
             android:title="Spending Trend" />
+        <item
+            android:id="@+id/nav_nan_bank"
+            android:icon="?attr/actionModeShareDrawable"
+            android:title="nav_linkBankAccount" />
     </group>
 
     <item android:title="System">

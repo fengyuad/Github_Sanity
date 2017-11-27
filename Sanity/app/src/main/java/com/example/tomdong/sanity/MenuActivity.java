@@ -231,6 +231,9 @@ public class MenuActivity extends AppCompatActivity
                 }
             });
             alert.show();
+        }else if(id == R.id.nav_nan_bank)
+        {
+            
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
