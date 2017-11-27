@@ -40,10 +40,14 @@ public class MenuActivity extends AppCompatActivity
         TransactionPickerFragment.OnFragmentInteractionListener,
         OverviewFragment.OnFragmentInteractionListener {
 
+    //    int mDialogResult = -1;
+    boolean mWaiting = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        BudgetModel.GetInstance().ResetAllBudgets(this);
 
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -66,6 +70,9 @@ public class MenuActivity extends AppCompatActivity
         ).commit();
 
         sendNotification();
+
+        if (BudgetModel.GetInstance().CheckResetAllBudgets())
+            selectResetOption();
     }
 
     @Override
@@ -82,7 +89,7 @@ public class MenuActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
-        ((TextView)findViewById(R.id.textViewUsername)).setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        ((TextView) findViewById(R.id.textViewUsername)).setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         return true;
     }
 
@@ -99,6 +106,51 @@ public class MenuActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void selectResetOption() {
+//        BudgetResetDialogFragment brdf = new BudgetResetDialogFragment();
+//        brdf.show(getSupportFragmentManager(), "This is a tag");
+        mWaiting = true;
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("You have budget period due(s). \nPlease choose a budget reset option: ")
+                .setPositiveButton("Rollover", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // FIRE ZE MISSILES!
+//                        ((MenuActivity) getActivity()).rightClick();
+                        BudgetModel.GetInstance().ResetAllBudgets(1);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+//                        mDialogResult = 1;
+//                        mWaiting = false;
+                    }
+                })
+                .setNegativeButton("Save Budget", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+//                        ((MenuActivity) getActivity()).leftClick();
+                        BudgetModel.GetInstance().ResetAllBudgets(0);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+//                        mDialogResult = 0;
+//                        mWaiting = false;
+                    }
+                })
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //123
+                        BudgetModel.GetInstance().ResetAllBudgets(-1);
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+//                        mDialogResult = -1;
+//                        mWaiting = false;
+                    }
+                });
+        // Create the AlertDialog object and return it
+        builder.create().show();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -188,12 +240,13 @@ public class MenuActivity extends AppCompatActivity
             View promptView = layoutInflater.inflate(R.layout.change_fandthreshhold_inpu_log, null);
             AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
             alertDialogBuilder.setView(promptView);
-            final EditText edit_thresh=promptView.findViewById(R.id.edit_thresh_hold);
-            final EditText edit_freq=promptView.findViewById(R.id.edit_frequency);
+            final EditText edit_thresh = promptView.findViewById(R.id.edit_thresh_hold);
+            final EditText edit_freq = promptView.findViewById(R.id.edit_frequency);
             alertDialogBuilder.setCancelable(false)
                     .setPositiveButton("submit", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int idx) {
-                            if(edit_freq.getText().toString().isEmpty() || edit_thresh.getText().toString().isEmpty()) return;
+                            if (edit_freq.getText().toString().isEmpty() || edit_thresh.getText().toString().isEmpty())
+                                return;
                             Variable.GetInstance().setmFrequency(Integer.parseInt(edit_freq.getText().toString()));
                             Variable.GetInstance().setmThreshold(Double.parseDouble(edit_thresh.getText().toString()));
 
@@ -253,13 +306,13 @@ public class MenuActivity extends AppCompatActivity
 
     public void sendNotification() {
         String text = "";
-        for(String s: CategoryModel.GetInstance().getNotification()){
+        for (String s : CategoryModel.GetInstance().getNotification()) {
             text += s;
         }
-        for(String s: BudgetModel.GetInstance().getNotification()){
+        for (String s : BudgetModel.GetInstance().getNotification()) {
             text += s;
         }
-        if(!text.isEmpty()){
+        if (!text.isEmpty()) {
             int id = 1;
             Drawable drawable = ContextCompat.getDrawable(this, R.drawable.app_icon);
             Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();

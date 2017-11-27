@@ -323,10 +323,17 @@ public class BudgetModel extends Model implements Serializable {
      * Try to reset budgets that need to be reset
      * Call every time the user launch this app
      */
-    public void ResetAllBudgets() {
+    public void ResetAllBudgets(int code) {
         for (Budget b : mBudgetMap.values())
-            b.ResetBudget();
+            b.ResetBudget(code);
         LocalUpdate();
+    }
+
+    public boolean CheckResetAllBudgets() {
+        for (Budget b : mBudgetMap.values())
+            if (b.CheckReset())
+                return true;
+        return false;
     }
 
     public void TestSavings() {

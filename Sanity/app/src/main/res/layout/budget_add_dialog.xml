@@ -26,29 +26,28 @@
         android:id="@+id/textView10"
         android:layout_width="89dp"
         android:layout_height="38dp"
-        android:text="Period"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintVertical_bias="0.958"
         android:layout_marginLeft="16dp"
-        android:textSize="25dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        android:text="Period"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.958" />
 
     <TextView
         android:id="@+id/textView11"
         android:layout_width="60dp"
         android:layout_height="39dp"
-        android:text="Days"
         android:layout_marginBottom="13dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline7"
         android:layout_marginRight="31dp"
-        android:textSize="25dp"
         android:gravity="center"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginEnd="31dp" />
+        android:text="Days"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline7"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <EditText
         android:id="@+id/add_bgt_name"

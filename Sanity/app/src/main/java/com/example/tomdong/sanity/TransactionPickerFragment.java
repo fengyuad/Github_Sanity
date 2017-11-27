@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
 
+import Model.Category;
 import Model.CategoryModel;
 import Model.Transaction;
 import Model.TransactionModel;
@@ -36,20 +37,18 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
     Button transFromButton, transToButton;
     TextView transFromText, transToText;
     ListView transHistory;
-    private int fromYear, fromMonth, fromDay;
-    private int toYear, toMonth, toDay;
     ArrayList<Transaction_card> list;
     CustomTransactionCardAdapter adapter;
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+    private OnFragmentInteractionListener mListener;
+    private int fromYear, fromMonth, fromDay;
+    private int toYear, toMonth, toDay;
+
     public TransactionPickerFragment() {
         // Required empty public constructor
     }
@@ -106,13 +105,13 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
         transToButton.setOnClickListener(this);
 
         list = new ArrayList<>();
-       // list.add(new Transaction_card("working","2017-5-10","600$","I love you"));
+        // list.add(new Transaction_card("working","2017-5-10","600$","I love you"));
 
         adapter = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, list);
         transHistory.setAdapter(adapter);
         transFromText.setText(fromYear + "-" + (fromMonth + 1) + "-" + fromMonth);
         transToText.setText(toYear + "-" + (toMonth + 1) + "-" + toMonth);
-       // showTransactions();
+        // showTransactions();
         return v;
     }
 
@@ -147,9 +146,9 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     transFromText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-                    fromYear=year;
-                    fromMonth=month;
-                    fromDay=dayOfMonth;
+                    fromYear = year;
+                    fromMonth = month;
+                    fromDay = dayOfMonth;
                     showTransactions();
                 }
             }, fromYear, fromMonth, fromDay);
@@ -161,9 +160,9 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                     transToText.setText(year + "-" + (month + 1) + "-" + dayOfMonth);
-                    toYear=year;
-                    toMonth=month;
-                    toDay=dayOfMonth;
+                    toYear = year;
+                    toMonth = month + 1;
+                    toDay = dayOfMonth;
                     showTransactions();
                 }
             }, toYear, toMonth, toDay);
@@ -171,31 +170,35 @@ public class TransactionPickerFragment extends Fragment implements View.OnClickL
 
         }
     }
-    public void showTransactions()
-    {
-        TransactionModel tmodel=TransactionModel.GetInstance();
-        Map<Long, Transaction> myTrasactions =tmodel.SelectTransactions(fromYear,fromMonth,fromDay,toYear, toMonth, toDay);
-        Log.d("fromDay:", "" +fromDay);
-        Log.d("toDay:", "" +toDay);
-        ArrayList<Transaction_card>nList=new ArrayList<>();
+
+    public void showTransactions() {
+        TransactionModel tmodel = TransactionModel.GetInstance();
+        Map<Long, Transaction> myTrasactions = tmodel.SelectTransactions(fromYear, fromMonth, fromDay, toYear, toMonth, toDay);
+        Log.d("fromDay:", "" + fromDay);
+        Log.d("toDay:", "" + toDay);
+        ArrayList<Transaction_card> nList = new ArrayList<>();
         Log.d("myTrasactionSize", "" + myTrasactions.size());
-        for (Long key : myTrasactions.keySet()){
-            String catName = CategoryModel.GetInstance().GetCategoryById(myTrasactions.get(key).getmCategoryId()).getmName();
-            int y= myTrasactions.get(key).getmYear();
-            int m= myTrasactions.get(key).getmMonth() + 1;
-            int d= myTrasactions.get(key).getmDay();
-            String timeStamp=y + "-" + m + "-" + d;
-            double amount=myTrasactions.get(key).getmAmount();
-            String moneyAMount=""+amount+"$";
-            String notes=myTrasactions.get(key).getmNotes();
-            nList.add(new Transaction_card(catName,timeStamp,moneyAMount,notes));
+        for (Long key : myTrasactions.keySet()) {
+            Category cat = CategoryModel.GetInstance().GetCategoryById(myTrasactions.get(key).getmCategoryId());
+            if (cat == null)
+                continue;
+            String catName = cat.getmName();
+            int y = myTrasactions.get(key).getmYear();
+            int m = myTrasactions.get(key).getmMonth();
+            int d = myTrasactions.get(key).getmDay();
+            String timeStamp = y + "-" + m + "-" + d;
+            double amount = myTrasactions.get(key).getmAmount();
+            String moneyAMount = "" + amount + "$";
+            String notes = myTrasactions.get(key).getmNotes();
+            nList.add(new Transaction_card(catName, timeStamp, moneyAMount, notes));
         }
-        CustomTransactionCardAdapter adapter1=new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, nList);
-        adapter= adapter1;
+        CustomTransactionCardAdapter adapter1 = new CustomTransactionCardAdapter(getContext(), R.layout.tran_item, nList);
+        adapter = adapter1;
         transHistory.setAdapter(adapter);
         Log.d("MyTest", "" + nList.size());
         adapter.notifyDataSetChanged();
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
