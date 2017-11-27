@@ -24,15 +24,24 @@ public class BudgetResetDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("美滋滋")
+        builder.setMessage("Budget")
                 .setPositiveButton("Rollover", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // FIRE ZE MISSILES!
+//                        ((MenuActivity) getActivity()).rightClick();
+//                        ((MenuActivity) getActivity()).mDialogResult = true;
                     }
                 })
                 .setNegativeButton("Save Budget", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog
+//                        ((MenuActivity) getActivity()).leftClick();
+//                        ((MenuActivity) getActivity()).mDialogResult = false;
+                    }
+                })
+                .setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //123
                     }
                 });
         // Create the AlertDialog object and return it

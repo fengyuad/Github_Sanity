@@ -299,6 +299,12 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(MainActivity.this, "Register Succeeded", Toast.LENGTH_SHORT).show();
+                    Variable.GetInstance().setmUserID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    BudgetModel.GetInstance().InitDataBase();
+                    CategoryModel.GetInstance().InitDataBase();
+                    TransactionModel.GetInstance().InitDataBase();
+                    BudgetModel.GetInstance().TestSavings();
+                    StorageModel.GetInstance().SaveAll();
                     StartActivity();
                 } else {
                     Account.setEnabled(true);
@@ -371,7 +377,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                 CategoryModel.GetInstance().InitDataBase();
                 TransactionModel.GetInstance().InitDataBase();
                 BudgetModel.GetInstance().TestSavings();
-                BudgetModel.GetInstance().ResetAllBudgets();
+//                BudgetModel.GetInstance().ResetAllBudgets();
                 StartActivity();
             }
         } else {
@@ -407,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
                             public void onSuccess(DataSnapshot data) {
                                 BudgetModel.GetInstance().TestSavings();
                                 StorageModel.GetInstance().SaveAll();
-                                BudgetModel.GetInstance().ResetAllBudgets();
+//                                BudgetModel.GetInstance().ResetAllBudgets();
                                 StartActivity();
                             }
 

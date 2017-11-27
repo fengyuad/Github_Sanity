@@ -81,14 +81,23 @@ public class Budget implements Serializable {
     /**
      * Reset budget if it's time (should be triggered somewhere)
      */
-    public void ResetBudget() {
+    public void ResetBudget(int code) {
         if (getmBudgetId() == -1L)
             return;
         // If new period
         if (mDueTime <= System.currentTimeMillis()) {
             mDueTime += 86400000 * mPeriod;
             // TODO 1018
-            PutToSaving();
+            switch (code) {
+                case 1:
+                    Rollover();
+                    break;
+                case 0:
+                    PutToSaving();
+                    break;
+                default:
+                    break;
+            }
             for (Long catId : mCatIds) {
                 CategoryModel.GetInstance().ResetCategoryPeriodEnds(catId);
             }
@@ -96,6 +105,15 @@ public class Budget implements Serializable {
             UpdateAmountLimit();
             BudgetModel.GetInstance().CloudSet(this);
         }
+    }
+
+    public boolean CheckReset()
+    {
+        if (getmBudgetId() == -1L)
+            return false;
+        if (mDueTime <= System.currentTimeMillis())
+            return true;
+        return false;
     }
 
     public void PutToSaving() {
