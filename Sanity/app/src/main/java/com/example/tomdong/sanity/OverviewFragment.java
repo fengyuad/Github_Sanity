@@ -193,13 +193,18 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         int currDay = cal.get(Calendar.DAY_OF_MONTH);
         int currMonth = cal.get(Calendar.MONTH);
         int currYear = cal.get(Calendar.YEAR);
-        for (Transaction t : autoTrans) {
-            if (t.getmYear() < currYear || (t.getmYear() == currYear && t.getmMonth() < currMonth) ||
-                    (t.getmYear() == currYear && t.getmMonth() == currMonth && t.getmDay() <= currDay)) {
+        Log.e("auto trans", "auto length " + autoTrans.size());
+        for(Transaction t: autoTrans)
+        {
+            Log.e("auto trans", t.getmNotes() + " " + currMonth + " " + currDay + " " + currYear);
+            if(t.getmYear() < currYear || (t.getmYear() == currYear && t.getmMonth() < currMonth) ||
+                    (t.getmYear() == currYear && t.getmMonth() == currMonth && t.getmDay() <= currDay))
+            {
+                Log.e("auto trans", "add auto trans");
                 TransactionModel.GetInstance().addTransaction(
                         new Transaction(t.getmAmount(),
                                 t.getmCategoryId(),
-                                "Auto transaction",
+                                t.getmNotes(),
                                 t.getmYear(),
                                 t.getmMonth(),
                                 t.getmDay(),
