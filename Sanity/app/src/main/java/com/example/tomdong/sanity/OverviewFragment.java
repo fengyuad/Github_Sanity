@@ -5,6 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -38,6 +41,44 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+
+import Model.Budget;
+import Model.BudgetModel;
+import Model.Category;
+import Model.CategoryModel;
+import Model.Transaction;
+import Model.TransactionModel;
 
 //import org.apache.http.HttpEntity;
 //import org.apache.http.HttpResponse;
@@ -56,48 +97,6 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 //import org.apache.http.client.methods.CloseableHttpResponse;
 //import org.apache.http.impl.client.CloseableHttpClient;
 //import org.apache.http.impl.client.HttpClients;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.client.HttpClients;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.Inet4Address;
-import java.net.URL;
-import java.nio.file.Files;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Vector;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-
-import Model.Budget;
-import Model.BudgetModel;
-import Model.Category;
-import Model.CategoryModel;
-import Model.Transaction;
-import Model.TransactionModel;
 
 
 /**
@@ -109,6 +108,7 @@ import Model.TransactionModel;
  * create an instance of this fragment.
  */
 public class OverviewFragment extends Fragment implements View.OnClickListener {
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -116,6 +116,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     PieChart pieChart;
     ListView Budget_ListView;
     View myFragmentView;
+    String mCurrentPhotoPath;
+    EditText transAmount;
+    EditText transNote;
+    ProgressBar progressBar;
+    File photoFile = null;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -124,7 +129,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
     private int transYear, transMonth, transDay;
     private Map<PieEntry, Long> pieMap = new HashMap<>();
     private FloatingActionButton scan;
-    String mCurrentPhotoPath;
+    private FloatingActionButton loc;
+    private FusedLocationProviderClient mFusedLocationClient = null;
+//    private String mLoc;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -148,6 +155,30 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
+    private static byte[] loadFile(File file) throws IOException {
+        InputStream is = new FileInputStream(file);
+
+        long length = file.length();
+        if (length > Integer.MAX_VALUE) {
+            // File is too large
+        }
+        byte[] bytes = new byte[(int) length];
+
+        int offset = 0;
+        int numRead = 0;
+        while (offset < bytes.length
+                && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+            offset += numRead;
+        }
+
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file " + file.getName());
+        }
+
+        is.close();
+        return bytes;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,11 +193,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         int currDay = cal.get(Calendar.DAY_OF_MONTH);
         int currMonth = cal.get(Calendar.MONTH);
         int currYear = cal.get(Calendar.YEAR);
-        for(Transaction t: autoTrans)
-        {
-            if(t.getmYear() < currYear || (t.getmYear() == currYear && t.getmMonth() < currMonth) ||
-                    (t.getmYear() == currYear && t.getmMonth() == currMonth && t.getmDay() <= currDay))
-            {
+        for (Transaction t : autoTrans) {
+            if (t.getmYear() < currYear || (t.getmYear() == currYear && t.getmMonth() < currMonth) ||
+                    (t.getmYear() == currYear && t.getmMonth() == currMonth && t.getmDay() <= currDay)) {
                 TransactionModel.GetInstance().addTransaction(
                         new Transaction(t.getmAmount(),
                                 t.getmCategoryId(),
@@ -178,6 +207,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                 TransactionModel.GetInstance().updateMonth(t);
             }
         }
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
     }
 
     @Override
@@ -253,11 +283,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        FloatingActionButton fab2=(FloatingActionButton) myFragmentView.findViewById(R.id.fab_multi_trans);
+        FloatingActionButton fab2 = (FloatingActionButton) myFragmentView.findViewById(R.id.fab_multi_trans);
         fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i=new Intent(getContext(),AddMultiTrasactionActivity.class);
+                Intent i = new Intent(getContext(), AddMultiTrasactionActivity.class);
                 startActivity(i);
             }
         });
@@ -287,11 +317,8 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         super.onDetach();
         mListener = null;
     }
-    EditText transAmount;
-    EditText transNote;
-    ProgressBar progressBar;
-    protected void showInputDialog() {
 
+    protected void showInputDialog() {
         // get input_dialog.xml view
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View promptView = layoutInflater.inflate(R.layout.input_dialog, null);
@@ -305,13 +332,45 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         transDateButton.setOnClickListener(this);
         final Spinner bgtSpinner = (Spinner) promptView.findViewById(R.id.bgt_spinner);
         final Spinner catSpinner = (Spinner) promptView.findViewById(R.id.cat_spinner);
-        scan=(FloatingActionButton)promptView.findViewById(R.id.fab_scan);
-        progressBar=(ProgressBar)promptView.findViewById(R.id.progressbar_recept_scanning);
+        scan = (FloatingActionButton) promptView.findViewById(R.id.fab_scan);
+        loc = (FloatingActionButton) promptView.findViewById(R.id.fab_loc);
+        progressBar = (ProgressBar) promptView.findViewById(R.id.progressbar_recept_scanning);
         progressBar.setVisibility(View.GONE);
         scan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dispatchTakePictureIntent();
+            }
+        });
+        loc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    mFusedLocationClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+//                            mLoc = "";
+                            if (location != null) {
+                                // Logic to handle location object
+                                Geocoder geocoder = new Geocoder(getActivity());
+                                try {
+                                    List<Address> addrList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 5);
+//                                    mLoc = addrList.get(0).getAddressLine(0);
+//                                    transNote.append(mLoc);
+                                    transNote.append(addrList.get(0).getAddressLine(0));
+//                            Toast.makeText(getActivity(), "good", Toast.LENGTH_SHORT).show();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "Location not available!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
             }
         });
         Map<Long, Budget> bgtMap = BudgetModel.GetInstance().GetBudgetMap();
@@ -323,8 +382,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
 
         for (Map.Entry<Long, Budget> entry : bgtMap.entrySet()) {
             Long bgtId = entry.getKey();
-            if(bgtId==-1)
-            {
+            if (bgtId == -1) {
                 continue;
             }
             Budget bgt = entry.getValue();
@@ -346,24 +404,23 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         catSpinner.setAdapter(catAdapter);
 
         bgtSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
             @Override
             public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 cats.clear();
                 Long selectedBgtID = bgtNameIdMap.get(bgtSpinner.getSelectedItem());
                 List<Category> cList = BudgetModel.GetInstance().getCategoriesUnderBudget(selectedBgtID);
+                cats.clear();
                 for (Category c : cList) {
-                    if(c == null) continue;
+                    if (c == null) continue;
                     cats.add(c.getmName());
-                    catAdapter.notifyDataSetChanged();
                 }
+                catAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> arg0) {
 
             }
-
         });
 
         final Switch autoSwitch = promptView.findViewById(R.id.auto_switch);
@@ -373,12 +430,9 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                     public void onClick(DialogInterface dialog, int id) {
                         if (transAmount.getText().toString().isEmpty()) {
                             Toast.makeText(getContext(), "Amount cannot be empty! Please Try Again", Toast.LENGTH_SHORT).show();
-                        }
-                        else if(cats.size()==0)
-                        {
+                        } else if (cats.size() == 0) {
                             Toast.makeText(getContext(), "Please add a category to Budget first", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else {
                             TransactionModel.GetInstance().addTransaction(
                                     new Transaction(Double.parseDouble(transAmount.getText().toString()),
                                             catNameIdMap.get(catSpinner.getSelectedItem()).longValue(),
@@ -397,12 +451,11 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                 })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        });
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
 
         // create an alert dialog
         AlertDialog alert = alertDialogBuilder.create();
@@ -423,22 +476,6 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         datePickerDialog.show();
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    File photoFile=null;
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -456,7 +493,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 
-       }
+        }
     }
 
     private File createImageFile() throws IOException {
@@ -473,6 +510,7 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == getActivity().RESULT_OK) {
@@ -483,98 +521,113 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public class RestAsync extends AsyncTask<String,String,String>
-    {
+    private String encodeFileToBase64Binary(File file)
+            throws IOException {
+
+        byte[] bytes = loadFile(file);
+        byte[] encoded = Base64.encodeBase64(bytes);
+        String encodedString = new String(encoded);
+        return encodedString;
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+    public class RestAsync extends AsyncTask<String, String, String> {
         BufferedReader httpResponseReader;
         HttpsURLConnection urlConnection;
-        double amount=0.0;
-        String date="Today";
-        Double taxAmount=0.0;
-        String address="3135 Mclintock Avenue, Los Angeles,CA, 90007";
+        double amount = 0.0;
+        String date = "Today";
+        Double taxAmount = 0.0;
+        String address = "3135 Mclintock Avenue, Los Angeles,CA, 90007";
+
         @Override
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected String doInBackground(String... strings){
+        protected String doInBackground(String... strings) {
 
-            try{
+            try {
                 SSLContext sslContext = SSLContexts.createSystemDefault();
                 SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                         sslContext,
                         SSLConnectionSocketFactory.STRICT_HOSTNAME_VERIFIER);
-                CloseableHttpClient  httpclient= HttpClientBuilder.create()
+                CloseableHttpClient httpclient = HttpClientBuilder.create()
                         .setSSLSocketFactory(sslsf)
                         .build();
                 HttpPost httpPost = new HttpPost("https://api.taggun.io/api/receipt/v1/simple/encoded");
-                String encodedFile=encodeFileToBase64Binary(photoFile);
+                String encodedFile = encodeFileToBase64Binary(photoFile);
                 Log.d("My File to 64 encoded", encodedFile);
                 String jsonString = new JSONObject()
-                        .put("image",encodedFile)
+                        .put("image", encodedFile)
                         .put("filename", "example.jpg")
                         .put("contentType", "image/jpeg")
-                        .put("refresh",true)
-                        .put("incognito",false)
-                        .put("ipAddress","219.88.232.1")
-                        .put("language","en").toString();
+                        .put("refresh", true)
+                        .put("incognito", false)
+                        .put("ipAddress", "219.88.232.1")
+                        .put("language", "en").toString();
                 StringEntity entity = new StringEntity(jsonString);
                 httpPost.setEntity(entity);
                 httpPost.setHeader("Accept", "application/json");
                 httpPost.setHeader("Content-type", "application/json");
-                httpPost.setHeader("apikey","c0080e90c34611e7a0ebfdc7a5da208a");
+                httpPost.setHeader("apikey", "c0080e90c34611e7a0ebfdc7a5da208a");
 
                 CloseableHttpResponse response = httpclient.execute(httpPost);
-                if(response.getStatusLine().getStatusCode()==200)
-                {
+                if (response.getStatusLine().getStatusCode() == 200) {
                     Log.d("I fucking did it", "doInBackground: ");
-                    InputStream ips=response.getEntity().getContent();
-                    BufferedReader buf = new BufferedReader(new InputStreamReader(ips,"UTF-8"));
+                    InputStream ips = response.getEntity().getContent();
+                    BufferedReader buf = new BufferedReader(new InputStreamReader(ips, "UTF-8"));
                     StringBuilder sb = new StringBuilder();
                     String s;
-                    while(true )
-                    {
+                    while (true) {
                         s = buf.readLine();
-                        if(s==null || s.length()==0)
+                        if (s == null || s.length() == 0)
                             break;
                         sb.append(s);
 
                     }
                     buf.close();
                     ips.close();
-                   String result= sb.toString();
+                    String result = sb.toString();
                     Log.d("The content is: ", result);
-                    JSONObject js=new JSONObject(result);
+                    JSONObject js = new JSONObject(result);
                     try {
-                        amount=js.getJSONObject("totalAmount").getDouble("data");
+                        amount = js.getJSONObject("totalAmount").getDouble("data");
 
-                    }catch (Exception e)
-                    {
-
-                    }
-                    try {
-                        date=js.getJSONObject("date").getString("data");
-                    }catch (Exception e)
-                    {
+                    } catch (Exception e) {
 
                     }
                     try {
-                        taxAmount=js.getJSONObject("taxAmount").getDouble("data");
-                    }catch (Exception e)
-                    {
+                        date = js.getJSONObject("date").getString("data");
+                    } catch (Exception e) {
 
                     }
-                    try{
-                        address=js.getJSONObject("merchantAddress").getString("data");
-                    }
-                    catch (Exception e)
-                    {
+                    try {
+                        taxAmount = js.getJSONObject("taxAmount").getDouble("data");
+                    } catch (Exception e) {
 
                     }
-                }
-                else
-                {
-                    Toast.makeText(getContext(),"Bad Receipt, please try again",Toast.LENGTH_SHORT).show();
+                    try {
+                        address = js.getJSONObject("merchantAddress").getString("data");
+                    } catch (Exception e) {
+
+                    }
+                } else {
+                    Toast.makeText(getContext(), "Bad Receipt, please try again", Toast.LENGTH_SHORT).show();
                 }
                 httpclient.close();
             } catch (Exception e) {
@@ -588,45 +641,13 @@ public class OverviewFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             try {
                 progressBar.setVisibility(View.GONE);
-                transAmount.setText(amount+"");
-                transNote.setText("date: "+date+'\n'+"TaxAmount:"+taxAmount+"Address: "+address);
-            }catch (Exception e) {
+                transAmount.setText(amount + "");
+                transNote.setText("date: " + date + '\n' + "TaxAmount:" + taxAmount + "Address: " + address);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
-    }
-    private String encodeFileToBase64Binary(File file)
-            throws IOException {
-
-        byte[] bytes = loadFile(file);
-        byte[] encoded = Base64.encodeBase64(bytes);
-        String encodedString = new String(encoded);
-        return encodedString;
-    }
-
-    private static byte[] loadFile(File file) throws IOException {
-        InputStream is = new FileInputStream(file);
-
-        long length = file.length();
-        if (length > Integer.MAX_VALUE) {
-            // File is too large
-        }
-        byte[] bytes = new byte[(int)length];
-
-        int offset = 0;
-        int numRead = 0;
-        while (offset < bytes.length
-                && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
-            offset += numRead;
-        }
-
-        if (offset < bytes.length) {
-            throw new IOException("Could not completely read file "+file.getName());
-        }
-
-        is.close();
-        return bytes;
     }
 
 

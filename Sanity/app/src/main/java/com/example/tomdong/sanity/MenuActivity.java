@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -28,9 +27,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tomdong.sanity.dummy.DummyContent;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 
 import Model.BudgetModel;
@@ -46,7 +42,6 @@ public class MenuActivity extends AppCompatActivity
 
     //    int mDialogResult = -1;
     boolean mWaiting = true;
-    private FusedLocationProviderClient mFusedLocationClient = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +71,6 @@ public class MenuActivity extends AppCompatActivity
 
         if (BudgetModel.GetInstance().CheckResetAllBudgets())
             selectResetOption();
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
     }
 
     @Override
