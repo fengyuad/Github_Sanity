@@ -76,8 +76,10 @@ dependencies {
         exclude module: 'httpclient'
     }
     compile 'org.apache.httpcomponents:httpclient-android:4.3.5'
+    implementation 'com.google.android.gms:play-services-location:11.4.2'
 }
 
+apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 repositories {
     mavenCentral()
