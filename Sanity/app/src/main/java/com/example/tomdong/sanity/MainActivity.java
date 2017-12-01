@@ -36,6 +36,7 @@ import com.jesusm.kfingerprintmanager.KFingerprintManager;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Scanner;
 import java.util.concurrent.Semaphore;
 
 import Controller.OnGetDataListener;
@@ -276,10 +277,21 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
     }
 
     public void RegisterUser() {
-        Account.setEnabled(false);
-        PassWord.setEnabled(false);
+//        Account.setEnabled(false);
+//        PassWord.setEnabled(false);
         String email = Account.getText().toString();
         String pw = PassWord.getText().toString();
+        if(!is_Valid_Password(pw))
+        {
+            Toast.makeText(MainActivity.this,  "1. A password must have at least eight characters.\n" +
+                    "2. A password consists of only letters and digits.\n" +
+                    "3. A password must contain at least two digits \n", Toast.LENGTH_SHORT).show();
+            Account.setEnabled(true);
+            PassWord.setEnabled(true);
+
+            enableAll();
+            return;
+        }
         if (TextUtils.isEmpty(email)) {
             Account.setEnabled(true);
             PassWord.setEnabled(true);
@@ -287,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             Toast.makeText(MainActivity.this, "Email Empty!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(pw)) {
             Account.setEnabled(true);
             PassWord.setEnabled(true);
             Register.setEnabled(true);
@@ -575,4 +587,39 @@ public class MainActivity extends AppCompatActivity implements Animation.Animati
             enableAll();
         }
     }
+
+
+
+        public static final int PASSWORD_LENGTH = 8;
+
+        public boolean is_Valid_Password(String password) {
+
+            if (password.length() < PASSWORD_LENGTH) return false;
+
+            int charCount = 0;
+            int numCount = 0;
+            for (int i = 0; i < password.length(); i++) {
+
+                char ch = password.charAt(i);
+
+                if (is_Numeric(ch)) numCount++;
+                else if (is_Letter(ch)) charCount++;
+                else return false;
+            }
+
+
+            return (charCount >= 2 && numCount >= 2);
+        }
+
+        public boolean is_Letter(char ch) {
+            ch = Character.toUpperCase(ch);
+            return (ch >= 'A' && ch <= 'Z');
+        }
+
+
+        public boolean is_Numeric(char ch) {
+
+            return (ch >= '0' && ch <= '9');
+        }
+
 }
