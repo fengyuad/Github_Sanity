@@ -72,12 +72,30 @@
         android:inputType="textPersonName"
         android:hint="Note" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_scan"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        app:srcCompat="@drawable/ic_menu_camera" />
+        android:gravity="center">
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="auto"
+            app:elevation="0dp"
+            app:srcCompat="@drawable/ic_menu_camera" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="128dp"
+            android:clickable="true"
+            android:focusable="auto"
+            app:elevation="0dp"
+            app:srcCompat="@android:drawable/ic_menu_mylocation" />
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/progressbar_recept_scanning"

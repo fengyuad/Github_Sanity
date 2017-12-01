@@ -42,13 +42,11 @@ public class MenuActivity extends AppCompatActivity
 
     //    int mDialogResult = -1;
     boolean mWaiting = true;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
 //        BudgetModel.GetInstance().ResetAllBudgets(this);
-
         setContentView(R.layout.activity_menu);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
